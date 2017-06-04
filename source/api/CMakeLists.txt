@@ -1,6 +1,7 @@
 #
 #  Author: Cillian O'Driscoll, cillian dot odriscoll (at) gmail dot com
-#   
+#          James T. Curran, jamestcurran@ieee.org
+#
 #  Copyright(c) 2015 Institute of Navigation
 #  http://www.ion.org
 #   
@@ -17,5 +18,4 @@
 #  You should have received a copy of the Lesser GNU General Public License
 #  along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
 # 
-
 add_subdirectory(lib)

@@ -1,97 +1,107 @@
-#include "statistics.h"
-#include <stdint.h>
+#include "Statistics.h"
 #include <limits.h>
 #include <cmath>
 
-statistics::statistics( int64_t samplesToSkip ):
+Statistics::Statistics( int64_t samplesToSkip ):
 mMean(0.0),
 mPower(0.0),
-mDenominator(0.0),
-mNumSamples(0)
+mMin( 1.0e308 ),
+mMax( -1.0e308 ),
+mNumSamples(0),
+mNumCalls(0),
+mSamplesToSkip(samplesToSkip),
+mHasRange(false),
+mRangeMin(0),
+mRangeMax(0)
+{
+
+};
+
+Statistics::Statistics(double rangeMin, double rangeMax, int64_t samplesToSkip ):
+mMean(0.0),
+mPower(0.0),
+mMin( 1.0e308 ),
+mMax( -1.0e308 ),
+mNumSamples(0),
+mNumCalls(0),
+mSamplesToSkip(samplesToSkip),
+mHasRange(true),
+mRangeMin(rangeMin),
+mRangeMax(rangeMax)
 {
 
 };
 
 
-
-
-statistics::~statistics(void)
+Statistics::~Statistics(void)
 {
 
 };
 
-void statistics::Reset()
+void Statistics::Reset()
 {
    mMean          = 0.0;
+   mMin           = 1.0e308;
+   mMax           = -1.0e308;
    mPower         = 0.0;
-   mDenominator    = 1;
+   mNumSamples    = 0;
+   mNumCalls      = 0;
 };
 
-void statistics::AddSample( double x )
+void Statistics::SetSamplesToSkip( int64_t samplesToSkip )
 {
-   AddSample( x, 1.0 );
+   mSamplesToSkip = samplesToSkip;
 }
 
-void statistics::AddSample( double x, double w )
+void Statistics::AddSample( double x )
 {
+   if( (++mNumCalls) < mSamplesToSkip )
+      return;
+
+   if( mHasRange && ( x < mRangeMin || x > mRangeMax ) )
+      return;
 
     mNumSamples++;
-    mDenominator += w;
-    double scale = ( mDenominator - 1.0 ) / mDenominator;
+    double scale = ( static_cast<double>(mNumSamples) - 1.0 ) / static_cast<double>(mNumSamples);
 
-    mMean = mMean * scale +  x  / mDenominator;
-    mPower = mPower * scale +  std::pow( x , 2 )  / mDenominator;
+    mMean = mMean * scale +  x  / static_cast<double>(mNumSamples);
+    mPower = mPower * scale +  std::pow( x , 2 )  / static_cast<double>(mNumSamples);
 
-};
-
-void statistics::RemoveSample( double x )
-{
-   RemoveSample( x, 1.0 );
-}
-
-void statistics::RemoveSample( double x, double w )
-{
- 
-    mNumSamples--;
-    mDenominator -= w;
-
-    if( mNumSamples == 0 )
-       Reset();
-
-    double scale = ( mDenominator + 1.0 ) / mDenominator;
-
-    mMean  = mMean  * scale -  x  / mDenominator;
-    mPower = mPower * scale -  std::pow( x , 2 )  / mDenominator;
+    mMin = ( x < mMin ? x : mMin );
+    mMax = ( x > mMax ? x : mMax );
 
 };
 
-
-const int64_t statistics::NumSamples() const
+double Statistics::NumSamples() const
 {
-   return mNumSamples;
+   return static_cast<double>( mNumSamples );
 };
 
-const double statistics::Mean() const
+double Statistics::Mean() const
 {
   return mMean;
 };
-
-const double statistics::Power() const
+double Statistics::Min() const
+{
+  return mMin;
+};
+double Statistics::Max() const
+{
+  return mMax;
+};
+double Statistics::Power() const
 {
   return mPower;
 };
-
-const double statistics::RMS() const
+double Statistics::RMS() const
 {
-    return std::sqrt( std::abs(Power()) );
+    return std::sqrt( Power() );
 };
-
-const double statistics::Variance() const
+double Statistics::Variance() const
 {
   return Power() - std::pow( Mean(), 2 );
 };
-
-const double statistics::StdDev() const
+double Statistics::StdDev() const
 {
-  return std::sqrt( std::abs(Variance()) );
+  return std::sqrt( Variance() );
 };

@@ -24,7 +24,7 @@
 #include <string>
 
 #include "SampleSink.h"
-#include "statistics.h"
+#include "Statistics.h"
 
 
 template<typename sample_base_t>
@@ -33,7 +33,7 @@ class SampleStatisticsSink : public SampleSinkT<sample_base_t>
 
 protected:
    std::string    mFileName;
-   statistics     mStats;
+   Statistics     mStats;
 
    bool Open();
    void DoAddSample( sample_base_t x );

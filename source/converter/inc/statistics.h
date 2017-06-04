@@ -1,33 +1,41 @@
-#ifndef CLASS_statistics
-#define CLASS_statistics
+#ifndef CLASS_Statistics
+#define CLASS_Statistics
 
 #include <stdint.h>
 
-class statistics
+class Statistics
 {
 
 private:
    double  mMean;
    double  mPower;
-   double  mDenominator;
+   double  mMin;
+   double  mMax;
    int64_t mNumSamples;
+   int64_t mNumCalls;
+   int64_t mSamplesToSkip;
+   bool    mHasRange;
+   double  mRangeMin;
+   double  mRangeMax;
 
 public:
-   statistics( int64_t samplesToSkip = 0 );
-   virtual ~statistics(void);
+   Statistics( int64_t samplesToSkip = 0 );
+   Statistics(double rangeMin, double rangeMax, int64_t samplesToSkip = 0 );
+   virtual ~Statistics(void);
 
-   const double  Mean()       const;
-   const double  Power()      const;
-   const double  RMS()        const;
-   const double  Variance()   const;
-   const double  StdDev()     const;
-   const int64_t NumSamples() const;
+   double Mean()       const;
+   double Min()        const;
+   double Max()        const;
+   double Power()      const;
+   double RMS()        const;
+   double Variance()   const;
+   double StdDev()     const;
+   double NumSamples() const;
 
-   void AddSample( double x, double w );
+   void SetSamplesToSkip( int64_t samplesToSkip );
+   
    void AddSample( double x );
-   void RemoveSample( double x, double w );
-   void RemoveSample( double x );
    void Reset();
 };
 
-#endif //CLASS_statistics
+#endif //CLASS_Statistics
