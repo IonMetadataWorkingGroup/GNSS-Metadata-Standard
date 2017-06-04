@@ -66,7 +66,7 @@ add the following lines to your CMakeLists.txt file:
  
 and include the following in your main.cpp file
 
-> #include "GnssMetadata.h"
+> #include "GnssMetadata.h"      
 > #include "Converter.h"
 
 
