@@ -19,12 +19,12 @@
 # 
 
 set( XML_LIB_SRCS
-    ${CMAKE_SOURCE_DIR}/source/api/inc/tinyxml2/tinyxml2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../inc/tinyxml2/tinyxml2.h
 	tinyxml2.cpp
     )
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/source/api/inc/tinyxml2
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../inc/tinyxml2
     )
 
 add_library( xml ${XML_LIB_SRCS} )

@@ -20,11 +20,11 @@
 	
 	
 include_directories(
-    ${CMAKE_SOURCE_DIR}/source/api/inc
-    ${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata
-    ${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml
-    ${CMAKE_SOURCE_DIR}/source/api/inc/tinyxml2
-    ${CMAKE_SOURCE_DIR}/source/converter/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../api/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../api/inc/GnssMetadata
+    ${CMAKE_CURRENT_SOURCE_DIR}/../api/inc/GnssMetadata/Xml
+    ${CMAKE_CURRENT_SOURCE_DIR}/../api/inc/tinyxml2
+    ${CMAKE_CURRENT_SOURCE_DIR}/../converter/inc
 )
 
 

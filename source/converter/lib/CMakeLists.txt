@@ -19,34 +19,34 @@
 # 
 
 set( cnv_lib_sources 
-	${CMAKE_SOURCE_DIR}/source/converter/inc/BlockInterpreter.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/ChunkInterpreter.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/ChunkInterpreter.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/EncoderFunctions.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/EndianFunctions.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/FormatFunctions.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/LaneInterpreter.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleBuffer.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleBuffer.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleConverter.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleConverter.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleFileSink.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleFileSink.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleFrontEnd.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleFrontEnd.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleInterpreter.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleInterpreterFactory.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleInterpreterFactory.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleSink.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleSinkFactory.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleSinkFactory.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleSource.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleStreamInfo.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleStatisticsSink.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SampleStatisticsSink.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SinkedSampleInterpreter.h
-	${CMAKE_SOURCE_DIR}/source/converter/inc/SinkedSampleInterpreter.hpp
-	${CMAKE_SOURCE_DIR}/source/converter/inc/statistics.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/BlockInterpreter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/ChunkInterpreter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/ChunkInterpreter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/EncoderFunctions.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/EndianFunctions.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/FormatFunctions.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/LaneInterpreter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleBuffer.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleBuffer.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleConverter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleConverter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleFileSink.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleFileSink.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleFrontEnd.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleFrontEnd.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleInterpreter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleInterpreterFactory.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleInterpreterFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleSink.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleSinkFactory.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleSinkFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleSource.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleStreamInfo.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleStatisticsSink.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleStatisticsSink.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SinkedSampleInterpreter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SinkedSampleInterpreter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/statistics.h
     BlockInterpreter.cpp
     EndianFunctions.cpp
     LaneInterpreter.cpp
@@ -55,11 +55,11 @@ set( cnv_lib_sources
 )
 	
 include_directories(
-    ${CMAKE_SOURCE_DIR}/source/api/inc
-    ${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata
-    ${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml
-    ${CMAKE_SOURCE_DIR}/source/api/inc/tinyxml2
-    ${CMAKE_SOURCE_DIR}/source/converter/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../api/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../api/inc/GnssMetadata
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../api/inc/GnssMetadata/Xml
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../api/inc/tinyxml2
+    ${CMAKE_CURRENT_SOURCE_DIR}/../inc
 )
 
 add_library(cnv ${cnv_lib_sources} )

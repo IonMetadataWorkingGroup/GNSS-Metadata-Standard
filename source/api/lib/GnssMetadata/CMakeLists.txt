@@ -1,5 +1,6 @@
 #
 #  Author: Cillian O'Driscoll, cillian dot odriscoll (at) gmail dot com
+#          James T. Curran, jamestcurran (at) ieee.org
 #   
 #  Copyright(c) 2015 Institute of Navigation
 #  http://www.ion.org
@@ -19,53 +20,53 @@
 # 
 
 set( api_sources 
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/AnyUriTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/BandTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/BlockTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/ChunkTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/ClusterTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/Context.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/DurationTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/FileSetTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/FileTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/FrequencyTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/LaneTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/LumpTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/MetadataTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/OscillatorTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/PositionTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/OrientationTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/RfConfigTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/SessionTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/SourceTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/StreamTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/SystemTranslator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/Translator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/XmlDefs.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml/XmlProcessor.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/AnyUri.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/AttributedObject.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Band.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/BaseTypes.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Block.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Chunk.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Cluster.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Comment.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Date.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Duration.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/File.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Frequency.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Lane.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Lump.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Metadata.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Orientation.h
-    ${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Oscillator.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Position.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/RfConfiguration.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Session.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Source.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/IonStream.h
-	${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/System.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/AnyUriTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/BandTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/BlockTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/ChunkTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/ClusterTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/Context.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/DurationTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/FileSetTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/FileTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/FrequencyTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/LaneTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/LumpTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/MetadataTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/OscillatorTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/PositionTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/OrientationTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/RfConfigTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/SessionTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/SourceTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/StreamTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/SystemTranslator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/Translator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/XmlDefs.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml/XmlProcessor.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/AnyUri.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/AttributedObject.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Band.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/BaseTypes.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Block.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Chunk.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Cluster.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Comment.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Date.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Duration.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/File.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Frequency.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Lane.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Lump.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Metadata.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Orientation.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Oscillator.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Position.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/RfConfiguration.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Session.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Source.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/IonStream.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/System.h
     AnyUri.cpp
     AttributedObject.cpp
     Band.cpp
@@ -113,10 +114,10 @@ set( api_sources
 )
 	
 include_directories(
-    ${CMAKE_SOURCE_DIR}/source/api/inc
-    ${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata
-    ${CMAKE_SOURCE_DIR}/source/api/inc/GnssMetadata/Xml
-    ${CMAKE_SOURCE_DIR}/source/api/inc/tinyxml2
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../inc/GnssMetadata/Xml
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../inc/tinyxml2
 )
 
 add_library(api ${api_sources})
