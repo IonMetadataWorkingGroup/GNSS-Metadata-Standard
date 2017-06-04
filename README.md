@@ -39,12 +39,12 @@ Unix (make) or Mac OS (make)
 To thest the code, change to the 'install' directory and run the acompanying matlab scrupt called 'check_converter.m'.
 If everything has build OK then you should see the following output:
 
->>check_converter   
-FGH:   OK   
-IFEN:  OK   
-JRC:   OK   
-TRIGR: OK   
->>   
+>
+>FGH:   OK   
+>IFEN:  OK   
+>JRC:   OK   
+>TRIGR: OK   
+>   
 
 
 
