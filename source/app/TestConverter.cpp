@@ -62,7 +62,7 @@ int Convert( std::string xmlFileName )
 
 
 template<typename sample_base_t>
-int Statistics( std::string xmlFileName )
+int ComputeStatistics( std::string xmlFileName )
 {
 
    printf("\n----------------n");
@@ -183,7 +183,7 @@ int main(int argc, char* argv[])
         change_dir( "JRC" );
         xmlFileName = "150408_125245_UTC.xml";
         res[0] = Convert<int8_t>(    xmlFileName );
-        res[1] = Statistics<int8_t>( xmlFileName );
+        res[1] = ComputeStatistics<int8_t>( xmlFileName );
         res[2] = FrontEnd<int8_t>(   xmlFileName );
         std::cout << "Result: "
                   << (res[0]==0?"ok ":"failed ")
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
         change_dir( "IFEN" );
         xmlFileName = "SX3_AltBOC_DualRF.smfx";
         res[0] = Convert<int8_t>(    xmlFileName );
-        res[1] = Statistics<int8_t>( xmlFileName );
+        res[1] = ComputeStatistics<int8_t>( xmlFileName );
         res[2] = FrontEnd<int8_t>(   xmlFileName );
         std::cout << "Result: "
                   << (res[0]==0?"ok ":"failed ")
@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
         change_dir( "FHG" );
         xmlFileName = "L125_III1b_15s.usbx";
         res[0] = Convert<int8_t>(    xmlFileName );
-        res[1] = Statistics<int8_t>( xmlFileName );
+        res[1] = ComputeStatistics<int8_t>( xmlFileName );
         res[2] = FrontEnd<int8_t>(   xmlFileName );
         std::cout << "Result: "
                   << (res[0]==0?"ok ":"failed ")
@@ -232,7 +232,7 @@ int main(int argc, char* argv[])
         change_dir( "TRIGR" );
         xmlFileName = "WideBand_1bit_L1_L2_E5a_E5b_000.tgx";
         res[0] = Convert<int8_t>(    xmlFileName );
-        res[1] = Statistics<int8_t>( xmlFileName );
+        res[1] = ComputeStatistics<int8_t>( xmlFileName );
         res[2] = FrontEnd<int8_t>(   xmlFileName );
         std::cout << "Result: "
                   << (res[0]==0?"ok ":"failed ")
