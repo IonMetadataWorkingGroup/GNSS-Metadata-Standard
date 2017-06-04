@@ -51,7 +51,7 @@ void SampleConverter::Close()
       for( std::vector<LaneInterpreter*>::iterator It = mLaneInterps.begin(); It != mLaneInterps.end(); ++It )
       {
          delete (*It);
-         mLaneFiles[*It]->close();
+         mLaneFiles[*It]->Close();
          delete mLaneFiles[*It];
          mLaneFiles.erase(*It);
       }

@@ -27,6 +27,7 @@
 #include "BlockInterpreter.h"
 #include "ChunkInterpreter.h"
 #include "SampleSinkFactory.h"
+#include "BinaryFileSource.h"
 
 #include <GnssMetadata/Metadata.h>
 
@@ -39,7 +40,7 @@ protected:
 
    //std::map<std::string,SampleSink*> mSampleSinks;
    std::vector<LaneInterpreter*>             mLaneInterps;
-   std::map<LaneInterpreter*,std::ifstream*> mLaneFiles;
+   std::map<LaneInterpreter*,BinaryFileSource*> mLaneFiles;
    
    //protected member functions, to keep the code clean and clear
    template<typename chunk_t, typename sample_base_t>

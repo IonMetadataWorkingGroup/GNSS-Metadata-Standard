@@ -23,12 +23,17 @@
 
 #include "SampleSinkFactory.h"
 #include "SampleBuffer.h"
+#include "SampleConverter.h"
 
 template<typename sample_base_t>
-class SampleFrontEnd : public SampleSinkFactory< SampleBuffer<sample_base_t> >
+class SampleFrontEnd : public SampleSinkFactory< SampleBuffer<sample_base_t> >, public SampleConverter
 {
 
 public:
+
+   SampleFrontEnd():
+   SampleConverter(this)
+   {};
 
    // return a SampelSource by name
    const SampleSource*     GetSource(const std::string sinkName) const;

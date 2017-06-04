@@ -127,18 +127,25 @@ int FrontEnd( std::string xmlFileName )
 
    //create the factory for the sample-sinks used in the converter, this is just a set of named buffers
    SampleFrontEnd<sample_base_t> frontEnd;
+   //open the Metadata Converter
+   frontEnd.template Open<sample_base_t>( md );
+   
+   
+   //SampleFrontEnd<sample_base_t> frontEnd;
 
    //create the converter, pass the front-end, it will see it as a sampleSinkFactory
-   SampleConverter spcv( &frontEnd );
+   //SampleConverter spcv( &frontEnd );
 
    //open the Metadata Converter
-   spcv.Open<sample_base_t>( md );
+   //spcv.Open<sample_base_t>( md );
 
+   //frontEnd.Open<sample_base_t>( md, xmlPath );
+   
    //perform the conversion, in parts of 1ms
    for( int i=0; i<1; i++ )
    {
       //load 5000 chunks (equal to 1ms)
-      spcv.Load( 5000 );
+      frontEnd.Load( 5000 );
 
       uint32_t nSamples = 0;
       const sample_base_t* pbuff;
@@ -171,26 +178,10 @@ int FrontEnd( std::string xmlFileName )
 
 
    //close the converter
-   spcv.Close();
+   frontEnd.Close();
 
    return 0;
 }
-
-//std::string ToBin(uint8_t& dec,uint8_t nBits)
-//{
-//	std::string inBin;
-//
-//	for (int16_t i=nBits-1; i>=0; i--)
-//	{
-//		if (dec & (0x1 << i))
-//			inBin.push_back('1');
-//		else
-//			inBin.push_back('0');
-//	}
-//
-//	return inBin;
-//}
-
 
 int main(int argc, char* argv[])
 {

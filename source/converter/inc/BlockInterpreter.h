@@ -21,10 +21,9 @@
 #ifndef CLASS_BlockInterpreter
 #define CLASS_BlockInterpreter
 #include <vector>
-#include <fstream>
 #include <GnssMetadata/Metadata.h>
 #include "ChunkInterpreter.h"
-
+#include <BinaryFileSource.h>
 
 class BlockInterpreter
 {
@@ -44,8 +43,8 @@ public:
 	virtual  ~BlockInterpreter();
 
    virtual void AddChunk(Chunk* newChunk);
-   virtual bool Interpret( std::ifstream& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess );
-   virtual bool InterpretChunk( std::ifstream& packedFile );
+   virtual bool Interpret( BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess );
+   virtual bool InterpretChunk( BinaryFileSource& packedFile );
 };
 
 #endif //CLASS_BlockInterpreter

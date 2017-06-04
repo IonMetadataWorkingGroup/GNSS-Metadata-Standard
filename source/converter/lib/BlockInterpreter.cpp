@@ -47,11 +47,11 @@ void BlockInterpreter::AddChunk(Chunk* newChunk)
 };
 
 
-bool BlockInterpreter::Interpret( std::ifstream& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess )
+bool BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess )
 {
    
    //first skip the header-bytes
-   packedFile.seekg( mHeaderBytes, std::ios::cur );
+   packedFile.Skip(mHeaderBytes);
    
    bool continueChunkInterpret = true;
    while( continueChunkInterpret )
@@ -68,7 +68,7 @@ bool BlockInterpreter::Interpret( std::ifstream& packedFile, uint32_t& bytesProc
          uint32_t nBytes = (*ckIt)->BytesPerChunk();
          
          //read one chunk
-         if( packedFile.read( pChunk, nBytes ).gcount() == static_cast<std::streamsize>(nBytes) )
+         if( packedFile.Get( pChunk, nBytes ) == static_cast<std::streamsize>(nBytes) )
          {
 
             (*ckIt)->Interpret( );
@@ -97,7 +97,7 @@ bool BlockInterpreter::Interpret( std::ifstream& packedFile, uint32_t& bytesProc
    }
    
    //finally skip the footer-bytes
-   packedFile.seekg( mFooterBytes, std::ios::cur );
+   packedFile.Skip( mFooterBytes );
    
    //otherwise, a full block was read
    return true;
@@ -105,13 +105,13 @@ bool BlockInterpreter::Interpret( std::ifstream& packedFile, uint32_t& bytesProc
 
 
 
-bool BlockInterpreter::InterpretChunk( std::ifstream& packedFile )
+bool BlockInterpreter::InterpretChunk( BinaryFileSource& packedFile )
 {
    
    if(mChunkIndex == 0)
    {
       //first skip the header-bytes
-      packedFile.seekg( mHeaderBytes, std::ios::cur );
+      packedFile.Skip( mHeaderBytes );
    }
    
    //now cycle through each chunk in the block and interpret
@@ -124,7 +124,7 @@ bool BlockInterpreter::InterpretChunk( std::ifstream& packedFile )
       uint32_t nBytes = (*ckIt)->BytesPerChunk();
       
       //read one chunk
-      if( packedFile.read( pChunk, nBytes ).gcount() == static_cast<std::streamsize>(nBytes) )
+      if( packedFile.Get( pChunk, nBytes ) == static_cast<std::streamsize>(nBytes) )
       {
          (*ckIt)->Interpret( );
       }
@@ -139,7 +139,7 @@ bool BlockInterpreter::InterpretChunk( std::ifstream& packedFile )
    if(mChunkIndex == mCycles)
    {
       //finally skip the footer-bytes
-      packedFile.seekg( mFooterBytes, std::ios::cur );
+      packedFile.Skip( mFooterBytes );
       mChunkIndex = 0;
    }
    

@@ -39,6 +39,8 @@ SampleInterpreterFactory<chunk_t,sample_base_t>::SampleInterpreterFactory()
    mEncoderFunctionMap["TCA"] = (encFuncPtr_t)&SampleEncoderFunctions::TwosComplimentAdjusted;
    mEncoderFunctionMap["OGA"] = (encFuncPtr_t)&SampleEncoderFunctions::OffsetGrayAdjusted;
 
+   mEncoderFunctionMap["INT8"] = (encFuncPtr_t)&SampleEncoderFunctions::IntegerEight;
+
    // "introduce" the FormatFunctions to the Factory
    mFormatFunctionMap[ GnssMetadata::IonStream::IF   ] = &SampleFormatFunctions::IF<chunk_t,sample_base_t>;
    mFormatFunctionMap[ GnssMetadata::IonStream::IFn  ] = &SampleFormatFunctions::IFn<chunk_t,sample_base_t>;
@@ -82,6 +84,9 @@ bool SampleInterpreterFactory<chunk_t,sample_base_t>::Create(
       printf("Error: no support for format type (%d).",fmt);
       return false;
    }
+
+   //it would be possible here to create specializations, which combine FormatFunctions and EncoderFunctions
+
 
    smplIntrp = new SinkedSampleInterpreter<chunk_t,sample_base_t>( 
                         BitWidth( fmt, qnt ), 

@@ -6,7 +6,7 @@ WIN = 1;
 %%%%%
 % Run the Converter
 
-SYS = WIN;
+SYS = MAC;
 binName    = 'TestConverter';
 
 testDir    = pwd;

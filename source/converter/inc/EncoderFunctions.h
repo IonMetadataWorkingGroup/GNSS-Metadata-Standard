@@ -87,7 +87,7 @@ namespace SampleEncoderFunctions
 	   bool sign = (pChunk[chunkIndex] >> (shift + quantization - 1)) & 0x1;
 
 	   //make a mask for the magnitude data (ones for the upper bits, noting the << 1 above)
-	   sample_base_t signExtension = std::numeric_limits<sample_base_t>::max() << (quantization + 1 );
+	   sample_base_t signExtension = std::numeric_limits<sample_base_t>::max() << quantization + 1;
 
 	   //either return the bits or add the sign extension, offset by +1
 	   return static_cast<sample_base_t>((sign ? bits | signExtension : bits) + 1 );
@@ -141,7 +141,7 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t bits = (pChunk[chunkIndex] >> shift) & mask;
 
-	   chunk_t offset = 1ULL << (quantization - 1);
+	   chunk_t offset = 0x1 << (quantization - 1);
 
 	   return static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
    };
@@ -155,7 +155,7 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits, then multiply by 2
 	   chunk_t bits = ((pChunk[chunkIndex] >> shift) & mask)<<1;
 
-	   chunk_t offset = (1ULL << quantization) - 1;
+	   chunk_t offset = (0x1 << quantization) - 1;
 
 	   return static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
    };
@@ -170,13 +170,13 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t gray = (pChunk[chunkIndex] >> shift) & mask;
 
-	   for (chunk_t b = 1ULL << quantization; b > 1; b >>= 1)
+	   for (chunk_t b = 1U << quantization; b > 1; b >>= 1)
 	   {
 		   if (gray & b)
 			   gray ^= (b >> 1);
 	   }
-      
-	   chunk_t offset = 1ULL << (quantization - 1);
+
+	   chunk_t offset = 0x1 << (quantization - 1);
 
 	   return static_cast<sample_base_t>(gray) - static_cast<sample_base_t>(offset);
    };
@@ -190,15 +190,25 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t gray = (pChunk[chunkIndex] >> shift) & mask;
 
-	   for (chunk_t b = 1ULL << quantization; b > 1; b >>= 1)
+	   for (chunk_t b = 1U << quantization; b > 1; b >>= 1)
 	   {
 		   if (gray & b)
 			   gray ^= (b >> 1);
 	   }
 
-	   chunk_t offset = (1ULL << quantization) - 1;
+	   chunk_t offset = (0x1 << quantization) - 1;
 
 	   return static_cast<sample_base_t>(gray << 1) - static_cast<sample_base_t>(offset);
+   };
+
+
+   template<typename chunk_t, typename sample_base_t>
+   sample_base_t IntegerEight(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
+   {
+
+	   int8_t sample =  static_cast<int8_t>( (pChunk[chunkIndex] >> shift) & 0xff );
+
+	   return static_cast<sample_base_t>(sample);
    };
 
 

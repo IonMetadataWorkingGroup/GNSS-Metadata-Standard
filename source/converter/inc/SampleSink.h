@@ -42,6 +42,7 @@ public:
    virtual void AddSample( double  x ) = 0;
 
    virtual void Close() = 0;
+   virtual void Flush(){};
 
 };
 
@@ -64,8 +65,7 @@ public:
    void AddSample( int64_t x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
    void AddSample( float   x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
    void AddSample( double  x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
-
-
+   
 };
 
 #endif // CLASS_SampleSink

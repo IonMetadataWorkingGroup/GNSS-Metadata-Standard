@@ -89,11 +89,11 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
       mLaneInterps.push_back( laneInterpreter );
 	  
       //now open the first file for each lane
-      mLaneFiles[ mLaneInterps.back() ] = new std::ifstream;
+      mLaneFiles[ mLaneInterps.back() ] = new BinaryFileSource;
       //and open the file for reading binary
 	  fullpath = path_prefix + mLaneInterps.back()->FileURL();
-      mLaneFiles[ mLaneInterps.back() ]->open( fullpath.c_str(), std::ios::binary );
-      if( !mLaneFiles[ mLaneInterps.back() ]->is_open() )
+      mLaneFiles[ mLaneInterps.back() ]->Open( fullpath );
+      if( !mLaneFiles[ mLaneInterps.back() ]->IsOpen() )
       {
 		 throw std::runtime_error( "SampleConverter: Could not open file" );
       }
@@ -141,7 +141,7 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
          CreateChunkInterpreter<uint64_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
          break;
       default:
-         printf("Error: unsupported Chunk::SizeWord(): %zd\n",ckIt->SizeWord());
+         printf("Error: unsupported Chunk::SizeWord(): %ld\n",ckIt->SizeWord());
          return false;
       }
       
@@ -182,11 +182,11 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 	   for (GnssMetadata::StreamList::iterator smIt = lpIt->Streams().begin(); smIt != lpIt->Streams().end(); ++smIt)
 	   {
 		   numSampleInterpretersPerLump += static_cast<uint32_t>(smIt->RateFactor());
-		   numBitsInLump += static_cast<uint16_t>( smIt->Packedbits() );
+		   numBitsInLump += smIt->Packedbits();
 		   //printf("Found Stream: %s\n", smIt->toString().c_str());
 	   }
 
-	   uint16_t lnLumpRepeat = static_cast<uint16_t>( ( chunk->SizeWord() * chunk->CountWords() * 8 ) / numBitsInLump );
+	   uint16_t lnLumpRepeat = ( chunk->SizeWord() * chunk->CountWords() * 8 ) / numBitsInLump;
 
 		for (uint16_t lr = 0; lr < lnLumpRepeat; lr++)
 		{
@@ -217,7 +217,7 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 				{
 					// take the templated-typed chunkInterpreter and use it to create the appropriate type of sample intepreter
 					SampleInterpreter* splIntrp;
-					chunkIntrp->mSampleInterpFactory.Create(sampleSink, smIt->Format(), smIt->Encoding(), static_cast<uint8_t>(smIt->Quantization()), splIntrp, nextCallOrder);
+					chunkIntrp->mSampleInterpFactory.Create(sampleSink, smIt->Format(), smIt->Encoding(), smIt->Quantization(), splIntrp, nextCallOrder);
 					// and add it to the ordered list
 					streamSplIntrps.push_back(splIntrp);
 
