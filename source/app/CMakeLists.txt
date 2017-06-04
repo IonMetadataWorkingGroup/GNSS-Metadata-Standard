@@ -1,6 +1,7 @@
 #
 #  Author: Cillian O'Driscoll, cillian dot odriscoll (at) gmail dot com
-#   
+#          James T. Curran, jamestcurran (at) ieee.org
+#
 #  Copyright(c) 2015 Institute of Navigation
 #  http://www.ion.org
 #   
@@ -17,16 +18,11 @@
 #  You should have received a copy of the Lesser GNU General Public License
 #  along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
 # 
-	
-	
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../api/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/../api/inc/GnssMetadata
-    ${CMAKE_CURRENT_SOURCE_DIR}/../api/inc/GnssMetadata/Xml
-    ${CMAKE_CURRENT_SOURCE_DIR}/../api/inc/tinyxml2
     ${CMAKE_CURRENT_SOURCE_DIR}/../converter/inc
 )
-
 
 ###############################################################################
 set( API_sources 
@@ -47,7 +43,6 @@ set_target_properties(TestAPI PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/install"
 )
  
-
 ###############################################################################
 set( TestConverter_sources 
     TestConverter.cpp
@@ -65,8 +60,7 @@ set_target_properties(TestConverter PROPERTIES
 set_target_properties(TestConverter PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/install"
 )
- 
- 
+
 ############################################################################### 
  set( ConverterApp_sources 
     Converter.cpp
@@ -84,5 +78,3 @@ set_target_properties(Converter PROPERTIES
 set_target_properties(Converter PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/install"
 )
-
-

@@ -11,14 +11,10 @@
 
 #include <iostream>
 
-#include <GnssMetadata/Metadata.h>
-#include <GnssMetadata/Xml/XmlProcessor.h>
-
-#include "SampleConverter.h"
-#include "SampleSinkFactory.h"
-#include "SampleFrontEnd.h"
-
-
+// include the GNSS Metadata API
+#include "GnssMetadata.h"
+// include the converter
+#include "Converter.h"
 
 // process triple frequency data from JRC
 template<typename sample_base_t>

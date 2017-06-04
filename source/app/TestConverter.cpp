@@ -11,18 +11,12 @@
    #define change_dir chdir
 #endif
 
-
-
 #include <iostream>
 
-#include <GnssMetadata/Metadata.h>
-#include <GnssMetadata/Xml/XmlProcessor.h>
-
-#include "SampleConverter.h"
-#include "SampleSinkFactory.h"
-#include "SampleFrontEnd.h"
-
-
+// include the GNSS Metadata API
+#include "GnssMetadata.h"
+// include the converter
+#include "Converter.h"
 
 // process triple frequency data from JRC
 template<typename sample_base_t>
@@ -65,6 +59,7 @@ int Convert( std::string xmlFileName )
 
    return 0;
 }
+
 
 template<typename sample_base_t>
 int Statistics( std::string xmlFileName )
@@ -131,16 +126,6 @@ int FrontEnd( std::string xmlFileName )
    frontEnd.template Open<sample_base_t>( md );
    
    
-   //SampleFrontEnd<sample_base_t> frontEnd;
-
-   //create the converter, pass the front-end, it will see it as a sampleSinkFactory
-   //SampleConverter spcv( &frontEnd );
-
-   //open the Metadata Converter
-   //spcv.Open<sample_base_t>( md );
-
-   //frontEnd.Open<sample_base_t>( md, xmlPath );
-   
    //perform the conversion, in parts of 1ms
    for( int i=0; i<1; i++ )
    {
@@ -176,12 +161,12 @@ int FrontEnd( std::string xmlFileName )
 
    }
 
-
    //close the converter
    frontEnd.Close();
 
    return 0;
 }
+
 
 int main(int argc, char* argv[])
 {
@@ -271,58 +256,3 @@ int main(int argc, char* argv[])
 	}
 		return 0;
 }
-
-
-
-
-
-	/*printf("Test Encoder Functions:\n");
-	uint32_t chidx = 0, cksft = 0, qnt = 5;
-	std::string inBin = "Binary";
-	
-	uint32_t strsz = std::max( static_cast<uint32_t>(inBin.length()), qnt );
-
-	printf("%s   OB   OBA  SM   SMA  TC   TCA  OG   OGA\n", inBin.c_str());
-
-	for (uint8_t i=0; i<(1 << qnt); i++)
-	{
-
-		inBin = ToBin(i, qnt);
-
-		uint8_t* pCk = &i;
-		int8_t   OB  = SampleEncoderFunctions::OffsetBinary<uint8_t, int8_t>(pCk, chidx, cksft, qnt);
-		int8_t   SM  = SampleEncoderFunctions::SignMagnitude<uint8_t, int8_t>(pCk, chidx, cksft, qnt);
-		int8_t   TC  = SampleEncoderFunctions::TwosCompliment<uint8_t, int8_t>(pCk, chidx, cksft, qnt);
-		int8_t   OBA = SampleEncoderFunctions::OffsetBinaryAdjusted<uint8_t, int8_t>(pCk, chidx, cksft, qnt);
-		int8_t   SMA = SampleEncoderFunctions::SignMagnitudeAdjusted<uint8_t, int8_t>(pCk, chidx, cksft, qnt);
-		int8_t   TCA = SampleEncoderFunctions::TwosComplimentAdjusted<uint8_t, int8_t>(pCk, chidx, cksft, qnt);
-		int8_t   OG  = SampleEncoderFunctions::OffsetGray<uint8_t, int8_t>(pCk, chidx, cksft, qnt);
-		int8_t   OGA = SampleEncoderFunctions::OffsetGrayAdjusted<uint8_t, int8_t>(pCk, chidx, cksft, qnt);
-				
-		std::string padding = "";
-		while (inBin.length() + padding.length() < strsz)
-			padding.push_back(' ');
-
-		printf("%s%s  %+3d  %+3d  %+3d  %+3d  %+3d  %+3d  %+3d  %+3d\n", inBin.c_str(), padding.c_str(), OB, OBA, SM, SMA, TC, TCA, OG, OGA);
-	}
-
-	return 0;*/
-	
-
-
-
-
-   		// process SJTU data
-		//std::cout << "SJTU data case\n";
-		//std::cout << "---------------\n";
-		//change_dir( "SJTU" );
-		//xmlFileName = "sjtu_l1b1_metadata_test_20151105.xml";
-		//res[0] = Convert<int16_t>(    xmlFileName );
-		//res[1] = Statistics<int16_t>( xmlFileName );
-		//res[2] = FrontEnd<int16_t>(   xmlFileName );
-		//std::cout << "Result: "
-		//<< (res[0]==0?"ok ":"failed ")
-		//<< (res[1]==0?"ok ":"failed ")
-		//<< (res[2]==0?"ok ":"failed ")
-		//<< "\n\n";
-		//change_dir( ".." );

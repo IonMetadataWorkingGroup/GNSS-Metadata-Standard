@@ -1,7 +1,7 @@
 /**
  * File: TestApp.cpp
  * Author: M.B. Mathews
- *  
+ *         James T. Curran jamestcurran@iee.org     
  * Copyright(c) 2014 Institute of Navigation
  * http://www.ion.org
  *  
@@ -18,8 +18,9 @@
  * You should have received a copy of the Lesser GNU General Public License
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <GnssMetadata/Metadata.h>
-#include <GnssMetadata/Xml/XmlProcessor.h>
+
+// include the GNSS Metadata API
+#include "GnssMetadata.h"
 
 using namespace GnssMetadata;
 
