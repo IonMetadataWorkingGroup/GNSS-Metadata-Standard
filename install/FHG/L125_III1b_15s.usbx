@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
+  <lane id="GPS SPS Data / Galileo OS Data">
+        <session id="0">
+            <comment format="text">This is a 15 second long signal generated from the Spirent GSS8000.</comment>
+            <toa>2014-12-30T22:38:54.905999999Z</toa>
+            <contact>Fraunhofer IIS</contact>
+            <campaign>Spirent GSS8000 GPS/Galileo Signal Generator Sample</campaign>
+            <scenario>15 seconds of L1, L2 and L5 multiplexed data</scenario>
+        </session>
+        <system id="Flexiband-1"/>
+        <block>
+            <cycles>253</cycles>
+            <sizeheader>6</sizeheader>
+            <sizefooter>6</sizefooter>
+            <chunk>
+                <sizeword>1</sizeword>
+                <countwords>4</countwords>
+                <endian>Little</endian>
+                <padding>None</padding>
+                <wordshift>Left</wordshift>
+                <lump>
+                    <stream id="L2L2C">
+                        <ratefactor>1</ratefactor>
+                        <quantization>4</quantization>
+                        <packedbits>8</packedbits>
+                        <alignment>Undefined</alignment>
+                        <shift>Undefined</shift>
+						<format>IQ</format>
+                        <encoding>TCA</encoding>
+                        <band id="L2L2c_external">
+                            <centerfreq format="Hz">1227600000e+000</centerfreq>
+                            <translatedfreq format="Hz">0.0000000000000000e+000</translatedfreq>
+                            <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                            <bandwidth format="MHz">1.8000000000000000e+001</bandwidth>
+                        </band>
+                    </stream>
+                    <stream id="L1E1bc">
+                        <ratefactor>1</ratefactor>
+                        <quantization>4</quantization>
+                        <packedbits>8</packedbits>
+                        <alignment>Undefined</alignment>
+						<shift>Undefined</shift>
+                        <format>IQ</format>
+                        <encoding>TCA</encoding>
+                        <band id="L1E1bc_external">
+                            <centerfreq format="Hz">1575420000e+000</centerfreq>
+                            <translatedfreq format="Hz">0.0000000000000000e+000</translatedfreq>
+                            <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                            <bandwidth format="MHz">1.8000000000000000e+001</bandwidth>
+                        </band>
+                    </stream>
+                    <stream id="L5E5a">
+                        <ratefactor>2</ratefactor>
+                        <quantization>4</quantization>
+                        <packedbits>16</packedbits>
+                        <alignment>Undefined</alignment>
+						<shift>Left</shift>
+                        <format>IQ</format>
+                        <encoding>TCA</encoding>
+                        <band id="L5E5a_external">
+                            <centerfreq format="Hz">1176450000e+000</centerfreq>
+                            <translatedfreq format="Hz">0.0000000000000000e+000</translatedfreq>
+                            <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                            <bandwidth format="MHz">3.8000000000000000e+001</bandwidth>
+                        </band>
+                    </stream>
+                </lump>
+            </chunk>
+        </block>
+    </lane>
+    <system id="Flexiband-1">
+        <comment format="text">Flexiband with L125 III-1b configuration</comment>
+        <freqbase format="Hz">20000000e+000</freqbase>
+        <equipment>Flexiband GNSS Front-end</equipment>
+        <types>Processor</types>
+    </system>
+    <file>
+        <url>L125_III1b_15s.usb</url>
+        <timestamp>2014-12-30T22:38:54.905999999Z</timestamp>
+        <lane id="GPS SPS Data / Galileo OS Data"/>
+        <owner>Fraunhofer IIS</owner>
+        <copyright>http://www.iis.fraunhofer.de/flexiband"</copyright>
+    </file>
+</metadata>

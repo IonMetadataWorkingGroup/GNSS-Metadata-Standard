@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
+    <lane id="Galileo E5a &amp; GPS L5 Data">
+        <bandsrc idband="E5aL5 Sim" idsrc="E5aL5"/>
+        <session id="0">
+            <comment format="text">This is an example metadata specification with one stream only.</comment>
+            <toa>1970-01-01T00:00:0.000000000Z</toa>
+            <position lat="46.86311230" lon="7.24642790" height="17.000"/>
+            <contact>L. Musumeci</contact>
+            <campaign>GNSS Metadata API Testing on Galileo E5a &amp; GPS L5</campaign>
+            <scenario>Example Scenario Galileo E5a &amp; GPS L5</scenario>
+        </session>
+        <system id="Spirent Simulator"/>
+        <block>
+            <cycles>256</cycles>
+            <chunk>
+                <sizeword>1</sizeword>
+                <countwords>1</countwords>
+                <endian>Undefined</endian>
+                <padding>None</padding>
+                <wordshift>Left</wordshift>
+                <lump>
+                    <stream id="E5aL5">
+                        <ratefactor>1</ratefactor>
+                        <quantization>8</quantization>
+                        <packedbits>8</packedbits>
+                        <alignment>Undefined</alignment>
+                        <shift>Undefined</shift>
+                        <format>IF</format>
+                        <encoding>BIN</encoding>
+                        <band id="E5aL5 Sim">
+                            <centerfreq format="MHz">1.1764500000000000e+03</centerfreq>
+                            <translatedfreq format="MHz">9.0000000000000000e+00</translatedfreq>
+                            <delaybias format="sec">0.0000000000000000e+00</delaybias>
+                            <bandwidth format="MHz">1.8000000000000000e+01</bandwidth>
+                        </band>
+                    </stream>
+                </lump>
+            </chunk>
+        </block>
+    </lane>
+    <system id="Spirent Simulator">
+        <freqbase format="MHz">3.6000000000000000e+01</freqbase>
+        <equipment>GSS-9000</equipment>
+        <types>Processor</types>
+        <source id="E5aL5">
+            <type>Simulator</type>
+            <polarization>UndefinedPolarization</polarization>
+            <idcluster>Simulator</idcluster>
+        </source>
+    </system>
+    <file>
+        <url>FRAUNHOFER_20111214_122558_raw.grab</url>
+        <timestamp>2011-12-14T12:25:58.000000000Z</timestamp>
+        <owner>Example Owner</owner>
+        <lane id="Galileo E5a &amp; GPS L5 Data"/>
+    </file>
+</metadata>

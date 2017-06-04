@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
+    <comment format="text">TRIGR metadata converter test</comment>
+    <lane id="Converted Lane">
+      <session id="Converted Session">
+        <toa>1970-01-01T00:00:0.000000000Z</toa>
+        <poc>Sanjeev Gunawardena</poc>
+        <campaign>GPS L1/L2 + Galileo E1/E5a/E5b Test Collection</campaign>
+      </session>
+      <system id="Converted System">
+        <freqbase format="Hz">5.6320000000000000e+007</freqbase>
+        <types>Processor</types>
+      </system>
+      <block id="Converted Block">
+        <cycles>7040</cycles>
+        <sizefooter>4</sizefooter>
+        <chunk id="Converted Chunk">
+          <sizeword>4</sizeword>
+          <countwords>1</countwords>
+          <endian>L</endian>
+          <padding>N</padding>
+          <wordshift>R</wordshift>
+          <lump id="Converted Lump">
+		        <shift>Right</shift>
+            <stream id="Str03">
+              <ratefactor>1</ratefactor>
+              <quantization>1</quantization>
+              <packedbits>1</packedbits>
+              <alignment>N</alignment>
+			        <shift>Right</shift>
+              <format>IF</format>
+              <encoding>SIGN</encoding>
+              <band id="0">
+                <centerfreq format="Hz">1.5754200000000000e+009</centerfreq>
+                <translatedfreq format="Hz">1.3680000000000000e+007</translatedfreq>
+                <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                <bandwidth format="Hz">2.0000000000000000e+007</bandwidth>
+              </band>
+            </stream>
+            <stream id="Str02">
+              <ratefactor>1</ratefactor>
+              <quantization>1</quantization>
+              <packedbits>1</packedbits>
+              <alignment>N</alignment>
+			        <shift>Right</shift>
+              <format>IF</format>
+              <encoding>SIGN</encoding>
+              <band id="1">
+                <centerfreq format="Hz">1.2276000000000000e+009</centerfreq>
+                <translatedfreq format="Hz">1.3680000000000000e+007</translatedfreq>
+                <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                <bandwidth format="Hz">2.0000000000000000e+007</bandwidth>
+              </band>
+            </stream>
+            <stream id="Str01">
+              <ratefactor>1</ratefactor>
+              <quantization>1</quantization>
+              <packedbits>1</packedbits>
+              <alignment>N</alignment>
+			       <shift>Right</shift>
+              <format>IF</format>
+              <encoding>SIGN</encoding>
+              <band id="2">
+                <centerfreq format="Hz">1.1764500000000000e+009</centerfreq>
+                <translatedfreq format="Hz">1.4130000000000000e+007</translatedfreq>
+                <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                <bandwidth format="Hz">2.0000000000000000e+007</bandwidth>
+              </band>
+            </stream>
+            <stream id="Str00">
+              <ratefactor>1</ratefactor>
+              <quantization>1</quantization>
+              <packedbits>1</packedbits>
+              <alignment>N</alignment>
+			        <shift>Right</shift>
+              <format>IF</format>
+              <encoding>SIGN</encoding>
+              <band id="3">
+                <centerfreq format="Hz">1.2071400000000000e+009</centerfreq>
+                <translatedfreq format="Hz">1.3820000000000000e+007</translatedfreq>
+                <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                <bandwidth format="Hz">2.0000000000000000e+007</bandwidth>
+              </band>
+            </stream>
+          </lump>
+        </chunk>
+      </block>
+    </lane>
+    <file id="Converted Trig File">
+      <url>WideBand_1bit_L1_L2_E5a_E5b_000.tgd</url>
+      <timestamp>1970-01-01T00:00:0.000000000Z</timestamp>
+      <next>WideBand_1bit_L1_L2_E5a_E5b_001.tgx</next>
+      <lane id="Converted Lane"/>
+    </file>
+</metadata>

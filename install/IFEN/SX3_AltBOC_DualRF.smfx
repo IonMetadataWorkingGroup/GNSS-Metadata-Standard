@@ -1,0 +1,155 @@
+	<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
+    <comment format="text">IFEN GNSS metadata converter test</comment>
+		
+	<system id="SX3">
+		<freqbase format="MHz">5</freqbase>
+		<equipment>IFEN frontend type: SX3 dual RF</equipment>
+		<types>Processor</types>
+	</system>
+
+	<session id="0">
+		<toa>2016-01-19T09:00:00Z</toa>
+		<position lat="48.17154012" lon="11.80868949" height="576.860"/>
+		<contact>T. Pany</contact>
+		<campaign>AltBOC reflectometry test</campaign>
+		<scenario>RF splitter</scenario>
+	</session>
+
+	<band id="L1">
+		<centerfreq format="Hz">1575420000.00000</centerfreq>
+		<translatedfreq format="Hz">5000445.88565834</translatedfreq>
+		<delaybias format="sec">0.0</delaybias>
+		<bandwidth format="MHz">10.0</bandwidth>
+	</band>		
+	
+	<band id="L5">
+		<centerfreq format="Hz">1191795000.00000</centerfreq>
+		<translatedfreq format="Hz">74999467.5946236</translatedfreq>
+		<delaybias format="sec">0.0</delaybias>
+		<bandwidth format="MHz">50.0</bandwidth>
+	</band>	
+	
+	<file>
+		<lane id="ANT0_E5L5"/>
+		<url>SX3_AltBOC_DualRF_Band0_FE0_ANT0_f1191795000.stream</url>
+		<timestamp>2016-01-19T09:00:00Z</timestamp>
+    </file>		
+	<file>
+		<lane id="ANT0_E1L1"/>
+		<url>SX3_AltBOC_DualRF_Band1_FE0_ANT0_f1575420000.stream</url>
+		<timestamp>2016-01-19T09:00:00Z</timestamp>
+    </file>		
+	<file>
+		<lane id="ANT1_E5L5"/>
+		<url>SX3_AltBOC_DualRF_Band2_FE0_ANT1_f1191795000.stream</url>
+		<timestamp>2016-01-19T09:00:00Z</timestamp>
+    </file>		
+	<file>
+		<lane id="ANT1_E1L1"/>
+		<url>SX3_AltBOC_DualRF_Band3_FE0_ANT1_f1575420000.stream</url>
+		<timestamp>2016-01-19T09:00:00Z</timestamp>
+    </file>		
+	
+    <lane id="ANT0_E5L5">
+		<system id="SX3"/>
+        <block>
+            <cycles>0</cycles>
+            <chunk>
+                <sizeword>1</sizeword>
+                <countwords>5</countwords>
+                <endian>Little</endian>
+                <padding>None</padding>
+                <wordshift>Right</wordshift>
+                <lump>
+                    <stream id="ANT0-E5L5">
+                        <ratefactor>20</ratefactor>
+                        <quantization>2</quantization>
+                        <packedbits>40</packedbits>
+                        <alignment>Left</alignment>
+						<shift>Right</shift>
+                        <format>IF</format>
+                        <encoding>TCA</encoding>
+                        <band id="L5"/>
+                    </stream>
+                </lump>
+            </chunk>
+        </block>
+    </lane>
+    <lane id="ANT0_E1L1">
+		<system id="SX3"/>
+        <block>
+            <cycles>0</cycles>
+            <chunk>
+                <sizeword>1</sizeword>
+                <countwords>1</countwords>
+                <endian>Little</endian>
+                <padding>None</padding>
+                <wordshift>Undefined</wordshift>
+                <lump>
+                    <stream id="ANT0-E1L1">
+                        <ratefactor>4</ratefactor>
+                        <quantization>2</quantization>
+                        <packedbits>8</packedbits>
+                        <alignment>Left</alignment>
+						<shift>Right</shift>
+                        <format>IF</format>
+                        <encoding>TCA</encoding>
+                        <band id="L1"/>
+                    </stream>
+                </lump>
+            </chunk>
+        </block>
+    </lane>
+    <lane id="ANT1_E5L5">
+		<system id="SX3"/>
+        <block>
+            <cycles>0</cycles>
+            <chunk>
+                <sizeword>1</sizeword>
+                <countwords>5</countwords>
+                <endian>Little</endian>
+                <padding>None</padding>
+                <wordshift>Right</wordshift>
+                <lump>
+                    <stream id="ANT1-E5L5">
+                        <ratefactor>20</ratefactor>
+                        <quantization>2</quantization>
+                        <packedbits>40</packedbits>
+                        <alignment>Left</alignment>
+						<shift>Right</shift>
+                        <format>IF</format>
+                        <encoding>TCA</encoding>
+                        <band id="L5"/>
+                    </stream>
+                </lump>
+            </chunk>
+        </block>
+    </lane>
+    <lane id="ANT1_E1L1">
+		<system id="SX3"/>
+        <block>
+            <cycles>0</cycles>
+            <chunk>
+                <sizeword>1</sizeword>
+                <countwords>1</countwords>
+                <endian>Little</endian>
+                <padding>None</padding>
+                <wordshift>Undefined</wordshift>
+                <lump>
+                    <stream id="ANT1-E1L1">
+                        <ratefactor>4</ratefactor>
+                        <quantization>2</quantization>
+                        <packedbits>8</packedbits>
+                        <alignment>Left</alignment>
+						<shift>Right</shift>
+                        <format>IF</format>
+                        <encoding>TCA</encoding>
+                        <band id="L1"/>
+                    </stream>
+                </lump>
+            </chunk>
+        </block>
+    </lane>	
+	
+</metadata>

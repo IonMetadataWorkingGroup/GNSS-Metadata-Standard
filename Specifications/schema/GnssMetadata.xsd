@@ -1,0 +1,485 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<?xml-stylesheet type="text/xsl" href="xs3p.xsl"?>
+
+<xs:schema elementFormDefault="qualified"
+           targetNamespace="http://www.ion.org/standards/sdrwg/schema/metadata.xsd"
+           xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <!-- Top Level Element Definition -->
+  <xs:complexType name="Metadata">
+    <xs:sequence>
+      <xs:element name="include" minOccurs="0"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="session" type="Session"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="system" type="System"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="band" type="Band"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="fileset" type="FileSet"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="lane" type="Lane"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="file" type="File"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="block" type="Block"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="chunk" type="Chunk"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="lump" type="Lump"/>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="stream" type="Stream"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- 
+  *******************************************************************************
+  * Simple Type Enumerations
+  *******************************************************************************
+  -->
+
+  <xs:simpleType name="SampleFormat">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="InQ"/>
+      <xs:enumeration value="InQn"/>
+      <xs:enumeration value="QI"/>
+      <xs:enumeration value="QnI"/>
+      <xs:enumeration value="IFn"/>
+      <xs:enumeration value="IQ"/>
+      <xs:enumeration value="QIn"/>
+      <xs:enumeration value="IF"/>
+      <xs:enumeration value="QnIn"/>
+      <xs:enumeration value="IQn"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Padding">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Head"/>
+      <xs:enumeration value="Tail"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="DurationUnits">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="sec"/>
+      <xs:enumeration value="msec"/>
+      <xs:enumeration value="usec"/>
+      <xs:enumeration value="nsec"/>
+      <xs:enumeration value="psec"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SystemType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Receiver"/>
+      <xs:enumeration value="Processor"/>
+      <xs:enumeration value="Undefined"/>
+      <xs:enumeration value="Simulator"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CommentFormat">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="text"/>
+      <xs:enumeration value="html"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Polarization">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined"/>
+      <xs:enumeration value="RHCP"/>
+      <xs:enumeration value="LHCP"/>
+      <xs:enumeration value="Linear"/>
+      <xs:enumeration value="Horizontal"/>
+      <xs:enumeration value="Vertical"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SourceType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined"/>
+      <xs:enumeration value="Patch"/>
+      <xs:enumeration value="Dipole"/>
+      <xs:enumeration value="Helical"/>
+      <xs:enumeration value="Quadrifilar"/>
+      <xs:enumeration value="Simulator"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="FrequencyUnits">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined"/>
+      <xs:enumeration value="Hz"/>
+      <xs:enumeration value="MHz"/>
+      <xs:enumeration value="GHz"/>
+      <xs:enumeration value="Ratio"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Alignment">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined"/>
+      <xs:enumeration value="Right"/>
+      <xs:enumeration value="Left"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Endian">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined"/>
+      <xs:enumeration value="Little"/>
+      <xs:enumeration value="Big"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="WordShift">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Left"/>
+      <xs:enumeration value="Right"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- 
+  *******************************************************************************
+  * Foundation Type Declarations
+  *******************************************************************************
+  -->  
+  
+  <xs:complexType name="Comment">
+    <xs:annotation>
+      <xs:documentation></xs:documentation>
+    </xs:annotation>
+    <xs:sequence/>
+    <xs:attribute name="format" type="CommentFormat"/>
+  </xs:complexType>
+
+  <xs:complexType name="Frequency">
+    <xs:annotation>
+      <xs:documentation>A frequency specifies a frequency value in user specified units (defaults to Hz if not defined).</xs:documentation>
+    </xs:annotation>
+    <xs:sequence/>
+		<xs:attribute default="MHz" name="units" type="FrequencyUnits"/>
+	</xs:complexType>
+	
+  <xs:complexType name="Position">
+    <xs:annotation>
+      <xs:documentation>A position specifies a point in 3-D Earth-Centered, Earth-Fixed space.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence/>
+		<xs:attribute name="lat" type="xs:double"/>
+		<xs:attribute name="lon" type="xs:double"/>
+		<xs:attribute name="height" type="xs:double"/>
+	</xs:complexType>
+
+  <xs:complexType name="Duration">
+    <xs:annotation>
+      <xs:documentation>A duration specifies a span of time in user specified units.  Defaults to seconds if units are note defined.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence/>
+    <xs:attribute name="units" type="DurationUnits"/>
+  </xs:complexType>
+
+  <xs:complexType name="Rotation">
+    <xs:annotation>
+      <xs:documentation>A rotation specifies a 3-D rotation matrix.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="Attitude">
+    <xs:annotation>
+      <xs:documentation>An attitude specifies an orientation in 3-D space with respect to a local vertical.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="Rotation">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="MetadataElement" abstract="true">
+    <xs:annotation>
+      <xs:documentation>MetadataElement is the base element with attributes and elements defined by all core metadata elements (implemented as extensions of this element).</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="artifact" type="xs:anyURI"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="comment" type="Comment"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+
+  <!-- 
+  *******************************************************************************
+  * Core Element Declarations
+  *******************************************************************************
+  -->
+
+  <!-- Block Format Type Definitions -->
+  <xs:complexType name="Block">
+    <xs:annotation>
+      <xs:documentation>A Block is an ordered sequence of chunks with optional header and footer.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+          <xs:element maxOccurs="unbounded" minOccurs="1" name="chunk" type="Chunk"/>
+          <xs:element maxOccurs="1" name="cycles" type="xs:unsignedInt">
+            <xs:annotation>
+              <xs:documentation>Number of cycles to repeat the chunk pattern. </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="sizeHeader" type="xs:unsignedInt"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="sizeFooter" type="xs:unsignedInt"/>
+        </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:complexType name="Band">
+		<xs:annotation>
+			<xs:documentation>A Band is a finite span of RF spectrum. Each Band is received from a single Source and converted to a sample stream by a signal processor that is typically referred to as an RF front-end. </xs:documentation>
+		</xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+			  <xs:element maxOccurs="1" name="centerfreq" type="Frequency"/>
+			  <xs:element maxOccurs="1" name="translatedfreq" type="Frequency"/>
+			  <xs:element maxOccurs="1" minOccurs="0" name="inverted" type="xs:boolean"/>
+			  <xs:element maxOccurs="1" minOccurs="0" name="delaybias" type="Duration"/>
+			  <xs:element maxOccurs="1" minOccurs="0" name="bandwidth" type="Frequency"/>
+		  </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+	<xs:complexType name="Stream">
+    <xs:annotation>
+      <xs:documentation>A stream defines sample data comprising information from one or more bands.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+			    <xs:element maxOccurs="1" name="ratefactor" type="xs:unsignedInt">
+				    <xs:annotation>
+					    <xs:documentation>If the rate factor (N) is greater than one, there will be N samples of the stream included per base rate period.</xs:documentation>
+				    </xs:annotation>
+			    </xs:element>
+			    <xs:element maxOccurs="1" name="quantization" type="xs:unsignedInt"/>
+			    <xs:element maxOccurs="1" name="packedbits" type="xs:unsignedInt">
+				    <xs:annotation>
+					    <xs:documentation>The total number of bits per sample.</xs:documentation>
+				    </xs:annotation>
+			    </xs:element>
+			    <xs:element default="Undefined" maxOccurs="1" name="alignment" type="Alignment"/>
+			    <xs:element maxOccurs="1" name="format" type="SampleFormat"/>
+			    <xs:element maxOccurs="1" name="encoding" type="xs:string"/>
+			    <xs:element maxOccurs="unbounded" minOccurs="1" name="band" type="Band"/>
+		    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Chunk">
+    <xs:annotation>
+      <xs:documentation>A chunk is an ordered sequence of lumps contained within a specified number of words.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">    
+        <xs:sequence minOccurs="0">
+          <xs:element maxOccurs="1" name="sizeWord" type="xs:unsignedInt">
+            <xs:annotation>
+              <xs:documentation>Size of word in bytes.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="unbounded" minOccurs="1" name="lump" type="Lump"/>
+          <xs:element maxOccurs="1" name="countWords" type="xs:unsignedInt">
+            <xs:annotation>
+              <xs:documentation>Count of words in a chunk</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="endian" type="Endian">
+            <xs:annotation>
+              <xs:documentation>Endian ordering of the words stored in the chunk.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="padding" type="Padding">
+            <xs:annotation>
+              <xs:documentation>Padding </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="shift" type="WordShift"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Lump">
+		<xs:annotation>
+			<xs:documentation>A lump is an ordered sequence of streams.</xs:documentation>
+		</xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+			    <xs:element maxOccurs="unbounded" minOccurs="1" name="stream" type="Stream"/>
+		    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- Equipment Configuration Type Definitions -->
+  <xs:complexType name="Cluster">
+    <xs:annotation>
+      <xs:documentation>Data collection setups may contain one or more antenna units where each antenna unit may comprise one or more elements. The position and orientation of each element’s phase center and the relative delay for each element must be known in order to perform multi-element signal processing. The antenna element geometry with respect to its reference frame may be supplied by the manufacturer. Hence, it is convenient to include these parameters directly as metadata. The standard defines the generic terms ‘cluster’ and ‘source’ to refer to an antenna unit and its elements respectively.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">    
+        <xs:sequence minOccurs="0">
+          <xs:element maxOccurs="1" minOccurs="0" name="location" type="Position"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="rotation" type="Rotation"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="vendor" type="xs:string"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="model" type="xs:string"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="serial" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Source">
+    <xs:annotation>
+      <xs:documentation>A source is the originator of an electrical signal. A coordinate frame is associated with a cluster. The origin and rotation of this frame is specified with respect to the platform coordinate frame.A source is defined as the originator of an electrical signal. A coordinate frame is associated with a cluster. The origin and rotation of this frame is specified with respect to the platform coordinate frame.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+          <xs:element maxOccurs="1" minOccurs="0" name="type" type="SourceType"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="polarization" type="Polarization"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="origin" type="Position"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="rotation" type="Rotation"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="idcluster" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="System">
+    <xs:annotation>
+      <xs:documentation>A System is a complete data collection apparatus. The system comprises all antennas, sensors, and other information outputting equipment down to the disk arrays that store SDR files. The system may also include GNSS signal simulators. The standard includes geometrical parameters (location and attitude) to the extent that this information is necessary for post-processing SDR data stream. For example, initial position and platform orientation may be needed for a dynamic scenario. The relative position and orientation of antennas and their elements with respect to the platform coordinate frame are needed for adaptive antenna signal processing.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+          <xs:element maxOccurs="1" name="freqBase" type="Frequency"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="equipment" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="1" name="source" type="Source"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="cluster" type="Cluster"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="type" type="SystemType"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Session">
+    <xs:annotation>
+      <xs:documentation>A Session specifies information about how,why,who,where information was collected.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+          <xs:element maxOccurs="1" minOccurs="0" name="toa" type="xs:dateTime"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="position" type="Position"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="attitude" type="Attitude"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="poc" type="xs:string"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="contact" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="system" type="System"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="campaign" type="xs:string"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="scenario" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  
+  <!-- Lane, FileSet, File Type Definitions -->
+  <xs:complexType name="Lane">
+    <xs:annotation>
+      <xs:documentation>A Lane is configuration specification defining the relationship between blocks, systems, and session information.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+          <xs:element maxOccurs="unbounded" minOccurs="1" name="bandsrc" type="BandSource"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="session" type="Session"/>
+          <xs:element maxOccurs="unbounded" minOccurs="1" name="system" type="System"/>
+          <xs:element maxOccurs="unbounded" minOccurs="1" name="block" type="Block"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="BandSource">
+    <xs:annotation>
+      <xs:documentation>Element binds a single source and band elements together in a lane configuration.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence/>
+    <xs:attribute name="idSrc" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Id of the Source element.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="idBand" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Identifier of the band element.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="File">
+    <xs:annotation>
+      <xs:documentation>A File is the ordered collection of bytes retrieved from a single Lane over a finite interval of time and stored in a digital media device.&#10;&#10;When a lane is written to a file, it may or may not be synchronized to the start of a block. For this reason there may be a byte offset from the beginning of the file to the first byte of the first block. This offset is different for each file.&#10;&#10;The creation time of the file may be tagged as metadata. This time is typically obtained from the system RTC.&#10;</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence minOccurs="0">
+          <xs:element maxOccurs="1" name="url" type="xs:anyURI">
+            <xs:annotation>
+              <xs:documentation>url points to the file</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" name="timestamp" type="xs:dateTime"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="offset" type="xs:unsignedInt">
+            <xs:annotation>
+              <xs:documentation>Byte offset into file for start of lane.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="owner" type="xs:string"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="copyright" type="xs:string"/>
+          <xs:element maxOccurs="1" minOccurs="0" name="next" type="xs:anyURI">
+            <xs:annotation>
+              <xs:documentation>Previous file URI in the sequence.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="previous" type="xs:anyURI">
+            <xs:annotation>
+              <xs:documentation>Previous file URI in the sequence.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" name="lane" type="Lane"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="FileSet">
+    <xs:annotation>
+      <xs:documentation>A file set is a list of metadata files URIs, which defines a group.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base ="MetadataElement">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="file" type="xs:anyURI">
+            <xs:annotation>
+              <xs:documentation>File element specifies the URI of the metadata file or id if locally contained within the current metadata scope.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+</xs:schema>

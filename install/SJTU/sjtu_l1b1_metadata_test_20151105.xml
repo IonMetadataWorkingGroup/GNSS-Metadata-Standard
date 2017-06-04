@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
+    <lane id="GPS_BDS SPS Data">
+        <session id="SJTU_METADATA_CAMPAIGN"/>
+        <system id="SAS6812"/>
+        <block>
+            <cycles>1</cycles>
+            <sizeheader>0</sizeheader>
+            <sizefooter>0</sizefooter>
+            <chunk>
+                <sizeword>2</sizeword>
+                <countwords>2</countwords>
+                <endian>N</endian>
+                <padding>N</padding>
+                <wordshift>L</wordshift>
+                <lump>
+                    <stream id="S1">
+                        <ratefactor>1</ratefactor>
+                        <quantization>8</quantization>
+                        <packedbits>16</packedbits>
+                        <alignment>N</alignment>
+                        <format>IQn</format>
+                        <encoding>INT</encoding>
+                        <band id="GPSL1">
+                            <centerfreq format="MHz">1575.420000</centerfreq>
+                            <translatedfreq format="MHz">7.420000</translatedfreq>
+                            <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                            <bandwidth format="MHz">25.000000</bandwidth>
+                        </band>
+                    </stream>
+                    <stream id="S2">
+                        <ratefactor>1</ratefactor>
+                        <quantization>8</quantization>
+                        <packedbits>16</packedbits>
+                        <alignment>N</alignment>
+                        <format>IQn</format>
+                        <encoding>INT</encoding>
+                        <band id="BDSB1">
+                            <centerfreq format="MHz">1561.098000</centerfreq>
+                            <translatedfreq format="MHz">-6.902000</translatedfreq>
+                            <delaybias format="sec">0.0000000000000000e+000</delaybias>
+                            <bandwidth format="MHz">25.000000</bandwidth>
+                        </band>
+                    </stream>					
+                </lump>
+            </chunk>
+        </block>
+    </lane>
+    <session id="SJTU_METADATA_CAMPAIGN">
+    	  <toa>2015-11-05T08:32:47</toa>
+    	  <position lat="31.0246352" lon="121.4388278" height="14.90"/>
+    	  <motion>dynamic</motion>
+    	  <system id="SAS6812"/>
+    	  <poc>xin chen</poc>
+    	  <contact>xin.chen@sjtu.edu.cn</contact>
+    	  <campaign>sjtu metadata API testing</campaign>
+    	  <scenario>campus dynamic</scenario>
+    	  <copyright>xin.chen@sjtu</copyright>
+    </session>
+    <system id="SAS6812">
+        <freqbase format="MHz">62.000000</freqbase>
+        <equipment>SAS6812</equipment>
+        <source id="L1B1">
+            <type>UndefinedType</type>
+            <polarization>RHCP</polarization>
+            <idcluster>Antenna</idcluster>
+        </source>
+        <cluster id="Antenna"/>
+    </system>
+
+	      <file>
+			      <lane id="GPS_BDS SPS Data"/>
+				  <url>sjtu_l1b1_metadata_test_20151105.dat</url>
+			      <timestamp>2015-11-06T19:05:54.105999999Z</timestamp>
+		    </file>
+		    <posrefile>sjtu_l1b1_metadata_test_20151105.gpfpd</posrefile>
+		    <posprecision>0.1m</posprecision>
+
+</metadata>
