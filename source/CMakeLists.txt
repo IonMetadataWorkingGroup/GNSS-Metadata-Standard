@@ -24,5 +24,7 @@ add_subdirectory(api)
 #build the converter library
 add_subdirectory(converter)
 
+IF( ${BUILD_TEST_EXECUTABLES} )
 #build the test applications
 add_subdirectory(app)
+ENDIF( ${BUILD_TEST_EXECUTABLES} )
