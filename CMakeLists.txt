@@ -85,7 +85,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MY_CXX_FLAGS}")
 ########################################################################
 add_subdirectory(source)
 
-Message("Hello from here")
 SET( BUILD_TEST_EXECUTABLES TRUE )
 
 
