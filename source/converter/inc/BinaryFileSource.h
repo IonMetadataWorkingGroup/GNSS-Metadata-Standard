@@ -27,6 +27,8 @@
 
 #define BinaryFileSource_READ_SIZE 1048576
 
+#undef min
+
 class BinaryFileSource
 {
    

@@ -31,6 +31,8 @@ class SampleFrontEnd : public SampleSinkFactory< SampleBuffer<sample_base_t> >, 
 
 public:
 
+	typedef std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > taggedSampleStreamWithInfo;
+
    SampleFrontEnd():
    SampleConverter(this)
    {};
