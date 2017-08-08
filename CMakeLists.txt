@@ -83,9 +83,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MY_CXX_FLAGS}")
 ########################################################################
 # Add subdirectories (in order of deps)
 ########################################################################
+SET( BUILD_TEST_EXECUTABLES TRUE )
 add_subdirectory(source)
 
-SET( BUILD_TEST_EXECUTABLES TRUE )
+
 
 
 
