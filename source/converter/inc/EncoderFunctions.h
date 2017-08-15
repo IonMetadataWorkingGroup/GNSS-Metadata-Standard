@@ -92,6 +92,7 @@ namespace SampleEncoderFunctions
 	   //either return the bits or add the sign extension, offset by +1
 	   return static_cast<sample_base_t>((sign ? bits | signExtension : bits) + 1 );
    };
+   
 
    template<typename chunk_t, typename sample_base_t>
    sample_base_t SignMagnitude(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
