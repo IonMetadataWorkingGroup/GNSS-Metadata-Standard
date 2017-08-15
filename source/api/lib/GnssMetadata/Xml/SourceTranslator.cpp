@@ -40,10 +40,10 @@ NODELIST_END
 
 
 // SourceType Values
-static const char* _szSourceType[] = {"UndefinedType","Patch", "Dipole", "Helical", "Quadrilfilar", "Simulator"};
+static const char* _szSourceType[] = {"UndefinedType","Patch", "Dipole", "Helical", "Quadrilfilar", "Simulator", "Other"};
 Source::SourceType ToSourceType( const char* psz)
 {
-    for( unsigned int i = 0; i < 6; i++)
+    for( unsigned int i = 0; i < 7; i++)
 	{
 		if( strcmp( _szSourceType[i], psz) == 0)
 			return (Source::SourceType)i;
@@ -55,7 +55,7 @@ Source::SourceType ToSourceType( const char* psz)
 static const char* _szSourcePolarization[] = {"UndefinedPolarization", "RHCP", "LHCP", "Linear", "Horizontal", "Vertical"};
 Source::SourcePolarization ToSourcePolarization( const char* psz)
 {
-    for( unsigned int i = 0; i < 5; i++)
+    for( unsigned int i = 0; i < 6; i++)
 	{
 		if( strcmp( _szSourcePolarization[i], psz) == 0)
 			return (Source::SourcePolarization)i;
@@ -123,7 +123,7 @@ bool SourceTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 		}
 
 		//Parse idcluster [0..1]
-		source.IdCluster( ReadFirstElement("idcluster", elem, false, ""));
+		source.IdCluster( ReadFirstElement("id", elem, false, ""));
 	}
 
 	//Lastly set the source on the specified object.
