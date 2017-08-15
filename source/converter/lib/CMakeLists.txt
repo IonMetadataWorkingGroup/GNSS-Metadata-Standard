@@ -19,6 +19,7 @@
 # 
 
 set( cnv_lib_sources 
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/BinaryFileSource.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/BlockInterpreter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/ChunkInterpreter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/ChunkInterpreter.hpp
