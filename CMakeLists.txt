@@ -74,7 +74,7 @@ endif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
 if(CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32)
     #http://gcc.gnu.org/wiki/Visibility
-    add_definitions(-fvisibility=hidden -Wno-unused-parameter)
+    add_definitions(-fvisibility=hidden -Wno-unused-parameter -Wno-unused-but-set-variable )
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MY_CXX_FLAGS}")
