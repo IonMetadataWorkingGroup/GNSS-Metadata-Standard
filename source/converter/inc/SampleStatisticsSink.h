@@ -24,7 +24,7 @@
 #include <string>
 
 #include "SampleSink.h"
-#include "Statistics.h"
+#include "statistics.h"
 
 
 template<typename sample_base_t>

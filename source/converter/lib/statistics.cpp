@@ -1,4 +1,4 @@
-#include "Statistics.h"
+#include "statistics.h"
 #include <limits.h>
 #include <cmath>
 
