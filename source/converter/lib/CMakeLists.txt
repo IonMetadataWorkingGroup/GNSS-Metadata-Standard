@@ -47,12 +47,12 @@ set( cnv_lib_sources
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SampleStatisticsSink.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SinkedSampleInterpreter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/SinkedSampleInterpreter.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/../inc/Statistics.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/statistics.h
     BlockInterpreter.cpp
     EndianFunctions.cpp
     LaneInterpreter.cpp
     SampleConverter.cpp
-    Statistics.cpp
+    statistics.cpp
 )
 	
 include_directories(

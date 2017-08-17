@@ -24,6 +24,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <cstring>
 
 #define BinaryFileSource_READ_SIZE 1048576
 
