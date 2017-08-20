@@ -49,7 +49,7 @@ namespace SampleFormatFunctions
       }
       else
       {
-         shiftSecond      = static_cast<uint8_t>( 8*sizeof(chunk_t) - (residualBitIndex + bitWidth)%(8*sizeof(chunk_t)) );
+         shiftSecond      = static_cast<uint8_t>( 8*sizeof(chunk_t) - (residualBitIndex + bitWidth - 8*sizeof(chunk_t)) );
          chunkIndexSecond = chunkIndex + 1;
       }
 
