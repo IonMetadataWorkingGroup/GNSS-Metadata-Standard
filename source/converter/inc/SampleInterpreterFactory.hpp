@@ -48,7 +48,7 @@ SampleInterpreterFactory<chunk_t,sample_base_t>::SampleInterpreterFactory()
    mFormatFunctionMap[ GnssMetadata::IonStream::IQn  ] = &SampleFormatFunctions::IQn<chunk_t,sample_base_t>;
    mFormatFunctionMap[ GnssMetadata::IonStream::InQ  ] = &SampleFormatFunctions::InQ<chunk_t,sample_base_t>;
    mFormatFunctionMap[ GnssMetadata::IonStream::InQn ] = &SampleFormatFunctions::InQn<chunk_t,sample_base_t>;
-   mFormatFunctionMap[ GnssMetadata::IonStream::IQ   ] = &SampleFormatFunctions::IQ<chunk_t,sample_base_t>;
+   mFormatFunctionMap[ GnssMetadata::IonStream::QI   ] = &SampleFormatFunctions::IQ<chunk_t,sample_base_t>;
    mFormatFunctionMap[ GnssMetadata::IonStream::QIn  ] = &SampleFormatFunctions::QIn<chunk_t,sample_base_t>;
    mFormatFunctionMap[ GnssMetadata::IonStream::QnI  ] = &SampleFormatFunctions::QnI<chunk_t,sample_base_t>;
    mFormatFunctionMap[ GnssMetadata::IonStream::QnIn ] = &SampleFormatFunctions::QnIn<chunk_t,sample_base_t>;
