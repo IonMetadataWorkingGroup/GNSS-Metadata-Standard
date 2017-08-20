@@ -22,6 +22,7 @@
 *.tcp
 *.exe
 build/*
+install/log.txt
 install/TestAPI*
 install/TestConverter*
 install/Converter*
