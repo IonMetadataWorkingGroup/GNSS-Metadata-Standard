@@ -51,7 +51,7 @@ int Convert( std::string xmlFileName )
    {
       //load 5000 chunks (equal to 1ms)
       spcv.Load( 5000 );
-
+      
    }
 
    //close the converter
@@ -125,41 +125,36 @@ int FrontEnd( std::string xmlFileName )
    //open the Metadata Converter
    frontEnd.template Open<sample_base_t>( md );
    
-   
-   //perform the conversion, in parts of 1ms
-   for( int i=0; i<1; i++ )
+   //load 5000 chunks
+   frontEnd.Load( 5000 );
+
+   uint32_t nSamples = 0;
+   const sample_base_t* pbuff;
+
+   // ask the front-end for the SampleSource corresponding to the channel
+   //(there might be a way to enumerate this better)
+   //
+   // the sources will have as many samples as correspond all of the
+   // previous Load( nChunks ) calls, since the last call to Clear()
+   std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > sourceMap = frontEnd.GetSources();
+   for(std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> >::iterator src_it = sourceMap.begin(); src_it != sourceMap.end(); src_it++)
    {
-      //load 5000 chunks (equal to 1ms)
-      frontEnd.Load( 5000 );
+      std::string             sourceName  = src_it->first;
+      const SampleSource*     pSource     = frontEnd.GetSource( sourceName );
+      const SampleStreamInfo* pSourceInfo = frontEnd.GetSampleStreamInfo( sourceName );
 
-      uint32_t nSamples = 0;
-      const sample_base_t* pbuff;
+      pSourceInfo->Print();
 
-      // ask the front-end for the SampleSource corresponding to the channel
-      //(there might be a way to enumerate this better)
-      //
-      // the sources will have as many samples as correspond all of the
-      // previous Load( nChunks ) calls, since the last call to Clear()
-      std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > sourceMap = frontEnd.GetSources();
-      for(std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> >::iterator src_it = sourceMap.begin(); src_it != sourceMap.end(); src_it++)
-      {
-         std::string             sourceName  = src_it->first;
-         const SampleSource*     pSource     = frontEnd.GetSource( sourceName );
-         const SampleStreamInfo* pSourceInfo = frontEnd.GetSampleStreamInfo( sourceName );
-
-         pSourceInfo->Print();
-
-         nSamples = pSource->GetSamples( pbuff );
-         printf("Samples: ");
-         for(int i=0;i<20;i++)
-            printf("% 4d ", pbuff[i]);
-         printf("\n");
-      }
-
-      //clear the sample buffers, otherwise the next Load will append the samples
-      frontEnd.Clear();
-
+      nSamples = pSource->GetSamples( pbuff );
+      printf("Samples: ");
+      for(int i=0;i<20;i++)
+         printf("% 4d ", pbuff[i]);
+      printf("\n");
    }
+
+   //clear the sample buffers, otherwise the next Load will append the samples
+   frontEnd.Clear();
+
 
    //close the converter
    frontEnd.Close();
@@ -192,6 +187,7 @@ int main(int argc, char* argv[])
                   << "\n\n";
         change_dir( ".." );
 
+       
         // process IFEN data
         printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
         std::cout << "IFEN data case\n";
