@@ -107,17 +107,8 @@ public:
       mBinfile->read( reinterpret_cast<char*>(&(*mStartBuffer)) , BinaryFileSource_READ_SIZE);
       mEndBuffer = mStartBuffer + mBinfile->gcount();
       
-      return !EndOfFile();
-   }
-   
-   bool EndOfFile()
-   {
-      if( !mIsOpen )
-      {
-         return false;
-      }
-      
-      return (mBinfile->eof());
+      //make sure that we have actually loaded something (we may have reached eof)
+      return !(mStartBuffer == mEndBuffer);
    }
    
    size_t Get( void* pData, size_t requestedBytes )
