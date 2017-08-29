@@ -146,7 +146,7 @@ void SampleConverter::Load( const uint32_t chunksToProcess )
          //read the entire block
          do
          {
-            readBlockOK = block->InterpretChunk( *mLaneFiles[*lnIt] );
+            readBlockOK = block->InterpretChunk( *mLaneFiles[laneInterpreter] );
             chunksProcessed++;
          }
          while( readBlockOK && chunksProcessed < chunksToProcess );

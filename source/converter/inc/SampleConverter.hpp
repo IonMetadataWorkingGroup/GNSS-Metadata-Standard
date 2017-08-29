@@ -42,6 +42,8 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
    LaneInterpreter* laneInterpreter;
    SampleStreamInfo commonSampleInfo;
    
+   //////////////////////////////////////////////////////////////
+   // processs it as though it is a non-standard/custom format
    for( GnssMetadata::LaneList::iterator  lnIt = md.Lanes().begin(); lnIt != md.Lanes().end(); ++lnIt)
    {
 
