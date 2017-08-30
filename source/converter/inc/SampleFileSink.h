@@ -44,6 +44,7 @@ protected:
 
    bool Open();
    void DoAddSample( sample_base_t x );
+   void DoAddSample( sample_base_t x, sample_base_t y );
    
 public:
    SampleFileSink(std::string fileName, unsigned int numSamplesPerBuffer = BASE_BUFFER_SIZE_IN_BYTES);

@@ -40,6 +40,13 @@ public:
    virtual void AddSample( int64_t x ) = 0;
    virtual void AddSample( float   x ) = 0;
    virtual void AddSample( double  x ) = 0;
+   
+   virtual void AddSample( int8_t  x, int8_t  y ) = 0;
+   virtual void AddSample( int16_t x, int16_t y ) = 0;
+   virtual void AddSample( int32_t x, int32_t y ) = 0;
+   virtual void AddSample( int64_t x, int64_t y ) = 0;
+   virtual void AddSample( float   x, float   y ) = 0;
+   virtual void AddSample( double  x, double  y ) = 0;
 
    virtual void Close() = 0;
    virtual void Flush(){};
@@ -51,6 +58,7 @@ class SampleSinkT : public SampleSink
 {
 protected:
    virtual void DoAddSample( sample_base_t x ) = 0;
+   virtual void DoAddSample( sample_base_t x, sample_base_t y ) = 0;
 
 public:
    
@@ -65,6 +73,14 @@ public:
    void AddSample( int64_t x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
    void AddSample( float   x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
    void AddSample( double  x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
+   
+   void AddSample( int8_t  x, int8_t  y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
+   void AddSample( int16_t x, int16_t y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
+   void AddSample( int32_t x, int32_t y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
+   void AddSample( int64_t x, int64_t y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
+   void AddSample( float   x, float   y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
+   void AddSample( double  x, double  y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
+   
    
 };
 

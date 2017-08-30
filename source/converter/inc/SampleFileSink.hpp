@@ -101,14 +101,32 @@ void SampleFileSink<sample_base_t>::DoAddSample( sample_base_t x )
    
    if( !this->mIsOpen )
       return;
-
+   
    mSampleBuffer[mIndexOfNextSample] = x ;
    
    mIndexOfNextSample++;
-
+   
    if( mIndexOfNextSample == mBufferSize)
       Flush();
+   
+};
 
+template<typename sample_base_t>
+void SampleFileSink<sample_base_t>::DoAddSample( sample_base_t x, sample_base_t y )
+{
+   
+   if( !this->mIsOpen )
+      return;
+   
+   mSampleBuffer[mIndexOfNextSample] = x ;
+   mIndexOfNextSample++;
+   //assume that we have an even buffer size 
+   mSampleBuffer[mIndexOfNextSample] = y ;
+   mIndexOfNextSample++;
+   
+   if( mIndexOfNextSample == mBufferSize)
+      Flush();
+   
 };
 
 template<typename sample_base_t>

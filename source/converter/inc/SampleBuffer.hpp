@@ -88,8 +88,20 @@ void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x )
    
    if( !this->mIsOpen )
       return;
-
+   
    mSampleBuffer.push_back( x );
+   
+};
+
+template<typename sample_base_t>
+void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x, sample_base_t Y )
+{
+   
+   if( !this->mIsOpen )
+      return;
+   
+   mSampleBuffer.push_back( x );
+   mSampleBuffer.push_back( Y );
    
 };
 

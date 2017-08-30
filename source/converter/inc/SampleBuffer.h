@@ -40,6 +40,7 @@ protected:
    
    bool     Open();
    void     DoAddSample( sample_base_t x );
+   void     DoAddSample( sample_base_t x, sample_base_t Y );
    uint32_t DoGetSamples( const void** buff ) const;
 
    
