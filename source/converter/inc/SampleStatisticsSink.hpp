@@ -79,6 +79,19 @@ void SampleStatisticsSink<sample_base_t>::DoAddSample(sample_base_t x)
 }
 
 template<typename sample_base_t>
+void SampleStatisticsSink<sample_base_t>::DoAddSample(sample_base_t x, sample_base_t y)
+{
+   
+   if( !this->mIsOpen )
+      return;
+   
+   
+   mStats.AddSample( static_cast<double>(x) );
+   mStats.AddSample( static_cast<double>(y) );
+   
+}
+
+template<typename sample_base_t>
 void SampleStatisticsSink<sample_base_t>::Report()
 {
    
