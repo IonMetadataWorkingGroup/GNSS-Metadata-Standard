@@ -90,16 +90,32 @@ bool SampleInterpreterFactory<chunk_t,sample_base_t>::Create(
    }
 
    //it would be possible here to create specializations, which combine FormatFunctions and EncoderFunctions
-   if( (fmt == GnssMetadata::IonStream::IQ) && ( enc == "INT8" ) && ( BitWidth( fmt, qnt ) == 16 ) )
+   
+   //try Int8 IF
+   if( (fmt == GnssMetadata::IonStream::IQ) && ( enc == "TC" ) && ( BitWidth( fmt, qnt ) == 8 ) )
    {
       //otherwise proceed with a generic SampleInterpreter
       smplIntrp = new SinkedSampleInterpreter<chunk_t,sample_base_t>(
-                        BitWidth( fmt, qnt ),
-                        NULL,
-                        mFormatFunctionMap[ GnssMetadata::IonStream::Int8IQ ],
-                        sampleSink,
-                        callOrder
-                     );
+                                                                     BitWidth( fmt, qnt ),
+                                                                     mEncoderFunctionMap["INT8"],
+                                                                     mFormatFunctionMap[ GnssMetadata::IonStream::IQ ],
+                                                                     sampleSink,
+                                                                     callOrder
+                                                                     );
+      return true;
+   }
+   
+   //try Int8 I,Q
+   if( (fmt == GnssMetadata::IonStream::IQ) && ( enc == "TC" ) && ( BitWidth( fmt, qnt ) == 16 ) )
+   {
+      //otherwise proceed with a generic SampleInterpreter
+      smplIntrp = new SinkedSampleInterpreter<chunk_t,sample_base_t>(
+                                                                     BitWidth( fmt, qnt ),
+                                                                     NULL,
+                                                                     mFormatFunctionMap[ GnssMetadata::IonStream::Int8IQ ],
+                                                                     sampleSink,
+                                                                     callOrder
+                                                                     );
       return true;
    }
    
