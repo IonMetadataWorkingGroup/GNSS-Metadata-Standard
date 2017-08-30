@@ -90,7 +90,7 @@ bool SampleInterpreterFactory<chunk_t,sample_base_t>::Create(
    }
 
    //it would be possible here to create specializations, which combine FormatFunctions and EncoderFunctions
-   if( (fmt == GnssMetadata::IonStream::IQ) && ( enc == "INT8" ) )
+   if( (fmt == GnssMetadata::IonStream::IQ) && ( enc == "INT8" ) && ( BitWidth( fmt, qnt ) == 16 ) )
    {
       //otherwise proceed with a generic SampleInterpreter
       smplIntrp = new SinkedSampleInterpreter<chunk_t,sample_base_t>(
