@@ -66,12 +66,12 @@ protected:
 
 public:	
    ChunkInterpreter( const uint32_t countWords, const bool rightWordShift = false );
-	virtual  ~ChunkInterpreter();
-	void     AddSampleInterpreter( SampleInterpreter* splIntrp, const bool front = false );
-   void     SetSourceEndianness( const GnssMetadata::Chunk::WordEndian& srcEndianness );
-   void     Interpret( );
-   void*    GetChunk();
-   uint32_t BytesPerChunk() const;
+	virtual         ~ChunkInterpreter();
+	void            AddSampleInterpreter( SampleInterpreter* splIntrp, const bool front = false );
+   void            SetSourceEndianness( const GnssMetadata::Chunk::WordEndian& srcEndianness );
+   inline void     Interpret( );
+   inline void*    GetChunk();
+   inline uint32_t BytesPerChunk() const;
 };
 
 #include "ChunkInterpreter.hpp"

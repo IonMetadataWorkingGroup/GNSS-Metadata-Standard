@@ -36,7 +36,7 @@ public:
    virtual ~SampleInterpreter(){};
    virtual void    SetChunkOffset(  const uint32_t chunkOffsetInBits ){};
    virtual void    Interpret( const void* vChunk ) const{};
-   virtual uint32_t BitWidth() const { return mBitWidth; };
+   virtual inline uint32_t BitWidth() const { return mBitWidth; };
 
    static bool callOrderSortAscend(const SampleInterpreter* first, const SampleInterpreter* second)
    {

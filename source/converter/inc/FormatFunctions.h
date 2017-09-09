@@ -191,7 +191,6 @@ namespace SampleFormatFunctions
       sample_base_t Q = -(*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
       
       sampleSink->AddSample( I, Q );
-      //sampleSink->AddSample( Q );
       
    };
    
@@ -207,8 +206,7 @@ namespace SampleFormatFunctions
       sample_base_t Q =  static_cast<int8_t>( (pChunk[chunkIndexSecond] >> shiftSecond) & 0xff );
       
       sampleSink->AddSample( I, Q );
-      //sampleSink->AddSample( Q );
-      
+
    };
 
 };//end namespace SampleFormatFunctions
