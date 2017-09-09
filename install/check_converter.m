@@ -34,32 +34,32 @@ doSilent = 1;
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %FHG
-cd('./FHG/');
-FHG_OK = CheckFHG( doSilent );
-if( FHG_OK )
-    fprintf('FGH:   OK\n');
-else
-    fprintf('FGH:   PROBLEM!\n');
-end
-cd('..');
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%IFEN
 if isMatlab
-    cd('./IFEN/');
-    IFEN_OK = CheckIFEN( doSilent );
-    if( IFEN_OK )
-        fprintf('IFEN:  OK\n');
+    cd('./FHG/');
+    FHG_OK = CheckFHG( doSilent );
+    if( FHG_OK )
+        fprintf('FGH:   OK\n');
     else
-        fprintf('IFEN:  PROBLEM!\n');
+        fprintf('FGH:   PROBLEM!\n');
     end
     cd('..');
 else
     fprintf('\n***********************************************\n');
     fprintf(  '* Warning: xmlread not supported under Octave *\n');
-    fprintf(  '* Skipping "CheckIFEN()" converter tests.     *\n')    
+    fprintf(  '* Skipping "CheckFHG()" converter tests.     *\n')    
     fprintf(  '***********************************************\n\n');
 end
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%IFEN
+cd('./IFEN/');
+IFEN_OK = CheckIFEN( doSilent );
+if( IFEN_OK )
+    fprintf('IFEN:  OK\n');
+else
+    fprintf('IFEN:  PROBLEM!\n');
+end
+cd('..');
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %JRC
