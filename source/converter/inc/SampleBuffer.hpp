@@ -88,7 +88,7 @@ void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x )
    mBufferPos++;
    
    //is there still space?
-   if( mBufferPos >= mSampleBuffer.size() )
+   if( mBufferPos >= static_cast<int32_t>(mSampleBuffer.size()) )
    {
       mSampleBuffer.resize( mSampleBuffer.size() + BASE_BUFFER_SIZE_IN_BYTES );
       mBufferSize = mSampleBuffer.size();
