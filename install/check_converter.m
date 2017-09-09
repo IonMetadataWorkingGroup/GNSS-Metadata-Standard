@@ -1,30 +1,29 @@
-%%
-MAC = 1;
-WIN = 0;
-
-
 %%%%%
 % Run the Converter
 
-SYS = MAC;
 binName    = 'TestConverter';
 
 testDir    = pwd;
-if SYS == WIN
-    installDir = '.';
-    cmdString  = [binName ' > log.txt'];
-elseif SYS == MAC 
+
+if ismac
     installDir = './';
     cmdString  = ['./'   binName  ' > log.txt'];
+elseif isunix
+    installDir = './';
+    cmdString  = ['./'   binName  ' > log.txt'];
+elseif ispc
+    installDir = '.';
+    cmdString  = [binName ' > log.txt'];
 else
-    printf('System??\n');
+    disp('Operating system not supported\nPlease manually modify script (check_converter.m : line 18) to continue.\n')
+    return;
 end
+
 
 cd(installDir);
 installDir = pwd();
 system(cmdString);
 cd(testDir);
-
 
 %%%%%%
 % Check each of the files

@@ -124,7 +124,7 @@ int FrontEnd( std::string xmlFileName )
    SampleFrontEnd<sample_base_t> frontEnd;
    //open the Metadata Converter
    frontEnd.template Open<sample_base_t>( md );
-   
+
    //load 5000 chunks
    frontEnd.Load( 5000 );
 
@@ -170,22 +170,22 @@ int main(int argc, char* argv[])
 
     try
     {
-
-        // process JRC data
-        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        std::cout << "JRC data case\n";
-        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        change_dir( "JRC" );
-        xmlFileName = "150408_125245_UTC.xml";
-        res[0] = Convert<int8_t>(    xmlFileName );
-        res[1] = ComputeStatistics<int8_t>( xmlFileName );
-        res[2] = FrontEnd<int8_t>(   xmlFileName );
-        std::cout << "Result: "
-                  << (res[0]==0?"ok ":"failed ")
-                  << (res[1]==0?"ok ":"failed ")
-                  << (res[2]==0?"ok ":"failed ")
-                  << "\n\n";
-        change_dir( ".." );
+       
+       // process JRC data
+       printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       std::cout << "JRC data case\n";
+       printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       change_dir( "JRC" );
+       xmlFileName = "150408_125245_UTC.xml";
+       res[0] = Convert<int8_t>(    xmlFileName );
+       res[1] = ComputeStatistics<int8_t>( xmlFileName );
+       res[2] = FrontEnd<int8_t>(   xmlFileName );
+       std::cout << "Result: "
+       << (res[0]==0?"ok ":"failed ")
+       << (res[1]==0?"ok ":"failed ")
+       << (res[2]==0?"ok ":"failed ")
+       << "\n\n";
+       change_dir( ".." );
 
        
         // process IFEN data
