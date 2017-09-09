@@ -19,16 +19,20 @@ else
     return;
 end
 
+% check the system (xmlread not supported under Octave) 
+isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+isMatlab = ~isOctave;
 
 cd(installDir);
 installDir = pwd();
 system(cmdString);
 cd(testDir);
 
-%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Check each of the files
 doSilent = 1;
 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %FHG
 cd('./FHG/');
 FHG_OK = CheckFHG( doSilent );
@@ -39,16 +43,25 @@ else
 end
 cd('..');
 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %IFEN
-cd('./IFEN/');
-IFEN_OK = CheckIFEN( doSilent );
-if( IFEN_OK )
-    fprintf('IFEN:  OK\n');
+if isMatlab
+    cd('./IFEN/');
+    IFEN_OK = CheckIFEN( doSilent );
+    if( IFEN_OK )
+        fprintf('IFEN:  OK\n');
+    else
+        fprintf('IFEN:  PROBLEM!\n');
+    end
+    cd('..');
 else
-    fprintf('IFEN:  PROBLEM!\n');
+    fprintf('\n***********************************************\n');
+    fprintf(  '* Warning: xmlread not supported under Octave *\n');
+    fprintf(  '* Skipping "CheckIFEN()" converter tests.     *\n')    
+    fprintf(  '***********************************************\n\n');
 end
-cd('..');
 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %JRC
 cd('./JRC/');
 JRC_OK = CheckJRC( doSilent );
@@ -59,8 +72,7 @@ else
 end
 cd('..');
 
-
-
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TRIGR
 cd('./TRIGR/');
 TRIGR_OK = CheckTRIGR( doSilent );
