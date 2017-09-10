@@ -89,7 +89,20 @@ for t=1:numel(testDirectories)
 end
 fprintf('\nTest completed.\n\n');
 
-return;
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Purge all of the old converted sample files now that we're done.
+
+warning('off','all')
+
+fprintf('Deleting converted files: ');
+for t=1:numel(testDirectories)
+    cd(testDirectories{t});
+    CleanData( );
+    cd('..');
+    fprintf('.');
+end
+fprintf('Done.\n');
 
 
 
