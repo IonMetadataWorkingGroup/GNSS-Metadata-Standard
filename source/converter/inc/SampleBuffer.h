@@ -28,7 +28,7 @@
 #include "SampleSink.h"
 #include "SampleSource.h"
 
-#define BASE_BUFFER_SIZE_IN_BYTES 1024 * 1024
+#define BASE_BUFFER_SIZE 1024 * 1024
 
 template<typename sample_base_t>
 class SampleBuffer : public SampleSinkT<sample_base_t>, public SampleSourceT<sample_base_t>
@@ -36,14 +36,14 @@ class SampleBuffer : public SampleSinkT<sample_base_t>, public SampleSourceT<sam
 
 protected:
    std::vector<sample_base_t> mSampleBuffer;
-   uint32_t                   mMaxBufferSize;
+   int32_t                    mBufferSize;
+   int32_t                    mBufferPos;
    
-   bool     Open();
-   void     DoAddSample( sample_base_t x );
-   uint32_t DoGetSamples( const void** buff ) const;
+   bool            Open();
+   inline void     DoAddSample( sample_base_t x );
+   inline void     DoAddSample( sample_base_t x, sample_base_t y );
+   inline uint32_t DoGetSamples( const void** buff ) const;
 
-   
-   
 public:
    SampleBuffer( std::string fileName );
    virtual ~SampleBuffer(void);

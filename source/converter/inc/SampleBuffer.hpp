@@ -22,7 +22,8 @@
 
 template<typename sample_base_t>
 SampleBuffer<sample_base_t>::SampleBuffer( std::string fileName ) :
-mMaxBufferSize( BASE_BUFFER_SIZE_IN_BYTES )
+mBufferSize(0),
+mBufferPos(0)
 {
    Open( );
 }
@@ -46,15 +47,11 @@ bool SampleBuffer<sample_base_t>::Open( )
    //default to true, doesn't make much sense here, but would be valid if malloc or new[] was used
    this->mIsOpen = true;
 
-
-   //choose buffer size, making sure its size in bytes is an integer multiple of BASE_BUFFER_SIZE_IN_BYTES
-   unsigned int numBytesPerBuffer = mMaxBufferSize; 
-   numBytesPerBuffer = numBytesPerBuffer - numBytesPerBuffer % BASE_BUFFER_SIZE_IN_BYTES;
-   mMaxBufferSize    = ( numBytesPerBuffer < BASE_BUFFER_SIZE_IN_BYTES ? BASE_BUFFER_SIZE_IN_BYTES : numBytesPerBuffer );
-
    //now try to ensure that there is space in the buffer
-   mSampleBuffer.reserve(mMaxBufferSize);
-  
+   mSampleBuffer.resize(BASE_BUFFER_SIZE);
+   mBufferSize = mSampleBuffer.size();
+   mBufferPos  = -1;
+   
    return this->mIsOpen;
 };
 
@@ -76,9 +73,7 @@ void SampleBuffer<sample_base_t>::Flush()
    if( !this->mIsOpen )
       return;
 
-   mSampleBuffer.clear();
-   mSampleBuffer.resize(0);
-   mSampleBuffer.reserve(mMaxBufferSize);
+   mBufferPos = -1;
 
 };
 
@@ -88,8 +83,41 @@ void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x )
    
    if( !this->mIsOpen )
       return;
+   
+   //advance the pointer
+   mBufferPos++;
+   
+   //is there still space?
+   if( mBufferPos >= static_cast<int32_t>(mSampleBuffer.size()) )
+   {
+      mSampleBuffer.resize( mSampleBuffer.size() + BASE_BUFFER_SIZE_IN_BYTES );
+      mBufferSize = mSampleBuffer.size();
+      
+   }
+   
+   mSampleBuffer[mBufferPos] = x;
+   
+};
 
-   mSampleBuffer.push_back( x );
+template<typename sample_base_t>
+void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x, sample_base_t y )
+{
+   
+   if( !this->mIsOpen )
+      return;
+   
+   //advance the pointer
+   mBufferPos += 2;
+   
+   //is there still space?
+   if( mBufferPos >= mBufferSize )
+   {
+      mSampleBuffer.resize( mBufferSize + BASE_BUFFER_SIZE_IN_BYTES );
+      mBufferSize = mSampleBuffer.size();
+   }
+   
+   mSampleBuffer[mBufferPos-1] = x;
+   mSampleBuffer[mBufferPos]   = y;
    
 };
 
@@ -101,7 +129,7 @@ uint32_t SampleBuffer<sample_base_t>:: DoGetSamples( const void** pbuff ) const
    *pbuff = &mSampleBuffer[0];
 
    //indicate how many samples are there
-   return static_cast<uint32_t>(mSampleBuffer.size());
+   return static_cast<uint32_t>(mBufferPos+1);
 };
 
 

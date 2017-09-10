@@ -38,9 +38,9 @@ public:
     LaneInterpreter( std::string fileURL );
 	virtual  ~LaneInterpreter();
 
-   virtual void AddBlock( BlockInterpreter* newBlock );
-   virtual std::vector<BlockInterpreter*>&    Blocks();
-   const std::string FileURL() const;
+   virtual void                            AddBlock( BlockInterpreter* newBlock );
+   virtual std::vector<BlockInterpreter*>& Blocks();
+   const   std::string                     FileURL() const;
 };
 
 #endif //CLASS_LaneInterpreter

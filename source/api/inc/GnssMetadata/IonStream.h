@@ -62,8 +62,9 @@ namespace GnssMetadata
 			QI,
 			QIn,
 			QnI,
-			QnIn
-			
+			QnIn,
+			//specialized SampleFormats (include native encoder types)
+         Int8IQ
 		};
 	public:
 		IonStream(  const IonString& id = "", bool bIsReference = false)

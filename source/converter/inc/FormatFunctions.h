@@ -92,8 +92,8 @@ namespace SampleFormatFunctions
       sample_base_t I = (*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
       sample_base_t Q = (*encoderFunc)( pChunk, chunkIndexSecond, shiftSecond, bitWidth/2 );
 
-      sampleSink->AddSample( I );
-      sampleSink->AddSample( Q );
+      sampleSink->AddSample( I, Q );
+      //sampleSink->AddSample( Q );
 	
    };
 
@@ -106,8 +106,8 @@ namespace SampleFormatFunctions
       sample_base_t I =  (*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
       sample_base_t Q = -(*encoderFunc)( pChunk, chunkIndexSecond, shiftSecond, bitWidth/2 );
 
-      sampleSink->AddSample( I );
-      sampleSink->AddSample( Q );
+      sampleSink->AddSample( I, Q );
+      //sampleSink->AddSample( Q );
 	
    };
 
@@ -120,8 +120,8 @@ namespace SampleFormatFunctions
       sample_base_t I = -(*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
       sample_base_t Q =  (*encoderFunc)( pChunk, chunkIndexSecond, shiftSecond, bitWidth/2 );
 
-      sampleSink->AddSample( I );
-      sampleSink->AddSample( Q );
+      sampleSink->AddSample( I, Q );
+      //sampleSink->AddSample( Q );
 	
    };
 
@@ -134,8 +134,8 @@ namespace SampleFormatFunctions
       sample_base_t I = -(*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
       sample_base_t Q = -(*encoderFunc)( pChunk, chunkIndexSecond, shiftSecond, bitWidth/2 );
 
-      sampleSink->AddSample( I );
-      sampleSink->AddSample( Q );
+      sampleSink->AddSample( I, Q );
+      //sampleSink->AddSample( Q );
 	
    };
 
@@ -148,8 +148,8 @@ namespace SampleFormatFunctions
       sample_base_t I = (*encoderFunc)( pChunk, chunkIndexSecond, shiftSecond, bitWidth/2 );
       sample_base_t Q = (*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
 
-      sampleSink->AddSample( I );
-      sampleSink->AddSample( Q );
+      sampleSink->AddSample( I, Q );
+      //sampleSink->AddSample( Q );
 	
    };
 
@@ -162,8 +162,8 @@ namespace SampleFormatFunctions
       sample_base_t I = -(*encoderFunc)( pChunk, chunkIndexSecond, shiftSecond, bitWidth/2 );
       sample_base_t Q = (*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
 
-      sampleSink->AddSample( I );
-      sampleSink->AddSample( Q );
+      sampleSink->AddSample( I, Q );
+      //sampleSink->AddSample( Q );
 	
    };
 
@@ -176,8 +176,8 @@ namespace SampleFormatFunctions
       sample_base_t I = (*encoderFunc)( pChunk, chunkIndexSecond, shiftSecond, bitWidth/2 );
       sample_base_t Q = -(*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
 
-      sampleSink->AddSample( I );
-      sampleSink->AddSample( Q );
+      sampleSink->AddSample( I, Q );
+      //sampleSink->AddSample( Q );
 	
    };
 
@@ -186,13 +186,27 @@ namespace SampleFormatFunctions
       uint8_t  shiftFirst, shiftSecond;
       uint32_t chunkIndexFirst, chunkIndexSecond;
       ComputeOffsets<chunk_t>( chunkIndex, residualBitIndex, bitWidth, shiftFirst, shiftSecond, chunkIndexFirst, chunkIndexSecond );
-
+      
       sample_base_t I = -(*encoderFunc)( pChunk, chunkIndexSecond, shiftSecond, bitWidth/2 );
       sample_base_t Q = -(*encoderFunc)( pChunk, chunkIndexFirst, shiftFirst, bitWidth/2 );
+      
+      sampleSink->AddSample( I, Q );
+      
+   };
+   
 
-      sampleSink->AddSample( I );
-      sampleSink->AddSample( Q );
-	
+   // Specialized FormatFunctions (including native type encoder functions
+   template<typename chunk_t, typename sample_base_t> void Int8IQ( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
+   {
+      uint8_t  shiftFirst, shiftSecond;
+      uint32_t chunkIndexFirst, chunkIndexSecond;
+      ComputeOffsets<chunk_t>( chunkIndex, residualBitIndex, bitWidth, shiftFirst, shiftSecond, chunkIndexFirst, chunkIndexSecond );
+      
+      sample_base_t I =  static_cast<int8_t>( (pChunk[chunkIndexFirst]  >> shiftFirst)  & 0xff );
+      sample_base_t Q =  static_cast<int8_t>( (pChunk[chunkIndexSecond] >> shiftSecond) & 0xff );
+      
+      sampleSink->AddSample( I, Q );
+
    };
 
 };//end namespace SampleFormatFunctions

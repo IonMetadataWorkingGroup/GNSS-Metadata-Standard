@@ -37,6 +37,7 @@ protected:
 
    bool Open();
    void DoAddSample( sample_base_t x );
+   void DoAddSample( sample_base_t x, sample_base_t y );
    
 public:
    SampleStatisticsSink(std::string fileName);

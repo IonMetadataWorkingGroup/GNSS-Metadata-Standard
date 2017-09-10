@@ -26,7 +26,7 @@
 #include <string>
 #include <cstring>
 
-#define BinaryFileSource_READ_SIZE 1048576
+#define BinaryFileSource_READ_SIZE 16*1024*1024
 
 #undef min
 

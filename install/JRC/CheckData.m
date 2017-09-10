@@ -1,4 +1,8 @@
-function JRC_OK = CheckJRC( doSilent )
+function JRC_OK = CheckData( doSilent )
+
+% +1  : for pass
+%  0 : fail
+% -1 : not executed
 
 nSamples = 1024*1024;
 
@@ -16,6 +20,12 @@ dataL5Original = fread( fileL5Original, nSamples, origFileDataType );
 fileL1New = fopen(sprintf('L1.dat'));
 fileL2New = fopen(sprintf('L2.dat'));
 fileL5New = fopen(sprintf('L5.dat'));
+
+if( sum( [fileL1New fileL2New fileL5New] == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    JRC_OK = 0;
+    return;
+end
 
 
 L1OK = 0;

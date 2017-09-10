@@ -39,7 +39,8 @@ SampleInterpreterFactory<chunk_t,sample_base_t>::SampleInterpreterFactory()
    mEncoderFunctionMap["TCA"] = (encFuncPtr_t)&SampleEncoderFunctions::TwosComplimentAdjusted;
    mEncoderFunctionMap["OGA"] = (encFuncPtr_t)&SampleEncoderFunctions::OffsetGrayAdjusted;
 
-   mEncoderFunctionMap["INT8"] = (encFuncPtr_t)&SampleEncoderFunctions::IntegerEight;
+   //specialized EncoderFunctions (native types)
+   mEncoderFunctionMap["INT8"] = (encFuncPtr_t)&SampleEncoderFunctions::Int8;
 
    // "introduce" the FormatFunctions to the Factory
    mFormatFunctionMap[ GnssMetadata::IonStream::IF   ] = &SampleFormatFunctions::IF<chunk_t,sample_base_t>;
@@ -52,6 +53,9 @@ SampleInterpreterFactory<chunk_t,sample_base_t>::SampleInterpreterFactory()
    mFormatFunctionMap[ GnssMetadata::IonStream::QIn  ] = &SampleFormatFunctions::QIn<chunk_t,sample_base_t>;
    mFormatFunctionMap[ GnssMetadata::IonStream::QnI  ] = &SampleFormatFunctions::QnI<chunk_t,sample_base_t>;
    mFormatFunctionMap[ GnssMetadata::IonStream::QnIn ] = &SampleFormatFunctions::QnIn<chunk_t,sample_base_t>;
+   
+   //specialized FormatFunctions (native types)
+   mFormatFunctionMap[ GnssMetadata::IonStream::Int8IQ ] = &SampleFormatFunctions::Int8IQ<chunk_t,sample_base_t>;
 
 };
 
@@ -86,8 +90,36 @@ bool SampleInterpreterFactory<chunk_t,sample_base_t>::Create(
    }
 
    //it would be possible here to create specializations, which combine FormatFunctions and EncoderFunctions
-
-
+   
+   //try Int8 IF
+   if( (fmt == GnssMetadata::IonStream::IF) && ( enc == "TC" ) && ( BitWidth( fmt, qnt ) == 8 ) )
+   {
+      //otherwise proceed with a generic SampleInterpreter
+      smplIntrp = new SinkedSampleInterpreter<chunk_t,sample_base_t>(
+                                                                     BitWidth( fmt, qnt ),
+                                                                     mEncoderFunctionMap["INT8"],
+                                                                     mFormatFunctionMap[ GnssMetadata::IonStream::IF ],
+                                                                     sampleSink,
+                                                                     callOrder
+                                                                     );
+      return true;
+   }
+   
+   //try Int8 I,Q
+   if( (fmt == GnssMetadata::IonStream::IQ) && ( enc == "TC" ) && ( BitWidth( fmt, qnt ) == 16 ) )
+   {
+      //otherwise proceed with a generic SampleInterpreter
+      smplIntrp = new SinkedSampleInterpreter<chunk_t,sample_base_t>(
+                                                                     BitWidth( fmt, qnt ),
+                                                                     NULL,
+                                                                     mFormatFunctionMap[ GnssMetadata::IonStream::Int8IQ ],
+                                                                     sampleSink,
+                                                                     callOrder
+                                                                     );
+      return true;
+   }
+   
+   //otherwise proceed with a generic SampleInterpreter
    smplIntrp = new SinkedSampleInterpreter<chunk_t,sample_base_t>( 
                         BitWidth( fmt, qnt ), 
                         mEncoderFunctionMap[enc], 

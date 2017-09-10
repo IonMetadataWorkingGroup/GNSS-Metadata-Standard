@@ -54,7 +54,7 @@ void SinkedSampleInterpreter<chunk_t,sample_base_t>::Interpret( const void* vChu
 {
 
    const chunk_t* pChunk = reinterpret_cast<const chunk_t*>( vChunk );
-   (*mFormatFunc)( mEncodingFunc, pChunk, mChunkIndex, mResidualBitIndex, BitWidth(), mSampleSink );
+   (*mFormatFunc)( mEncodingFunc, pChunk, mChunkIndex, mResidualBitIndex, mBitWidth, mSampleSink );
 
 };
 

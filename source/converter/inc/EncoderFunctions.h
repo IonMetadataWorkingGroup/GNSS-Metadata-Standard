@@ -204,7 +204,7 @@ namespace SampleEncoderFunctions
 
 
    template<typename chunk_t, typename sample_base_t>
-   sample_base_t IntegerEight(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
+   sample_base_t Int8(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
    {
 
 	   int8_t sample =  static_cast<int8_t>( (pChunk[chunkIndex] >> shift) & 0xff );

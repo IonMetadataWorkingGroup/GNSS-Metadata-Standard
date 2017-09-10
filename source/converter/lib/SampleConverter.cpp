@@ -112,22 +112,24 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
 
 
 
-void SampleConverter::Load( const uint32_t chunksToProcess )
+bool SampleConverter::Load( const uint32_t chunksToProcess )
 {
    
    if( !mIsOpen )
    {
       printf("Error: no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n )");
-      return;
+      return false;
    }
    
    // Do we have anything to do?
    if( mLaneInterps.size() == 0 )
    {
       printf("No Lanes found. Terminating.\n");
-      return;
+      return false;
    }
    
+   
+   bool readAllOK = true;
    
    // otherwise iterate over the lanes and do the unpacking/converting
    for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
@@ -146,14 +148,18 @@ void SampleConverter::Load( const uint32_t chunksToProcess )
          //read the entire block
          do
          {
-            readBlockOK = block->InterpretChunk( *mLaneFiles[*lnIt] );
+            readBlockOK = block->InterpretChunk( *mLaneFiles[laneInterpreter] );
             chunksProcessed++;
          }
          while( readBlockOK && chunksProcessed < chunksToProcess );
+         
+         readAllOK = readAllOK && ( chunksProcessed == chunksToProcess );
       }
       
       
    }//end for( lnIt )
+
+   return readAllOK;
 };
 
 

@@ -56,7 +56,7 @@ public:
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" );
    void Close();
    void Convert( const uint32_t bytesToProcess = 0 );
-   void Load( const uint32_t chunksToProcess );
+   bool Load( const uint32_t chunksToProcess );
  
 };
 

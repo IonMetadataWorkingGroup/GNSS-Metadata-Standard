@@ -1,4 +1,8 @@
-function TRIGR_OK = CheckTRIGR( doSilent )
+function TRIGR_OK = CheckData( doSilent )
+
+% +1  : for pass
+%  0 : fail
+% -1 : not executed
 
 nSamples = 56320;
 
@@ -24,6 +28,12 @@ fileS0New = fopen(sprintf('Str00.dat'));
 fileS1New = fopen(sprintf('Str01.dat'));
 fileS2New = fopen(sprintf('Str02.dat'));
 fileS3New = fopen(sprintf('Str03.dat'));
+
+if( sum( [fileS0New fileS1New fileS2New fileS3New] == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    TRIGR_OK = 0;
+    return;
+end
 
 
 STR00OK = 0;
