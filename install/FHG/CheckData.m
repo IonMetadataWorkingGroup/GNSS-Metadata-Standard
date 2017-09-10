@@ -1,4 +1,26 @@
-function FHG_OK = CheckFHG( doSilent )
+function FHG_OK = CheckData( doSilent )
+
+% +1  : for pass
+%  0 : fail
+% -1 : not executed
+
+% check the system (xmlread not supported under Octave) 
+isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+if isOctave
+    fprintf('\n***********************************************\n');
+    fprintf(  '* Warning: xmlread not supported under Octave *\n');
+    fprintf(  '* Skipping "CheckFHG()" converter tests.     *\n')    
+    fprintf(  '***********************************************\n\n');
+    
+    FHG_OK = -1;
+    return;
+end
+
+
+
+
+
+
 
 if( ~exist( 'doSilent', 'var') )
     doSilent = 0;

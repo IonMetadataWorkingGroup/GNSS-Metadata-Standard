@@ -1,4 +1,8 @@
-function TRIGR_OK = CheckTRIGR( doSilent )
+function TRIGR_OK = CheckData( doSilent )
+
+% +1  : for pass
+%  0 : fail
+% -1 : not executed
 
 nSamples = 56320;
 

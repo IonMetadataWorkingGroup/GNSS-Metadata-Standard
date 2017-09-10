@@ -1,5 +1,8 @@
-function IFEN_OK = CheckIFEN( doSilent )
+function IFEN_OK = CheckData( doSilent )
 
+% +1  : for pass
+%  0 : fail
+% -1 : not executed
 
 if( ~doSilent )
     disp( 'Verification of IFEN AltBOC dual RF data' );

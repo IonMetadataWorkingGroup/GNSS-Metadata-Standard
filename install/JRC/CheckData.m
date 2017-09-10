@@ -1,4 +1,8 @@
-function JRC_OK = CheckJRC( doSilent )
+function JRC_OK = CheckData( doSilent )
+
+% +1  : for pass
+%  0 : fail
+% -1 : not executed
 
 nSamples = 1024*1024;
 

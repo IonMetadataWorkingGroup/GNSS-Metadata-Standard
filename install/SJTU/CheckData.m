@@ -1,3 +1,15 @@
+function TEST_OK = CheckData( doSilent )
+
+% +1  : for pass
+%  0 : fail
+% -1 : not executed
+
+TEST_OK = -1;
+return;
+
+
+
+
 fs       = 62e6;
 IFL1CA   = 7.42e6;
 IFBDSB1  = -6.902e6;
