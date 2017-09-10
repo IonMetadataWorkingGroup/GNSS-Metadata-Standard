@@ -46,6 +46,7 @@ end
 isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 isMatlab = ~isOctave;
 
+% run the converter 
 cd(installDir);
 installDir = pwd();
 system(cmdString);

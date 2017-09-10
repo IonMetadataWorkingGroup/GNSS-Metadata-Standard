@@ -40,6 +40,11 @@ end
 
 
 fp=fopen( 'ANT0-E5L5.dat', 'rb' );
+if( sum( fp == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    IFEN_OK = 0;
+    return;
+end
 samp = fread( fp, 1000, 'int8' );
 fclose( fp );
 
@@ -83,6 +88,11 @@ end
 
 
 fp=fopen( 'ANT0-E1L1.dat', 'rb' );
+if( sum( fp == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    IFEN_OK = 0;
+    return;
+end
 samp = fread( fp, 1000, 'int8' );
 fclose( fp );
 
@@ -121,6 +131,11 @@ else
 end
 
 fp=fopen( 'ANT1-E5L5.dat', 'rb' );
+if( sum( fp == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    IFEN_OK = 0;
+    return;
+end
 samp = fread( fp, 1000, 'int8' );
 fclose( fp );
 
@@ -160,6 +175,11 @@ else
 end
 
 fp=fopen( 'ANT1-E1L1.dat', 'rb' );
+if( sum( fp == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    IFEN_OK = 0;
+    return;
+end
 samp = fread( fp, 1000, 'int8' );
 fclose( fp );
 

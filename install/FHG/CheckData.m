@@ -189,14 +189,29 @@ end
 %%
 %
 fid = fopen('L1E1bc.dat', 'r');
+if( sum( fid == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    FHG_OK = 0;
+    return;
+end
 rawL1 = fread(fid, 2 * nrOfFrames * block.cycles * streamL1.ratefactor, chunk.sizeword); % 2* for I/Q
 fclose(fid);
 
 fid = fopen('L2L2C.dat', 'r');
+if( sum( fid == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    FHG_OK = 0;
+    return;
+end
 rawL2 = fread(fid, 2 * nrOfFrames * block.cycles * streamL2.ratefactor, chunk.sizeword); % 2* for I/Q
 fclose(fid);
 
 fid = fopen('L5E5a.dat', 'r');
+if( sum( fid == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    FHG_OK = 0;
+    return;
+end
 rawL5 = fread(fid, 2 * nrOfFrames * block.cycles * streamL5.ratefactor, chunk.sizeword); % 2* for I/Q
 fclose(fid);
 

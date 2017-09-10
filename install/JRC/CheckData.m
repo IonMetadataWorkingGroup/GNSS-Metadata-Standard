@@ -21,6 +21,12 @@ fileL1New = fopen(sprintf('L1.dat'));
 fileL2New = fopen(sprintf('L2.dat'));
 fileL5New = fopen(sprintf('L5.dat'));
 
+if( sum( [fileL1New fileL2New fileL5New] == -1 ) > 0 )
+    fprintf('Failed to open input file: FAIL\n')
+    JRC_OK = 0;
+    return;
+end
+
 
 L1OK = 0;
 if( fileL1New > 0 )
