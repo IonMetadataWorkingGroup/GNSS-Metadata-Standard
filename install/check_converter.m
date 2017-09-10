@@ -16,11 +16,17 @@ testDirectories = {'FHG', 'IFEN', 'JRC', 'TRIGR', 'SJTU'};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Purge all of the old converted sample files, to ensure that the 
 % TestConverter execution acutally creates new converted files 
+
+warning('off','all')
+
+fprintf('Deleting old files: ');
 for t=1:numel(testDirectories)
     cd(testDirectories{t});
     CleanData( );
     cd('..');
+    fprintf('.');
 end
+fprintf('Done.\n');
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -47,15 +53,17 @@ isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 isMatlab = ~isOctave;
 
 % run the converter 
+fprintf('Running the test converter ("%s"): ',binName);
 cd(installDir);
 installDir = pwd();
 system(cmdString);
 cd(testDir);
+fprintf('Done.\n');
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Check each of the files
 doSilent = 1;
-
+fprintf('Checking the converted output: \n');
 for t=1:numel(testDirectories)
     
     cd(testDirectories{t});
@@ -77,7 +85,9 @@ for t=1:numel(testDirectories)
     end
     
     cd('..');
+
 end
+fprintf('\nTest completed.\n\n');
 
 return;
 

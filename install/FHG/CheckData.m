@@ -6,21 +6,7 @@ function FHG_OK = CheckData( doSilent )
 
 % check the system (xmlread not supported under Octave) 
 isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
-if isOctave
-    fprintf('\n***********************************************\n');
-    fprintf(  '* Warning: xmlread not supported under Octave *\n');
-    fprintf(  '* Skipping "CheckFHG()" converter tests.     *\n')    
-    fprintf(  '***********************************************\n\n');
-    
-    FHG_OK = -1;
-    return;
-end
-
-
-
-
-
-
+isMatlab = ~isOctave;
 
 if( ~exist( 'doSilent', 'var') )
     doSilent = 0;
@@ -54,47 +40,64 @@ preamble = '55aa';
 preambleDataLength = 2; % byte
 counterDataLength = 4; % byte
 
-% ION Metadata
-usbx = xml2struct('L125_III1b_15s.usbx');
 
-block.cycles = str2num(usbx.metadata.lane.block.cycles.Text);
-block.sizeheader = str2num(usbx.metadata.lane.block.sizeheader.Text);
-block.sizefooter = str2num(usbx.metadata.lane.block.sizefooter.Text);
+% if we are in Matlab, then read the XML
 
-chunk.countwords = str2num(usbx.metadata.lane.block.chunk.countwords.Text);
-chunk.sizeword = 'int8';    % str2num(usbx.metadata.lane.block.chunk.sizeword.Text);
-                            % int8 =! uint8; we are using int8, not uint8
+if isMatlab
 
-streamL2.ratefactor = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,1}.ratefactor.Text);
-streamL2.quantization = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,1}.quantization.Text);
-streamL2.format = usbx.metadata.lane.block.chunk.lump.stream{1,1}.format.Text;
 
-streamL1.ratefactor = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,2}.ratefactor.Text);
-streamL1.quantization = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,2}.quantization.Text);
-streamL1.format = usbx.metadata.lane.block.chunk.lump.stream{1,2}.format.Text;
+    % ION Metadata
+    usbx = xml2struct('L125_III1b_15s.usbx');
 
-streamL5.ratefactor = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,3}.ratefactor.Text);
-streamL5.quantization = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,3}.quantization.Text);
-streamL5.format = usbx.metadata.lane.block.chunk.lump.stream{1,3}.format.Text;
+    block.cycles = str2num(usbx.metadata.lane.block.cycles.Text);
+    block.sizeheader = str2num(usbx.metadata.lane.block.sizeheader.Text);
+    block.sizefooter = str2num(usbx.metadata.lane.block.sizefooter.Text);
 
-% block.cycles = 253;
-% block.sizeheader = 6; %preambleDataLength + counterDataLength;
-% block.sizefooter = 6;
-% 
-% chunk.countwords = 4;
-% chunk.sizeword = 'int8'; % =! uint8; we are using int8, not uint8
-% 
-% streamL1.ratefactor = 1;
-% streamL1.quantization = 4;
-% streamL2.format = 'IQ';
-% 
-% streamL2.ratefactor = 1;
-% streamL2.quantization = 4;
-% streamL2.format = 'IQ';
-% 
-% streamL5.ratefactor = 2;
-% streamL5.quantization = 4;
-% streamL5.format = 'IQ';
+    chunk.countwords = str2num(usbx.metadata.lane.block.chunk.countwords.Text);
+    chunk.sizeword = 'int8';    % str2num(usbx.metadata.lane.block.chunk.sizeword.Text);
+                                % int8 =! uint8; we are using int8, not uint8
+
+    streamL2.ratefactor = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,1}.ratefactor.Text);
+    streamL2.quantization = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,1}.quantization.Text);
+    streamL2.format = usbx.metadata.lane.block.chunk.lump.stream{1,1}.format.Text;
+
+    streamL1.ratefactor = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,2}.ratefactor.Text);
+    streamL1.quantization = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,2}.quantization.Text);
+    streamL1.format = usbx.metadata.lane.block.chunk.lump.stream{1,2}.format.Text;
+
+    streamL5.ratefactor = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,3}.ratefactor.Text);
+    streamL5.quantization = str2num(usbx.metadata.lane.block.chunk.lump.stream{1,3}.quantization.Text);
+    streamL5.format = usbx.metadata.lane.block.chunk.lump.stream{1,3}.format.Text;
+
+    
+else
+    
+    fprintf('\n************************************************\n');
+    fprintf(  '* Warning: xmlread not supported under Octave  *\n');
+    fprintf(  '* Using hard-coded data in FHG converter tests *\n')    
+    fprintf(  '************************************************\n\n');
+    
+    block.cycles = 253;
+    block.sizeheader = 6; %preambleDataLength + counterDataLength;
+    block.sizefooter = 6;
+
+    chunk.countwords = 4;
+    chunk.sizeword = 'int8'; % =! uint8; we are using int8, not uint8
+
+    streamL1.ratefactor = 1;
+    streamL1.quantization = 4;
+    streamL2.format = 'IQ';
+
+    streamL2.ratefactor = 1;
+    streamL2.quantization = 4;
+    streamL2.format = 'IQ';
+
+    streamL5.ratefactor = 2;
+    streamL5.quantization = 4;
+    streamL5.format = 'IQ';
+    
+end
+
 
 % How much data shall be converted...
 nrOfFrames = 10;
@@ -224,18 +227,37 @@ end
 L2OK = 1;
 L1OK = 1;
 L5OK = 1;
-if sum( abs(  L2I - rawL2(1:2:nrOfFrames*2*block.cycles*streamL2.ratefactor).' ) ); L2OK = 0; disp('error in L2I conversion'); end
-if sum( abs(  L2Q - rawL2(2:2:nrOfFrames*2*block.cycles*streamL2.ratefactor).' ) ); L2OK = 0; disp('error in L2Q conversion'); end
-if sum( abs(  L1I - rawL1(1:2:nrOfFrames*2*block.cycles*streamL1.ratefactor).' ) ); L1OK = 0; disp('error in L1I conversion'); end
-if sum( abs(  L1Q - rawL1(2:2:nrOfFrames*2*block.cycles*streamL1.ratefactor).' ) ); L1OK = 0; disp('error in L1Q conversion'); end
-if sum( abs(  L5I - rawL5(1:2:nrOfFrames*2*block.cycles*streamL5.ratefactor).' ) ); L5OK = 0; disp('error in L5I conversion'); end
-if sum( abs( L5Q - rawL5(2:2:nrOfFrames*2*block.cycles*streamL5.ratefactor).'  ) ); L5OK = 0; disp('error in L5Q conversion'); end
+
+if sum( abs(  L2I - rawL2(1:2:nrOfFrames*2*block.cycles*streamL2.ratefactor).' ) ) 
+    L2OK = 0; 
+    disp('error in L2I conversion'); 
+end
+if  sum( abs(  L2Q - rawL2(2:2:nrOfFrames*2*block.cycles*streamL2.ratefactor).' ) );
+    L2OK = 0; 
+    disp('error in L2Q conversion'); 
+end
+if  sum( abs(  L1I - rawL1(1:2:nrOfFrames*2*block.cycles*streamL1.ratefactor).' ) ); 
+    L1OK = 0; 
+    disp('error in L1I conversion'); 
+end
+if  sum( abs(  L1Q - rawL1(2:2:nrOfFrames*2*block.cycles*streamL1.ratefactor).' ) ); 
+    L1OK = 0; 
+    disp('error in L1Q conversion'); 
+end
+if  sum( abs(  L5I - rawL5(1:2:nrOfFrames*2*block.cycles*streamL5.ratefactor).' ) ); 
+    L5OK = 0; 
+    disp('error in L5I conversion'); 
+end
+if  sum( abs( L5Q - rawL5(2:2:nrOfFrames*2*block.cycles*streamL5.ratefactor).'  ) ); 
+    L5OK = 0; 
+    disp('error in L5Q conversion'); 
+end
 
 if( ~doSilent )
     disp('done.')
 end
 %
-FHG_OK = L2OK && L1OK && L5OK;
+FHG_OK = L1OK  && L2OK && L5OK;
 
 
 
