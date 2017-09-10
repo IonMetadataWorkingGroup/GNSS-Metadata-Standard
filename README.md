@@ -36,22 +36,22 @@ Unix (make) or Mac OS (make)
 
 
 
-To thest the code, change to the 'install' directory and run the acompanying matlab/octave script called 'check_converter.m'.
-If everything has build OK then you should see the following output:
-
->
->Deleting old files: .....Done.
->Running the test converter ("TestConverter"): Done.
->Checking the converted output: 
->FHG:             OK
->IFEN:            OK
->JRC:             OK
->TRIGR:           OK
->SJTU:            SKIPPED
->
->Test completed.
->
-
+To thest the code, change to the 'install' directory and run the acompanying matlab/octave script called 'check_converter.m'.  
+If everything has build OK then you should see the following output:  
+  
+>  
+>Deleting old files: .....Done.   
+>Running the test converter ("TestConverter"): Done.  
+>Checking the converted output:   
+>FHG:             OK  
+>IFEN:            OK  
+>JRC:             OK  
+>TRIGR:           OK   
+>SJTU:            SKIPPED  
+>  
+>Test completed.  
+>  
+  
 
 To add the the "GNSS-Metadata-Standard Converter" to your  CMake managed project, 
 add the following lines to your CMakeLists.txt file:
