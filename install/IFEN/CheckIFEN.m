@@ -1,41 +1,40 @@
 function IFEN_OK = CheckIFEN( doSilent )
 
+
 if( ~doSilent )
     disp( 'Verification of IFEN AltBOC dual RF data' );
     disp( '----------------------------------------' );
 end
-% %%
-% MAC = 0;
-% WIN = 1;
-% 
-% SYS = WIN;
-% 
-% 
-% testDir    = pwd;
-% if SYS == WIN
-%     installDir = '..';
-%     binName    = 'TestApp_vs';
-% elseif SYS == MAC 
-%     installDir = '/Volumes/Data/GitHub/GNSS-Metadata-Standard/Converter/install/';
-%     binName    = './TestApp';
-% else
-%     printf('System??\n');
-% end
-% 
-% 
-% 
-% cd(installDir);
-% system('rm *.dat');
-% system(binName);
-% cd(testDir);
 
+
+% check the system (xmlread not supported under Octave) 
+isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+isMatlab = ~isOctave;
 
 
 %%
 fpt=fopen( 'SX3_AltBOC_DualRF_Band0_FE0_ANT0_f1191795000.stream', 'rb' );
-sampt=fread( fpt, 1000, 'bit2' );
-fclose( fpt );
-sampt=2*sampt+1;
+
+% James's - quick Octave-ready hack
+if isMatlab
+    % if we are Matlab, then use the fancy 'binN' functionality
+    sampt=fread( fpt, 1000, 'bit2' );
+    fclose( fpt );
+    sampt=2*sampt+1;
+else
+    % otherwise do the old-fashioned bit manipulation
+    data=fread( fpt, 250, 'uint8' );
+    fclose( fpt );
+
+    sampt = zeros(1000,1);
+    LUT = [1 3 -3 -1];
+    for b=1:250
+        for ofst=0:3
+            sampt( 4*(b-1) + ofst + 1 ) = LUT( 1 + uint8( bitand(bitshift( data( b ) ,-2*ofst),uint8(3)) )  );
+        end
+    end
+end
+
 
 fp=fopen( 'ANT0-E5L5.dat', 'rb' );
 samp = fread( fp, 1000, 'int8' );
@@ -57,9 +56,28 @@ end
 
 %%
 fpt=fopen( 'SX3_AltBOC_DualRF_Band1_FE0_ANT0_f1575420000.stream', 'rb' );
-sampt=fread( fpt, 1000, 'bit2' );
-fclose( fpt );
-sampt=2*sampt+1;
+
+% James's - quick Octave-ready hack
+if isMatlab
+    % if we are Matlab, then use the fancy 'binN' functionality
+    sampt=fread( fpt, 1000, 'bit2' );
+    fclose( fpt );
+    sampt=2*sampt+1;
+else
+    % otherwise do the old-fashioned bit manipulation
+    data=fread( fpt, 250, 'uint8' );
+    fclose( fpt );
+
+    sampt = zeros(1000,1);
+    LUT = [1 3 -3 -1];
+    for b=1:250
+        for ofst=0:3
+            sampt( 4*(b-1) + ofst + 1 ) = LUT( 1 + uint8( bitand(bitshift( data( b ) ,-2*ofst),uint8(3)) )  );
+        end
+    end
+end
+
+
 
 fp=fopen( 'ANT0-E1L1.dat', 'rb' );
 samp = fread( fp, 1000, 'int8' );
@@ -79,9 +97,25 @@ end
 
 %%
 fpt=fopen( 'SX3_AltBOC_DualRF_Band2_FE0_ANT1_f1191795000.stream', 'rb' );
-sampt=fread( fpt, 1000, 'bit2' );
-fclose( fpt );
-sampt=2*sampt+1;
+% James's - quick Octave-ready hack
+if isMatlab
+    % if we are Matlab, then use the fancy 'binN' functionality
+    sampt=fread( fpt, 1000, 'bit2' );
+    fclose( fpt );
+    sampt=2*sampt+1;
+else
+    % otherwise do the old-fashioned bit manipulation
+    data=fread( fpt, 250, 'uint8' );
+    fclose( fpt );
+
+    sampt = zeros(1000,1);
+    LUT = [1 3 -3 -1];
+    for b=1:250
+        for ofst=0:3
+            sampt( 4*(b-1) + ofst + 1 ) = LUT( 1 + uint8( bitand(bitshift( data( b ) ,-2*ofst),uint8(3)) )  );
+        end
+    end
+end
 
 fp=fopen( 'ANT1-E5L5.dat', 'rb' );
 samp = fread( fp, 1000, 'int8' );
@@ -102,9 +136,25 @@ end
 
 %%
 fpt=fopen( 'SX3_AltBOC_DualRF_Band3_FE0_ANT1_f1575420000.stream', 'rb' );
-sampt=fread( fpt, 1000, 'bit2' );
-fclose( fpt );
-sampt=2*sampt+1;
+% James's - quick Octave-ready hack
+if isMatlab
+    % if we are Matlab, then use the fancy 'binN' functionality
+    sampt=fread( fpt, 1000, 'bit2' );
+    fclose( fpt );
+    sampt=2*sampt+1;
+else
+    % otherwise do the old-fashioned bit manipulation
+    data=fread( fpt, 250, 'uint8' );
+    fclose( fpt );
+
+    sampt = zeros(1000,1);
+    LUT = [1 3 -3 -1];
+    for b=1:250
+        for ofst=0:3
+            sampt( 4*(b-1) + ofst + 1 ) = LUT( 1 + uint8( bitand(bitshift( data( b ) ,-2*ofst),uint8(3)) )  );
+        end
+    end
+end
 
 fp=fopen( 'ANT1-E1L1.dat', 'rb' );
 samp = fread( fp, 1000, 'int8' );
