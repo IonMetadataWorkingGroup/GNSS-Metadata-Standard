@@ -1,4 +1,4 @@
-function CleanFHG( )
+function CleanData( )
 
 % delte the old files, to make sure that the 'TestConverter' execution
 % actually creates some new files.
