@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
     if( argc == 3 )
     {
 
-       // process JRC data
+       // process data from command-line-args
        std::string xmlDirName  = std::string( argv[1] );
        std::string xmlFileName = std::string( argv[2] );
        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
