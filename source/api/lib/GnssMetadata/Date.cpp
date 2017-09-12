@@ -76,7 +76,6 @@ Date Date::Now()
 #if defined(_WIN32) || defined(_WIN64)
 	FILETIME ft;
 	GetSystemTimeAsFileTime(&ft);
-
 	ULARGE_INTEGER ull;    
 	ull.LowPart = ft.dwLowDateTime;    
 	ull.HighPart = ft.dwHighDateTime;    
@@ -135,7 +134,7 @@ Date::Date( double secGps, int wkGps, int secLeap )
     _dt.tv_nsec = (long)((secGps - (double)tsecGps)*BILLION_VALUE);
 }
 
-Date::Date( const char* pszDate)
+Date::Date( const char* pszDate) : _secLeap(0)
 {
 	int yr,mo,day,hr,min;
 	double sec;
