@@ -21,6 +21,7 @@
 
 #include "SampleFileSink.h"
 #include "SampleStatisticsSink.h"
+#include <math.h>
 
 template<typename sample_base_t>
 bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix )
@@ -101,8 +102,58 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
       }
    }
 
-   //try to add some info here
    
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   //determine the minimum common load period
+   std::vector<double> chunkPeriods;
+   //loop over lanes/blocks/chunks
+   for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
+   {
+      //for now, just decode the first Lane
+      LaneInterpreter* laneInterpreter= (*lnIt);
+      
+      for( std::vector<BlockInterpreter*>::iterator BkIt = laneInterpreter->Blocks().begin(); BkIt != laneInterpreter->Blocks().end(); ++BkIt )
+      {
+         BlockInterpreter* block = (*BkIt);
+         //
+         std::vector<double> chunkPeriodsThisBlock;
+         for( std::vector<Chunk*>::iterator ckIt = block->ChunkInterpreters().begin(); ckIt != block->ChunkInterpreters().end(); ++ckIt )
+         {
+            //make a list of the chunk periods, consiering the entire system
+            chunkPeriods.push_back((*ckIt)->ChunkPeriod());
+            //also make a list locally, per block (important for timing when unpacking)
+            chunkPeriodsThisBlock.push_back((*ckIt)->ChunkPeriod());
+         }
+         
+         //check that the same period of time is covered for each sample-stream
+         for( size_t p=1; p<chunkPeriodsThisBlock.size(); p++ )
+         {
+            if( chunkPeriodsThisBlock[0] != chunkPeriodsThisBlock[p] )
+            {
+               printf("Warning: found chunks with unequal period in a single block.\n");
+            }
+         }
+         
+         //now we should register the chunk period in this block to make it available to the converter
+         block->SetChunkPeriod( chunkPeriodsThisBlock[0] );
+         
+      }
+   }//end for( lnIt )
+   
+   //determine a load time that is the smallest integer multiple of all chunkPeriods and of the basePeriod
+   mBaseLoadPeriod = 0;
+   bool foundBaseLoadPeriod = true;
+   do
+   {  //while the base period is not an integer multiple of all chunk periods, increase the base period
+      mBaseLoadPeriod += 1.0 / ( commonSampleInfo.mBaseFrequency.toHertz() );
+
+      for(size_t p=0; p<chunkPeriods.size(); p++)
+      {
+         foundBaseLoadPeriod |= ( (mBaseLoadPeriod/chunkPeriods[p]) == floor( mBaseLoadPeriod/chunkPeriods[p] ) );
+      }
+      
+   }while( !foundBaseLoadPeriod );
+      
    //if this worked, then flag the converter as being open
    mIsOpen = true;
 
@@ -175,6 +226,8 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
    
    uint32_t totalOccupiedBitsInChunk   = 0;
    	
+   std::vector<double> periodEachChunk;
+   
    for (GnssMetadata::LumpList::iterator lpIt = chunk->Lumps().begin(); lpIt != chunk->Lumps().end(); ++lpIt)
    {
 
@@ -189,10 +242,14 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 	   }
 
 	   uint16_t lnLumpRepeat = ( chunk->SizeWord() * chunk->CountWords() * 8 ) / numBitsInLump;
-
+      double   lumpPeriod   = 0;
+      
 		for (uint16_t lr = 0; lr < lnLumpRepeat; lr++)
 		{
-
+         
+         //make a list of the period of each set of samples in the lump, check they are the same after...
+         std::vector<double> periodEachStream;
+         
 			uint16_t totalNumSampleInterpreters = 0;
 			for (GnssMetadata::StreamList::iterator smIt = lpIt->Streams().begin(); smIt != lpIt->Streams().end(); ++smIt)
 			{
@@ -270,12 +327,41 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
             sampleInfo->mTranslatedFrequency = GnssMetadata::Frequency( band.TranslatedFrequency().toHertz() );
             sampleInfo->mDelayBias           = band.DelayBias();
 
+            //log the period covered for each sample-stream
+            periodEachStream.push_back( static_cast<double>(smIt->RateFactor())/sampleInfo->mSampleFrequency.toHertz() );
             //
 			} //end iteration over sample-streams
+         
+         //check that the same period of time is covered for each sample-stream
+         for( size_t p=1; p<periodEachStream.size(); p++ )
+         {
+            if( periodEachStream[0] != periodEachStream[p] )
+            {
+               printf("Warning: found lump with unequal period for each sample-stream.\n");
+            }
+         }
+         lumpPeriod = periodEachStream[0];
+         
 		}//end lump-repeat
+      
+      //log the period of the chunk, as calculated based on this lump
+      periodEachChunk.push_back( lnLumpRepeat * lumpPeriod );
+      
 	} //end iteration over lumps
 
-	
+
+   //check that the same period of time is covered for each sample-stream
+   for( size_t p=1; p<periodEachChunk.size(); p++ )
+   {
+      if( periodEachChunk[0] != periodEachChunk[p] )
+      {
+         printf("Warning: found chunk with unequal period for each lump.\n");
+      }
+   }
+
+   //set the chunk period
+   chunkIntrp->SetChunkPeriod( periodEachChunk[0] );
+   
    //now apply some padding to fill out the remainder of the chunk bits
    uint32_t numChunkPaddingBits = 8*sizeof(chunk_t)*static_cast<uint32_t>(chunk->CountWords()) - totalOccupiedBitsInChunk;
    if( numChunkPaddingBits > 0 && (chunk->Padding() != GnssMetadata::Chunk::None) )
