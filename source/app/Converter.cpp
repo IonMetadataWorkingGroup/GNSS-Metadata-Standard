@@ -87,23 +87,23 @@ int main(int argc, char* argv[])
 	try
     {
 
-        // process JRC data
+        //
         std::cout << "--- GNSS MetaData Converter ---\n";
 		
 		switch (fileOutputType)
 		{
-		case kInt8:
-			Convert<int8_t>(argv[1]);
-			break;
-		case kInt16:
-			Convert<int16_t>(argv[1]);
-			break;
-		case kInt32:
-			Convert<int32_t>(argv[1]);
-			break;
-		case kInt64:
-			Convert<int64_t>(argv[1]);
-			break;
+         case kInt8:
+            Convert<int8_t>(argv[1]);
+            break;
+         case kInt16:
+            Convert<int16_t>(argv[1]);
+            break;
+         case kInt32:
+            Convert<int32_t>(argv[1]);
+            break;
+         case kInt64:
+            Convert<int64_t>(argv[1]);
+            break;
 
 		}
 		

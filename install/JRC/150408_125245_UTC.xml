@@ -16,11 +16,12 @@
             <sizeheader>0</sizeheader>
             <sizefooter>0</sizefooter>
 			<chunk>
-                <sizeword>2</sizeword>
-                <countwords>1</countwords>
-                <endian>Little</endian>
-                <padding>Tail</padding>
-                <wordshift>Undefined</wordshift>
+            
+             <sizeword>2</sizeword>
+             <countwords>1</countwords>
+             <endian>Little</endian>
+             <padding>Tail</padding>
+             <wordshift>Undefined</wordshift>
 				<lump>
 									
 					<stream id="L1">

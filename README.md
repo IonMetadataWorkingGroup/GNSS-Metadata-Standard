@@ -87,3 +87,39 @@ add the following lines to your CMakeLists.txt file:
 and include the following in your main.cpp file   
 
 > #include "GnssMetadata.h"   
+
+
+
+
+
+
+
+The ToDo List:
+
+
+1) Chunk Period.
+Question: Shuold all Chunks within a given Block should have the same 'period'?
+   i.e. if a block has two chunk types of chunk, can the samples of one chunk represent a longer period of time than the samples in the other?
+Suggestion: Yes, we should be able to impose this restriction without loosing functionality. The varying sample-rates can be accommodated in the Lump object. Chunks within different lanes can have different periods. 
+
+2) Can we really imagine a scenario where we have multiple types of blocks interleaved in one file?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

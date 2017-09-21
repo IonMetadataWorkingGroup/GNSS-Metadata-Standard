@@ -36,9 +36,11 @@ public:
 
    virtual    void  AddSampleInterpreter( SampleInterpreter* splIntrp, const bool front = false ) = 0;
    virtual    void  SetSourceEndianness( const GnssMetadata::Chunk::WordEndian& srcEndianness) = 0;
+   virtual    void  SetChunkPeriod( const double chunkPeriod ) = 0;
    virtual    void  Interpret( )            = 0;
    virtual    void* GetChunk()              = 0;
    virtual uint32_t BytesPerChunk() const   = 0;
+   virtual double   ChunkPeriod() const   = 0;
 };
 
 
@@ -60,6 +62,7 @@ protected:
    std::vector<chunk_t>           mDataChunk;
    bool                           mSourceEndiannessIsDifferent;
    bool                           mRightWordShift;
+   double                         mChunkPeriod;
 
 protected:
    void ChangeCunkEndianness( );
@@ -69,9 +72,11 @@ public:
 	virtual         ~ChunkInterpreter();
 	void            AddSampleInterpreter( SampleInterpreter* splIntrp, const bool front = false );
    void            SetSourceEndianness( const GnssMetadata::Chunk::WordEndian& srcEndianness );
+   void            SetChunkPeriod( const double chunkPeriod );
    inline void     Interpret( );
    inline void*    GetChunk();
    inline uint32_t BytesPerChunk() const;
+   inline double   ChunkPeriod() const;
 };
 
 #include "ChunkInterpreter.hpp"

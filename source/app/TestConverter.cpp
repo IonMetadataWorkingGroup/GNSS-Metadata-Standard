@@ -49,8 +49,8 @@ int Convert( std::string xmlFileName )
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
    {
-      //load 5000 chunks (equal to 1ms)
-      spcv.Load( 5000 );
+      //load equal to 1ms
+      spcv.Load( 0.001 );
       
    }
 
@@ -92,8 +92,8 @@ int ComputeStatistics( std::string xmlFileName )
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
    {
-      //load 5000 chunks (equal to 1ms)
-      spcv.Load( 5000 );
+      //load equal to 1ms
+      spcv.Load( 0.001 );
 
    }
 
@@ -125,8 +125,8 @@ int FrontEnd( std::string xmlFileName )
    //open the Metadata Converter
    frontEnd.template Open<sample_base_t>( md );
 
-   //load 5000 chunks
-   frontEnd.Load( 5000 );
+   //load 1ms
+   frontEnd.Load( 0.001 );
 
    uint32_t nSamples = 0;
    const sample_base_t* pbuff;
