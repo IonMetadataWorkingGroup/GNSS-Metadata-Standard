@@ -50,7 +50,8 @@ public:
    
    std::vector<Chunk*>& ChunkInterpreters();
    
-   const double GetChunkPeriod() const;
+   
+   double GetChunkPeriod() const;
    void SetChunkPeriod(const double chunkPeriod);
 };
 

@@ -62,7 +62,7 @@ void SampleConverter::Close()
    mIsOpen = false;
 };
 
-const double SampleConverter::BaseLoadPeriod() const
+double SampleConverter::BaseLoadPeriod() const
 {
    return mBaseLoadPeriod;
 };

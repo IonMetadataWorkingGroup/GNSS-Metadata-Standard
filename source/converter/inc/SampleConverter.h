@@ -59,7 +59,7 @@ public:
    void Close();
    void Convert( const uint32_t bytesToProcess = 0 );
    bool Load( const double secondsToLoad );
-   const double BaseLoadPeriod() const;
+   double BaseLoadPeriod() const;
  
 };
 

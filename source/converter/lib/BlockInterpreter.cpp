@@ -47,7 +47,7 @@ void BlockInterpreter::AddChunk(Chunk* newChunk)
 
 };
 
-const double BlockInterpreter::GetChunkPeriod() const
+double BlockInterpreter::GetChunkPeriod() const
 {
    return mCommonChunkPeriod;
 };
