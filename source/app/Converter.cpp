@@ -3,10 +3,10 @@
 #include <stdint.h>
 
 #ifdef _WIN32
-   #include <direct.h>
+#include <direct.h>
 #elif defined __linux__
-   #include <sys/stat.h>
-   #include <unistd.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #endif
 
 #include <iostream>
@@ -18,40 +18,37 @@
 
 // process triple frequency data from JRC
 template<typename sample_base_t>
-int Convert( std::string xmlFileName )
+int Convert(std::string xmlFileName)
 {
 
-   GnssMetadata::Metadata md;
-   GnssMetadata::XmlProcessor xproc;
+	GnssMetadata::Metadata md;
+	GnssMetadata::XmlProcessor xproc;
 
-   if( !xproc.Load( xmlFileName.c_str(), false, md) )
-   {
-      printf("Could not load metadata. Terminating.\n");
-      return -1;
-   }
+	if (!xproc.Load(xmlFileName.c_str(), false, md))
+	{
+		printf("Could not load metadata. Terminating.\n");
+		return -1;
+	}
 
-   //create the factory for the sample-sinks used in the converter
-   //
-   // Dump the samples to file
-   SampleSinkFactory<SampleFileSink<sample_base_t> > sampleSinkFactory;
+	//create the factory for the sample-sinks used in the converter
+	//
+	// Dump the samples to file
+	SampleSinkFactory<SampleFileSink<sample_base_t> > sampleSinkFactory;
 
-   //create the converter
-   SampleConverter spcv( &sampleSinkFactory );
+	//create the converter
+	SampleConverter spcv(&sampleSinkFactory);
 
-   //open the Metadata Converter
-   spcv.Open<sample_base_t>( md );
+	//open the Metadata Converter
+	spcv.Open<sample_base_t>(md);
 
-   //perform the conversion
-   spcv.Convert();
+	//perform the conversion
+	spcv.Convert();
 
+	//close the converter
+	spcv.Close();
 
-   //close the converter
-   spcv.Close();
-
-   return 0;
+	return 0;
 }
-
-
 
 int main(int argc, char* argv[])
 {
@@ -64,34 +61,31 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-
-
-	typedef enum 
+	typedef enum
 	{
 		kInt8, kInt16, kInt32, kInt64, kFloat, kDouble
 	} outputTypes;
 
-	std::map<std::string,outputTypes> validFileOutputType;
-	validFileOutputType[ "int8_t"  ] = kInt8;
-	validFileOutputType[ "int16_t" ] = kInt16;
-	validFileOutputType[ "int32_t" ] = kInt32;
-	validFileOutputType[ "int64_t" ] = kInt64;
-	validFileOutputType[ "float"   ] = kFloat;
-	validFileOutputType[ "double"  ] = kDouble;
+	std::map<std::string, outputTypes> validFileOutputType;
+	validFileOutputType["int8_t"] = kInt8;
+	validFileOutputType["int16_t"] = kInt16;
+	validFileOutputType["int32_t"] = kInt32;
+	validFileOutputType["int64_t"] = kInt64;
+	validFileOutputType["float"] = kFloat;
+	validFileOutputType["double"] = kDouble;
 
 	outputTypes fileOutputType = kInt8;
 	if (validFileOutputType.find(argv[2]) != validFileOutputType.end())
 		fileOutputType = validFileOutputType[argv[2]];
 
 	printf("Parsing file: '%s'", argv[1]);
-	
-	
-	try
-    {
 
-        // process JRC data
-        std::cout << "--- GNSS MetaData Converter ---\n";
-		
+	try
+	{
+
+		// process JRC data
+		std::cout << "--- GNSS MetaData Converter ---\n";
+
 		switch (fileOutputType)
 		{
 		case kInt8:
@@ -113,22 +107,19 @@ int main(int argc, char* argv[])
 			Convert<double>(argv[1]);
 			break;
 		}
-		
-		
-
 
 	}
-	catch ( GnssMetadata::ApiException &e)
+	catch (GnssMetadata::ApiException &e)
 	{
-		std::cout << "caught API exception: " << e.what( ) << "\n";
+		std::cout << "caught API exception: " << e.what() << "\n";
 	}
 	catch (std::exception &e)
 	{
-		std::cout << "caught exception: " << e.what( ) << "\n";
+		std::cout << "caught exception: " << e.what() << "\n";
 	}
-	catch( ... )
+	catch (...)
 	{
 		std::cout << "unknown exception\n";
 	}
-		return 0;
+	return 0;
 }

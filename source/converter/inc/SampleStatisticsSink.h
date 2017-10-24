@@ -1,14 +1,14 @@
 /**
  * Author: James T. Curran
- *  
+ *
  * Copyright(c) 2015 Institute of Navigation
  * http://www.ion.org
- *  
+ *
  * This Metadata Converter is free software; you can redistribute it and/or
  * modify it under the terms of the Lesser GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,30 +26,30 @@
 #include "SampleSink.h"
 #include "statistics.h"
 
-
 template<typename sample_base_t>
 class SampleStatisticsSink : public SampleSinkT<sample_base_t>
 {
 
 protected:
-   std::string    mFileName;
-   Statistics     mStats;
+	std::string mFileName;
+	Statistics mStats;
 
-   bool Open();
-   void DoAddSample( sample_base_t x );
-   void DoAddSample( sample_base_t x, sample_base_t y );
-   
+	bool Open();
+	void DoAddSample(sample_base_t x);
+	void DoAddSample(sample_base_t x, sample_base_t y);
+
 public:
-   SampleStatisticsSink(std::string fileName);
-   virtual ~SampleStatisticsSink(void);
+	SampleStatisticsSink(std::string fileName);
+	virtual ~SampleStatisticsSink(void);
 
-   void Close();
-   void Flush(){};
-   void Report();
-   
+	void Close();
+	void Flush()
+	{
+	}
+	void Report();
+
 };
 
 #include "SampleStatisticsSink.hpp"
 
 #endif // CLASS_SampleStatisticsSink
-

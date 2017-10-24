@@ -1,14 +1,14 @@
 /**
  * Author: James T. Curran
- *  
+ *
  * Copyright(c) 2015 Institute of Navigation
  * http://www.ion.org
- *  
+ *
  * This Metadata Converter is free software; you can redistribute it and/or
  * modify it under the terms of the Lesser GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,30 +28,22 @@
 class BlockInterpreter
 {
 
+protected:
 
-protected:	
+	uint32_t mCycles;
+	uint32_t mChunkIndex;
+	uint32_t mHeaderBytes;
+	uint32_t mFooterBytes;
 
-   uint32_t            mCycles;
-   uint32_t            mChunkIndex;
-	uint32_t            mHeaderBytes;
-   uint32_t            mFooterBytes;
+	std::vector<Chunk*> mChunkInterpreters;
 
-   std::vector<Chunk*> mChunkInterpreters;
-	
-public:	
-   BlockInterpreter( const uint32_t cycles, const uint32_t headerBytes, const uint32_t footerBytes );
-	virtual  ~BlockInterpreter();
+public:
+	BlockInterpreter(const uint32_t cycles, const uint32_t headerBytes, const uint32_t footerBytes);
+	virtual ~BlockInterpreter();
 
-   virtual void AddChunk(Chunk* newChunk);
-   virtual bool Interpret( BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess );
-   virtual bool InterpretChunk( BinaryFileSource& packedFile );
+	virtual void AddChunk(Chunk* newChunk);
+	virtual bool Interpret(BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess);
+	virtual bool InterpretChunk(BinaryFileSource& packedFile);
 };
 
 #endif //CLASS_BlockInterpreter
-
-
-
-
-
-
-

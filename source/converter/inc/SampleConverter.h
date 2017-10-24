@@ -35,29 +35,29 @@ class SampleConverter
 {
 protected:
 
-   bool                   mIsOpen;
-   BaseSampleSinkFactory* mSampleSinkFactory;
+	bool mIsOpen;
+	BaseSampleSinkFactory* mSampleSinkFactory;
 
-   //std::map<std::string,SampleSink*> mSampleSinks;
-   std::vector<LaneInterpreter*>             mLaneInterps;
-   std::map<LaneInterpreter*,BinaryFileSource*> mLaneFiles;
-   
-   //protected member functions, to keep the code clean and clear
-   template<typename chunk_t, typename sample_base_t>
-   bool CreateChunkInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp  );
-   template<typename sample_base_t>
-   bool CreateBlockInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Block* block, BlockInterpreter** blockInterp );
+	//std::map<std::string,SampleSink*> mSampleSinks;
+	std::vector<LaneInterpreter*> mLaneInterps;
+	std::map<LaneInterpreter*, BinaryFileSource*> mLaneFiles;
+
+	//protected member functions, to keep the code clean and clear
+	template<typename chunk_t, typename sample_base_t>
+	bool CreateChunkInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp);
+	template<typename sample_base_t>
+	bool CreateBlockInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Block* block, BlockInterpreter** blockInterp);
 
 public:
-   SampleConverter( BaseSampleSinkFactory* ssFactory );
-   virtual ~SampleConverter(void);
+	SampleConverter(BaseSampleSinkFactory* ssFactory);
+	virtual ~SampleConverter(void);
 
-   template<typename sample_base_t>
-   bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" );
-   void Close();
-   void Convert( const uint32_t bytesToProcess = 0 );
-   bool Load( const uint32_t chunksToProcess );
- 
+	template<typename sample_base_t>
+	bool Open(GnssMetadata::Metadata& md, std::string path_prefix = "");
+	void Close();
+	void Convert(const uint32_t bytesToProcess = 0);
+	bool Load(const uint32_t chunksToProcess);
+
 };
 
 #include "SampleConverter.hpp"
