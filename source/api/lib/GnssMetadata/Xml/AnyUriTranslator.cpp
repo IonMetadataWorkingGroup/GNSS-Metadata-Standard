@@ -30,11 +30,6 @@ using namespace tinyxml2;
 
 #include "XmlDefs.h"
 
-AnyUriTranslator::AnyUriTranslator()
-		: Translator(NULL)
-{
-}
-
 /**
  * Reads a node from the document and parses into metadata.
  */

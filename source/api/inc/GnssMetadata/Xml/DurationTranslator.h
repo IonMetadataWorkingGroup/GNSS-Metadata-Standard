@@ -34,7 +34,7 @@ namespace GnssMetadata
 	{
 
 	public:
-		DurationTranslator();
+		DurationTranslator() {}
 
 	protected:
 		/**

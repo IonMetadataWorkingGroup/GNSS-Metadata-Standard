@@ -39,11 +39,6 @@ static Duration::DurationFormat ToFormat(const char* pszFmt)
 	return (Duration::DurationFormat)0;
 }
 
-DurationTranslator::DurationTranslator()
-		: Translator( NULL)
-{
-}
-
 /**
  * Reads a node from the document and parses into metadata.
  */

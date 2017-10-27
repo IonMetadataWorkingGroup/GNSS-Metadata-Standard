@@ -33,7 +33,7 @@ namespace GnssMetadata
 	class AnyUriTranslator : public Translator
 	{
 	public:
-		AnyUriTranslator();
+		AnyUriTranslator() {}
 
 	protected:
 		/**

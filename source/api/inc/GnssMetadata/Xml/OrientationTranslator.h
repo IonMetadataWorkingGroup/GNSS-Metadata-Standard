@@ -34,7 +34,7 @@ namespace GnssMetadata
 	{
 
 	public:
-		OrientationTranslator();
+		OrientationTranslator() {}
 
 	protected:
 		/**

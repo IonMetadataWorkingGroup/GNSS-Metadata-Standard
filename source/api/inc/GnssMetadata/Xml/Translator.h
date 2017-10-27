@@ -44,7 +44,7 @@ namespace GnssMetadata
 		typedef const char* pcstr;
 
 	public:
-		Translator(NodeEntry* nodesAllowed) : _nodesAllowed(nodesAllowed) { }
+		Translator(NodeEntry* nodesAllowed = nullptr) : _nodesAllowed(nodesAllowed) { }
 		virtual ~Translator();
 
 		/**

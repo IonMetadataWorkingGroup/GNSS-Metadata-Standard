@@ -28,11 +28,6 @@
 using namespace GnssMetadata;
 using namespace tinyxml2;
 
-PositionTranslator::PositionTranslator()
-		: Translator( NULL)
-{
-}
-
 /**
  * Reads a node from the document and parses into metadata.
  */
