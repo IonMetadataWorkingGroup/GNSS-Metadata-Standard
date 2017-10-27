@@ -45,6 +45,7 @@ namespace GnssMetadata
 
 	public:
 		Translator(NodeEntry* nodesAllowed) : _nodesAllowed(nodesAllowed) { }
+		virtual ~Translator();
 
 		/**
 		 * Reads the current node and translates into metadata defined

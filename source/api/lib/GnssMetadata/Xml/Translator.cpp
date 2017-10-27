@@ -28,8 +28,10 @@ using namespace tinyxml2;
 /******************************************************************************
  * Translator Implementation
  ******************************************************************************/
-namespace GnssMetadata
+
+Translator::~Translator()
 {
+}
 
 /**
  * Processes the current element within the context of the attributed object, delegates
@@ -258,5 +260,4 @@ void Translator::WriteElement(const char* pszElemName, double dvalue, XMLElement
 		pelem->SetText(buff);
 		pcontainer->InsertEndChild(pelem);
 	}
-}
 }

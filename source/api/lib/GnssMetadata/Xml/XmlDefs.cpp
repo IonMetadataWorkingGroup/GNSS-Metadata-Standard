@@ -1,5 +1,5 @@
 /**
- * File: BaseTypes.cpp
+ * File: XmlDefs.cpp
  *
  * Copyright(c) 2014 Institute of Navigation
  * http://www.ion.org
@@ -18,8 +18,8 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <GnssMetadata/BaseTypes.h>
+#include "XmlDefs.h"
 
 using namespace GnssMetadata;
 
-Object::~Object() {}
+AccessorAdaptorBase::~AccessorAdaptorBase() {}
