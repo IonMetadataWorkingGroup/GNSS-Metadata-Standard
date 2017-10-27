@@ -47,23 +47,23 @@ using namespace GnssMetadata;
 
 static time_t UtcYmdhmsToTime_T(int year, int mon, int day, int hour, int min, int sec)
 {   struct tm *temp_tm;
-	time_t temp_time_t;
-	time(&temp_time_t);
-	temp_tm = gmtime(&temp_time_t);
-	temp_tm->tm_sec = sec;
-	temp_tm->tm_min = min;
-	temp_tm->tm_hour = hour;
-	temp_tm->tm_mday = day;
-	temp_tm->tm_mon = mon;
-	temp_tm->tm_year = (year > 1900 ? year - 1900 : year);
-	temp_time_t=mktime(temp_tm);    
-#if defined(_POSIX_C_SOURCE)
-	temp_time_t -= timezone;    // undo any correction for timezone/daylight savings system did
+   time_t temp_time_t;
+   time(&temp_time_t);
+   temp_tm = gmtime(&temp_time_t);
+   temp_tm->tm_sec = sec;
+   temp_tm->tm_min = min;
+   temp_tm->tm_hour = hour;
+   temp_tm->tm_mday = day;
+   temp_tm->tm_mon = mon;
+   temp_tm->tm_year = (year > 1900 ? year - 1900 : year);
+   temp_time_t=mktime(temp_tm);
+#if defined(_WIN32) || defined(_WIN64)
+   temp_time_t -= _timezone;	// undo any correction for timezone/daylight savings system did
 #else
-	temp_time_t -= _timezone;   // undo any correction for timezone/daylight savings system did
+   temp_time_t -= timezone;	// undo any correction for timezone/daylight savings system did
 #endif
-
-	return temp_time_t;
+   
+   return temp_time_t;
 }
 
 /******************************************************************************
