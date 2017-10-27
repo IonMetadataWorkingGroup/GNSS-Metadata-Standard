@@ -2,7 +2,8 @@
 
 
 
-The master branch has been frozen for the duration of the RFC ending Dec 30th 2017
+The master branch has been frozen for the duration of the RFC ending Dec 30th 2017.
+
 If you wish to contribute code, please use the devel branch
 
 
