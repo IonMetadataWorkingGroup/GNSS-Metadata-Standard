@@ -81,6 +81,7 @@ namespace GnssMetadata
 	 */
 	struct AccessorAdaptorBase
 	{	
+      virtual ~AccessorAdaptorBase() = 0;
 		virtual void set( void* pval) =0;
 		//virtual const void* get() const = 0;
 	};

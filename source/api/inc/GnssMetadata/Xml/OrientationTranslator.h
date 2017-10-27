@@ -34,13 +34,13 @@ namespace GnssMetadata
 	{
 		
 	public:
-		OrientationTranslator();
+		OrientationTranslator() : Translator( NULL) {};
 
 	protected:
 		/**
 		 * Reads a node from the document and parses into metadata.
 		 */
-		virtual bool OnRead( Context & ctxt, const tinyxml2::XMLElement & elem, AccessorAdaptorBase* pAdaptor = NULL );
+		virtual bool OnRead( Context & ctxt, const tinyxml2::XMLElement & elem, AccessorAdaptorBase* pAdaptor = nullptr );
 		/**
 		 * Write the current object 
 		 */

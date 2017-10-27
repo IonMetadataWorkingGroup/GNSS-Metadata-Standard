@@ -41,11 +41,6 @@ static Frequency::FrequencyFormat ToFormat( const char* pszFmt)
 }
 
 
-FrequencyTranslator::FrequencyTranslator() 
-: Translator( NULL)
-{
-}
-
 /**
  * Reads a node from the document and parses into metadata.
  */

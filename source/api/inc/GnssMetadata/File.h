@@ -187,8 +187,6 @@ namespace GnssMetadata
 			const IonString& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
 
 		 
-		GnssMetadata::Lane* nLane;
-
 	private:
 		/**
 		 * url points to the file 
@@ -233,7 +231,6 @@ namespace GnssMetadata
 		
 	public:
 		
-		GnssMetadata::Lane * nLane;
 		FileSet( const IonString& id) : AttributedObject( id){}
 		FileSet() {}
 		FileSet(const FileSet& rhs) 

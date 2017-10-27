@@ -57,10 +57,10 @@ static time_t UtcYmdhmsToTime_T(int year, int mon, int day, int hour, int min, i
 	temp_tm->tm_mon = mon;
 	temp_tm->tm_year = (year > 1900 ? year - 1900 : year);
 	temp_time_t=mktime(temp_tm);    
-#if defined(_WIN32) || defined(_WIN64)
-	temp_time_t -= _timezone;	// undo any correction for timezone/daylight savings system did
+#if defined(_POSIX_C_SOURCE)
+	temp_time_t -= timezone;    // undo any correction for timezone/daylight savings system did
 #else
-   	temp_time_t -= timezone;	// undo any correction for timezone/daylight savings system did
+	temp_time_t -= _timezone;   // undo any correction for timezone/daylight savings system did
 #endif
 
 	return temp_time_t;
@@ -73,9 +73,12 @@ static time_t UtcYmdhmsToTime_T(int year, int mon, int day, int hour, int min, i
 Date Date::Now()
 {
 	Date date;
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_POSIX_C_SOURCE)
+    clock_gettime( CLOCK_REALTIME, &(date._dt));
+#elif defined(_WIN32) || defined(_WIN64)
 	FILETIME ft;
 	GetSystemTimeAsFileTime(&ft);
+
 	ULARGE_INTEGER ull;    
 	ull.LowPart = ft.dwLowDateTime;    
 	ull.HighPart = ft.dwHighDateTime;    
@@ -92,8 +95,6 @@ Date Date::Now()
 	mach_port_deallocate(mach_task_self(), cclock);
 	date._dt.tv_sec = mts.tv_sec;
 	date._dt.tv_nsec = mts.tv_nsec;
-#elif defined(LINUX)
-	clock_gettime( CLOCK_REALTIME, &(date._dt));
 #endif
 	return date;
 }
@@ -134,7 +135,7 @@ Date::Date( double secGps, int wkGps, int secLeap )
     _dt.tv_nsec = (long)((secGps - (double)tsecGps)*BILLION_VALUE);
 }
 
-Date::Date( const char* pszDate) : _secLeap(0)
+Date::Date( const char* pszDate)
 {
 	int yr,mo,day,hr,min;
 	double sec;

@@ -43,7 +43,7 @@ protected:
    
 public:
    BinaryFileSource():
-   mIsOpen(false)
+   mIsOpen(false), mBinfile(NULL)
    {};
    
    BinaryFileSource(const std::string filename)

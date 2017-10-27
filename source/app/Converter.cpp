@@ -60,7 +60,8 @@ int main(int argc, char* argv[])
 	{
 		printf("Call with:\n");
 		printf(" - xml_file (full path)\n");
-		printf(" - [type]   (output file type: int8_t, int16_t, int32_t, int64_t, float, double)\n");
+		printf(" - [type]   (output file type: int8_t, int16_t, int32_t, float, double)\n");
+		//printf(" - [type]   (output file type: int8_t, int16_t, int32_t, int64_t, float, double)\n");
 		return 0;
 	}
 

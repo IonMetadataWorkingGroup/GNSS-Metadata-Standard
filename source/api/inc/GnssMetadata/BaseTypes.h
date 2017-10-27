@@ -40,7 +40,7 @@ namespace GnssMetadata
 	{
 	public:
 		static const IonString DefaultFormat;
-		
+		virtual ~Object() = 0;
 	public:
 		/**
 		 * Returns a string representation of the object.
