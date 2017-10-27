@@ -41,7 +41,7 @@ IonString AttributedObject::toString(const IonString & /*sFormat*/) const
  * Virtual function implemented by derived classes traverses collections of attributed objects looking for object with the
  * specified id. Returns the count of objects found.
  */
-size_t AttributedObject::FindObject(SearchItem::List& listResults, const IonString& sid, const AttributedObject& rparent, bool bExcludeReference, int nDepth) const
+size_t AttributedObject::FindObject(SearchItem::List& listResults, const IonString& sid, const AttributedObject& rparent, bool bExcludeReference, int /*nDepth*/) const
 {
 	size_t count = 0;
 
