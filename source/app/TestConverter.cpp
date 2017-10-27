@@ -133,11 +133,9 @@ int FrontEnd(std::string xmlFileName)
 	//
 	// the sources will have as many samples as correspond all of the
 	// previous Load( nChunks ) calls, since the last call to Clear()
-	std::map<std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > sourceMap = frontEnd.GetSources();
-	for (std::map<std::string, std::pair<const SampleSource*, const SampleStreamInfo*> >::iterator src_it = sourceMap.begin(); src_it != sourceMap.end();
-	        src_it++)
+	for (const auto& source : frontEnd.GetSources())
 	{
-		std::string sourceName = src_it->first;
+		std::string sourceName = source.first;
 		const SampleSource* pSource = frontEnd.GetSource(sourceName);
 		const SampleStreamInfo* pSourceInfo = frontEnd.GetSampleStreamInfo(sourceName);
 

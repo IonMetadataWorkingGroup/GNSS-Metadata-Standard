@@ -41,12 +41,12 @@ void SampleConverter::Close()
 	if (mIsOpen)
 	{
 		// delete the lane data
-		for (std::vector<LaneInterpreter*>::iterator It = mLaneInterps.begin(); It != mLaneInterps.end(); ++It)
+		for (LaneInterpreter* i : mLaneInterps)
 		{
-			delete (*It);
-			mLaneFiles[*It]->Close();
-			delete mLaneFiles[*It];
-			mLaneFiles.erase(*It);
+			delete i;
+			mLaneFiles[i]->Close();
+			delete mLaneFiles[i];
+			mLaneFiles.erase(i);
 		}
 	}
 	mIsOpen = false;
@@ -68,23 +68,20 @@ void SampleConverter::Convert(const uint32_t bytesToProcess)
 	}
 
 	// otherwise iterate over the lanes and do the unpacking/converting
-	for (std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++)
+	for (LaneInterpreter* laneInterpreter : mLaneInterps)
 	{
 		uint32_t bytesProcessed = 0;
 
 		// for now, just decode the first Lane
-		LaneInterpreter* laneInterpreter = (*lnIt);
-
 		bool readBlockOK = false;
 		do
 		{
-			for (std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It)
+			for (BlockInterpreter* block : laneInterpreter->Blocks())
 			{
-				BlockInterpreter* block = (*It);
 				// read the entire block
 				do
 				{
-					readBlockOK = block->Interpret(*mLaneFiles[*lnIt], bytesProcessed, bytesToProcess);
+					readBlockOK = block->Interpret(*mLaneFiles[laneInterpreter], bytesProcessed, bytesToProcess);
 				}
 				while (readBlockOK);
 			}
@@ -112,18 +109,14 @@ bool SampleConverter::Load(const uint32_t chunksToProcess)
 	bool readAllOK = true;
 
 	// otherwise iterate over the lanes and do the unpacking/converting
-	for (std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++)
+	for (LaneInterpreter* laneInterpreter : mLaneInterps)
 	{
 		uint32_t chunksProcessed = 0;
 
-		// for now, just decode the first Lane
-		LaneInterpreter* laneInterpreter = (*lnIt);
-
 		bool readBlockOK = false;
 
-		for (std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It)
+		for (BlockInterpreter* block : laneInterpreter->Blocks())
 		{
-			BlockInterpreter* block = (*It);
 			// read the entire block
 			do
 			{

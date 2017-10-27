@@ -28,10 +28,10 @@ SampleSinkFactory<sample_sink_t>::SampleSinkFactory()
 template<typename sample_sink_t>
 SampleSinkFactory<sample_sink_t>::~SampleSinkFactory()
 {
-	for (std::map<std::string, std::pair<SampleSink*, SampleStreamInfo*>>::iterator it = mSampleSinks.begin(); it != mSampleSinks.end(); ++it)
+	for (const auto& it : mSampleSinks)
 	{
-		delete it->second.first;
-		delete it->second.second;
+		delete it.second.first;
+		delete it.second.second;
 	}
 }
 

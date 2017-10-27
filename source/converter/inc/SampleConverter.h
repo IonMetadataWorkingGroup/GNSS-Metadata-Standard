@@ -1,14 +1,14 @@
 /**
  * Author: James T. Curran
- *  
+ *
  * Copyright(c) 2015 Institute of Navigation
  * http://www.ion.org
- *  
+ *
  * This Metadata Converter is free software; you can redistribute it and/or
  * modify it under the terms of the Lesser GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,9 +44,9 @@ protected:
 
 	//protected member functions, to keep the code clean and clear
 	template<typename chunk_t, typename sample_base_t>
-	bool CreateChunkInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp);
+	bool CreateChunkInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, const GnssMetadata::Chunk& chunk, Chunk** chunkInterp);
 	template<typename sample_base_t>
-	bool CreateBlockInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Block* block, BlockInterpreter** blockInterp);
+	bool CreateBlockInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, const GnssMetadata::Block& block, BlockInterpreter** blockInterp);
 
 public:
 	SampleConverter(BaseSampleSinkFactory* ssFactory);

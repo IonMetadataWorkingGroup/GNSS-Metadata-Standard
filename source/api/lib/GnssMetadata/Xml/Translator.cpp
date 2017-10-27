@@ -107,11 +107,9 @@ void Translator::WriteAttributedObject(const AttributedObject& aobj, Context& /*
 	}
 
 	// Write the comments.
-	CommentList::const_iterator citer = aobj.Comments().begin();
-	for (; citer != aobj.Comments().end(); citer++)
+	for (const Comment& cmt : aobj.Comments())
 	{
 		XMLElement* pec = elem.GetDocument()->NewElement("comment");
-		const Comment& cmt = *citer;
 		const char* szFormat = (cmt.Format() == Comment::text) ? "text" : "html";
 		pec->SetAttribute("format", szFormat);
 		pec->SetText(cmt.Value().c_str());
@@ -119,11 +117,10 @@ void Translator::WriteAttributedObject(const AttributedObject& aobj, Context& /*
 	}
 
 	// Write the Artifacts.
-	AnyUriList::const_iterator aiter = aobj.Artifacts().begin();
-	for (; aiter != aobj.Artifacts().end(); aiter++)
+	for (const AnyUri& uri : aobj.Artifacts())
 	{
 		XMLElement* pec = elem.GetDocument()->NewElement("artifact");
-		pec->SetText(aiter->Value().c_str());
+		pec->SetText(uri.Value().c_str());
 		elem.InsertEndChild(pec);
 	}
 }

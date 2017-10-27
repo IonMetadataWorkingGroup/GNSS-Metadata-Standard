@@ -104,12 +104,11 @@ void LaneTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ct
 	if (!plane->IsReference())
 	{
 		// Write bandsrc [1..*]
-		Lane::BandSourceList::const_iterator iter = plane->BandSources().begin();
-		for (; iter != plane->BandSources().end(); iter++)
+		for (const Lane::BandSource& item : plane->BandSources())
 		{
 			XMLElement* pelem = elem.GetDocument()->NewElement("bandsrc");
-			pelem->SetAttribute("idband", iter->idBand.c_str());
-			pelem->SetAttribute("idsrc", iter->idSource.c_str());
+			pelem->SetAttribute("idband", item.idBand.c_str());
+			pelem->SetAttribute("idsrc", item.idSource.c_str());
 			pelemc->InsertEndChild(pelem);
 		}
 

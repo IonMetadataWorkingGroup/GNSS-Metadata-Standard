@@ -55,11 +55,10 @@ std::map<std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > 
 	const SampleSource* pSampleBuff;
 	std::map<std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > sourceMap;
 
-	for (std::map<std::string, std::pair<SampleSink*, SampleStreamInfo*>>::const_iterator mit = this->mSampleSinks.begin(); mit != this->mSampleSinks.end();
-	        mit++)
+	for (const auto& mit : this->mSampleSinks)
 	{
-		pSampleBuff = dynamic_cast<const SampleSource*>(mit->second.first);
-		sourceMap[mit->first] = std::make_pair(pSampleBuff, mit->second.second);
+		pSampleBuff = dynamic_cast<const SampleSource*>(mit.second.first);
+		sourceMap[mit.first] = std::make_pair(pSampleBuff, mit.second.second);
 	}
 
 	return sourceMap;
@@ -71,10 +70,9 @@ void SampleFrontEnd<sample_base_t>::Clear()
 	// temporary pointer
 	SampleBuffer<sample_base_t>* pSampleBuff;
 
-	for (std::map<std::string, std::pair<SampleSink*, SampleStreamInfo*>>::iterator mit = this->mSampleSinks.begin(); mit != this->mSampleSinks.end(); mit++)
+	for (const auto &mit : this->mSampleSinks)
 	{
-		pSampleBuff = dynamic_cast<SampleBuffer<sample_base_t>*>(mit->second.first);
-		if (pSampleBuff)
-			pSampleBuff->Flush();
+		pSampleBuff = dynamic_cast<SampleBuffer<sample_base_t>*>(mit.second.first);
+		if (pSampleBuff) pSampleBuff->Flush();
 	}
 }

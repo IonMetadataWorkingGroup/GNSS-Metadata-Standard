@@ -30,7 +30,7 @@ LaneInterpreter::LaneInterpreter(std::string fileURL)
 
 LaneInterpreter::~LaneInterpreter()
 {
-	for (std::vector<BlockInterpreter*>::iterator It = mBlockInterpreters.begin(); It != mBlockInterpreters.end(); ++It) delete (*It);
+	for (const BlockInterpreter* i : mBlockInterpreters) delete i;
 }
 
 void LaneInterpreter::AddBlock(BlockInterpreter* newBlock)

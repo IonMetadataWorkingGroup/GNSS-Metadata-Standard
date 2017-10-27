@@ -32,7 +32,7 @@ BlockInterpreter::BlockInterpreter(const uint32_t cycles, const uint32_t headerB
 
 BlockInterpreter::~BlockInterpreter()
 {
-	for (std::vector<Chunk*>::iterator It = mChunkInterpreters.begin(); It != mChunkInterpreters.end(); ++It) delete (*It);
+	for (Chunk* i : mChunkInterpreters) delete i;
 }
 
 void BlockInterpreter::AddChunk(Chunk* newChunk)
@@ -52,16 +52,16 @@ bool BlockInterpreter::Interpret(BinaryFileSource& packedFile, uint32_t& bytesPr
 		uint32_t chunkPatternCount = 0;
 
 		// now cycle through each chunk in the block and interpret
-		for (std::vector<Chunk*>::iterator ckIt = mChunkInterpreters.begin(); ckIt != mChunkInterpreters.end(); ++ckIt)
+		for (Chunk* ck : mChunkInterpreters)
 		{
 			// get the chunk memory from the chunk interpreter
-			char* pChunk = static_cast<char*>((*ckIt)->GetChunk());
-			uint32_t nBytes = (*ckIt)->BytesPerChunk();
+			char* pChunk = static_cast<char*>(ck->GetChunk());
+			uint32_t nBytes = ck->BytesPerChunk();
 
 			// read one chunk
 			if (packedFile.Get(pChunk, nBytes) == static_cast<std::streamsize>(nBytes))
 			{
-				(*ckIt)->Interpret();
+				ck->Interpret();
 				bytesProcessed += nBytes;
 
 				if (bytesToProcess != 0 && (bytesProcessed >= bytesToProcess))
@@ -100,18 +100,18 @@ bool BlockInterpreter::InterpretChunk(BinaryFileSource& packedFile)
 	}
 
 	// now cycle through each chunk in the block and interpret
-	for (std::vector<Chunk*>::iterator ckIt = mChunkInterpreters.begin(); ckIt != mChunkInterpreters.end(); ++ckIt)
+	for (Chunk* ck : mChunkInterpreters)
 	{
 		mChunkIndex++;
 
 		// get the chunk memory from the chunk interpreter
-		char* pChunk = static_cast<char*>((*ckIt)->GetChunk());
-		uint32_t nBytes = (*ckIt)->BytesPerChunk();
+		char* pChunk = static_cast<char*>(ck->GetChunk());
+		uint32_t nBytes = ck->BytesPerChunk();
 
 		// read one chunk
 		if (packedFile.Get(pChunk, nBytes) == static_cast<std::streamsize>(nBytes))
 		{
-			(*ckIt)->Interpret();
+			ck->Interpret();
 		}
 		else
 		{

@@ -125,12 +125,7 @@ namespace GnssMetadata
 		void WriteList(const std::list<A>& list, const char* pszName,
 				Context& ctxt, tinyxml2::XMLElement & elem)
 		{
-			typename std::list<A>::const_iterator iter = list.begin();
-
-			for (; iter != list.end(); iter++)
-			{
-				WriteElement(&(*iter), pszName, ctxt, elem);
-			}
+			for (const A &item : list) WriteElement(&item, pszName, ctxt, elem);
 		}
 
 	private:

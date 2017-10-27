@@ -160,10 +160,9 @@ bool XmlProcessor::Load(const char* szFilename, const bool bProcessIncludes, Met
 	if (bRetVal && bProcessIncludes)
 	{
 		Metadata mdchild;
-		AnyUriList::const_iterator iter = metadata.Includes().begin();
-		for (; iter != metadata.Includes().end() && bRetVal; iter++)
+		for (const AnyUri& uri : metadata.Includes())
 		{
-			bRetVal = Load(iter->Value().c_str(), bProcessIncludes, mdchild);
+			bRetVal = Load(uri.Value().c_str(), bProcessIncludes, mdchild);
 
 			// If successful, combine metadata with parent.
 			if (bRetVal) metadata.Splice(mdchild);

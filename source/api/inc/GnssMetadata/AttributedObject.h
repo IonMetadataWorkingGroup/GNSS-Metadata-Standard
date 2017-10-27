@@ -157,12 +157,9 @@ namespace GnssMetadata
 		if (nDepth == 0) return 0;
 
 		size_t count = 0;
-		typename std::list<Type>::const_iterator iter = listsrc.begin();
-		for (; iter != listsrc.end(); iter++)
-		{
-			//Search object for matching ID.
-			count += (*iter).FindObject(listResults, sid, rparent, bExcludeReference, nDepth);
-		}
+		// Search object for matching ID.
+		for (const Type& item : listsrc) count += item.FindObject(listResults, sid, rparent, bExcludeReference, nDepth);
+
 		return count;
 	}
 
@@ -175,9 +172,9 @@ namespace GnssMetadata
 
 		size_t nFound = source.FindObject(listResults, sid, parent, true /*only look for real objects*/);
 
-		for (AttributedObject::SearchItem::List::iterator it = listResults.begin(); it != listResults.end(); ++it)
+		for (const SearchItem& item : listResults)
 		{
-			pResult = dynamic_cast<const Type*>(it->pObject);
+			pResult = dynamic_cast<const Type*>(item.pObject);
 			if (pResult != nullptr)
 			{
 				result = *pResult;

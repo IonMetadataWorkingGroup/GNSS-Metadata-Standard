@@ -34,8 +34,7 @@ template<typename chunk_t, typename sample_base_t>
 ChunkInterpreter<chunk_t, sample_base_t>::~ChunkInterpreter()
 {
 	// iterate through the sample interpreters and delete them
-	for (std::deque<SampleInterpreter*>::iterator it = mSampleInterpreters.begin(); it != mSampleInterpreters.end(); ++it)
-		delete (*it);
+	for (SampleInterpreter* i : mSampleInterpreters) delete i;
 
 }
 
@@ -50,20 +49,17 @@ void ChunkInterpreter<chunk_t, sample_base_t>::AddSampleInterpreter(SampleInterp
 
 	// figure out what the sum of the preceding bit-widths is
 	uint32_t bitOffset = 0;
-	for (std::deque<SampleInterpreter*>::iterator it = mSampleInterpreters.begin(); it != mSampleInterpreters.end(); ++it)
+	for (SampleInterpreter* i : mSampleInterpreters)
 	{
 		//indicate the bit offset: this tells the sample-interpreter how many bits into the chunk to start decoding the sample
-		(*it)->SetChunkOffset(bitOffset);
-		bitOffset += (*it)->BitWidth();
+		i->SetChunkOffset(bitOffset);
+		bitOffset += i->BitWidth();
 
 	}
 
 	// now add the sample interpreters to the call-ordered list, and sort based on the call index
 	mCallOrderedSampleInterpreters.clear();
-	for (std::deque<SampleInterpreter*>::iterator it = mSampleInterpreters.begin(); it != mSampleInterpreters.end(); ++it)
-	{
-		mCallOrderedSampleInterpreters.push_back(*it);
-	}
+	for (SampleInterpreter* i : mSampleInterpreters) mCallOrderedSampleInterpreters.push_back(i);
 
 	mCallOrderedSampleInterpreters.sort(SampleInterpreter::callOrderSortAscend);
 }
@@ -111,12 +107,7 @@ void ChunkInterpreter<chunk_t, sample_base_t>::ChangeCunkEndianness()
 {
 	// printf("Warning: `ChunkInterpreter::ChangeCunkEndianness( )' not yet tested!\n");
 
-	// it seems some compilers don't like dependent definitions of iterators...
-	typedef typename std::vector<chunk_t>::iterator iterator;
-	for (iterator it = mDataChunk.begin(); it != mDataChunk.end(); ++it)
-	{
-		(*it) = EndianFunctions::ChangeEndianness(*it);
-	}
+	for (chunk_t& chunk : mDataChunk) chunk = EndianFunctions::ChangeEndianness(chunk);
 }
 
 template<typename chunk_t, typename sample_base_t>
@@ -132,8 +123,5 @@ void ChunkInterpreter<chunk_t, sample_base_t>::Interpret()
 		std::reverse(mDataChunk.begin(), mDataChunk.end());
 	}
 
-	for (std::list<SampleInterpreter*>::iterator it = mCallOrderedSampleInterpreters.begin(); it != mCallOrderedSampleInterpreters.end(); ++it)
-	{
-		(*it)->Interpret(&mDataChunk[0]);
-	}
+	for (SampleInterpreter* i : mCallOrderedSampleInterpreters) i->Interpret(&mDataChunk[0]);
 }
