@@ -42,7 +42,7 @@ public:
 	{
 	}
 
-	virtual void AddSampleInterpreter(SampleInterpreter* splIntrp, const bool front = false) = 0;
+  virtual void AddSampleInterpreter(SampleInterpreter* splIntrp, const bool front = false) = 0;
 	virtual void SetSourceEndianness(const GnssMetadata::Chunk::WordEndian& srcEndianness) = 0;
 	virtual void Interpret() = 0;
 	virtual void* GetChunk() = 0;
@@ -61,12 +61,14 @@ public:
 protected:
 	// this is an orderd set of SampleInterpreters, the placement in the deque indicates which bits of the chunk are interpreted
 	std::deque<SampleInterpreter*> mSampleInterpreters;
-	// this is an orderd set of SampleInterpreters, the placement in the list indicates which should be called first
+
+// this is an orderd set of SampleInterpreters, the placement in the list indicates which should be called first
 	// -when multiple interpreters send data to the same sink, the order in which they are called matters.
 	std::list<SampleInterpreter*> mCallOrderedSampleInterpreters;
 	std::vector<chunk_t> mDataChunk;
 	bool mSourceEndiannessIsDifferent;
 	bool mRightWordShift;
+
 
 protected:
 	void ChangeCunkEndianness();
@@ -79,6 +81,7 @@ public:
 	inline void Interpret();
 	inline void* GetChunk();
 	inline uint32_t BytesPerChunk() const;
+
 };
 
 #include "ChunkInterpreter.hpp"

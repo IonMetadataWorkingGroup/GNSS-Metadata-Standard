@@ -24,9 +24,10 @@
 #include "SampleInterpreterFactory.h"
 
 SampleConverter::SampleConverter(BaseSampleSinkFactory* ssFactory)
-		:
-		        mIsOpen(false),
-		        mSampleSinkFactory(ssFactory)
+     :
+mIsOpen(false),
+mSampleSinkFactory(ssFactory),
+mBaseLoadPeriod(1)
 {
 }
 
@@ -38,97 +39,137 @@ SampleConverter::~SampleConverter()
 
 void SampleConverter::Close()
 {
-	if (mIsOpen)
-	{
-		// delete the lane data
-		for (LaneInterpreter* i : mLaneInterps)
-		{
-			delete i;
-			mLaneFiles[i]->Close();
-			delete mLaneFiles[i];
-			mLaneFiles.erase(i);
-		}
-	}
-	mIsOpen = false;
-}
 
-void SampleConverter::Convert(const uint32_t bytesToProcess)
+
+   if( mIsOpen )
+   {
+      //delete the lane data
+      for( std::vector<LaneInterpreter*>::iterator It = mLaneInterps.begin(); It != mLaneInterps.end(); ++It )
+      {
+         delete (*It);
+         mLaneFiles[*It]->Close();
+         delete mLaneFiles[*It];
+         mLaneFiles.erase(*It);
+      }
+      
+      
+   }
+   mIsOpen = false;
+};
+
+double SampleConverter::BaseLoadPeriod() const
 {
-	if (!mIsOpen)
-	{
-		printf("Error: no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n )");
-		return;
-	}
+   return mBaseLoadPeriod;
+};
 
-	// Do we have anything to do?
-	if (mLaneInterps.size() == 0)
-	{
-		printf("No Lanes found. Terminating.\n");
-		return;
-	}
 
-	// otherwise iterate over the lanes and do the unpacking/converting
-	for (LaneInterpreter* laneInterpreter : mLaneInterps)
-	{
-		uint32_t bytesProcessed = 0;
-
-		// for now, just decode the first Lane
-		bool readBlockOK = false;
-		do
-		{
-			for (BlockInterpreter* block : laneInterpreter->Blocks())
-			{
-				// read the entire block
-				do
-				{
-					readBlockOK = block->Interpret(*mLaneFiles[laneInterpreter], bytesProcessed, bytesToProcess);
-				}
-				while (readBlockOK);
-			}
-		}
-		while (readBlockOK);
-
-	} // end for( lnIt )
-}
-
-bool SampleConverter::Load(const uint32_t chunksToProcess)
+void SampleConverter::Convert( const uint32_t bytesToProcess )
 {
-	if (!mIsOpen)
-	{
-		printf("Error: no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n )");
-		return false;
-	}
 
-	// Do we have anything to do?
-	if (mLaneInterps.size() == 0)
-	{
-		printf("No Lanes found. Terminating.\n");
-		return false;
-	}
+   if( !mIsOpen )
+   {
+      printf("Error: no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n )");
+      return;
+   }
 
-	bool readAllOK = true;
+   // Do we have anything to do?
+   if( mLaneInterps.size() == 0 )
+   {
+      printf("No Lanes found. Terminating.\n");
+      return;
+   }
 
-	// otherwise iterate over the lanes and do the unpacking/converting
-	for (LaneInterpreter* laneInterpreter : mLaneInterps)
-	{
-		uint32_t chunksProcessed = 0;
 
-		bool readBlockOK = false;
+   // otherwise iterate over the lanes and do the unpacking/converting
+   for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
+   {
 
-		for (BlockInterpreter* block : laneInterpreter->Blocks())
-		{
-			// read the entire block
-			do
-			{
-				readBlockOK = block->InterpretChunk(*mLaneFiles[laneInterpreter]);
-				chunksProcessed++;
-			}
-			while (readBlockOK && chunksProcessed < chunksToProcess);
+      uint32_t bytesProcessed = 0;
+   
+      //for now, just decode the first Lane
+      LaneInterpreter* laneInterpreter= (*lnIt);
+   
+      bool readBlockOK = false;
+      do
+      {
+   
+         for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
+         {
+            BlockInterpreter* block = (*It);
+            //read the entire block
+            do
+            {
+               readBlockOK = block->Interpret( *mLaneFiles[*lnIt], bytesProcessed, bytesToProcess );
+            }
+            while( readBlockOK );
+         }
 
-			readAllOK = readAllOK && (chunksProcessed == chunksToProcess);
-		}
+      }
+      while( readBlockOK );
 
-	} // end for( lnIt )
+   }//end for( lnIt )
+};
 
-	return readAllOK;
-}
+
+
+
+bool SampleConverter::Load( const double secondsToProcess )
+{
+   
+   if( !mIsOpen )
+   {
+      printf("Error: no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n )");
+      return false;
+   }
+   
+   // Do we have anything to do?
+   if( mLaneInterps.size() == 0 )
+   {
+      printf("No Lanes found. Terminating.\n");
+      return false;
+   }
+   
+   // JTC ToDo:
+   //
+   // Make sure that secondsToProcess is an integer multiple of BaseLoadPeriod
+   //
+   //
+   
+   
+   bool readAllOK = true;
+   
+   // otherwise iterate over the lanes and do the unpacking/converting
+   for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
+   {
+      
+      //for now, just decode the first Lane
+      LaneInterpreter* laneInterpreter= (*lnIt);
+      
+      bool readBlockOK = false;
+         
+      //for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
+      {
+         std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin();
+         BlockInterpreter* block = (*It);
+         
+         //determine how many chunks to interpret
+         uint32_t chunksToLoad = static_cast<uint32_t>( round( secondsToProcess / block->GetChunkPeriod() ) );
+         //
+         uint32_t chunksLoaded = 0;
+         do
+         {
+            readBlockOK = block->InterpretChunks( *mLaneFiles[laneInterpreter] );
+            chunksLoaded++;
+         }
+         while( readBlockOK && chunksLoaded < chunksToLoad );
+         
+         readAllOK = readAllOK && ( chunksToLoad == chunksLoaded );
+      }
+      
+      
+   }//end for( lnIt )
+
+   return readAllOK;
+};
+
+

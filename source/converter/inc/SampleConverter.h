@@ -38,15 +38,18 @@ protected:
 	bool mIsOpen;
 	BaseSampleSinkFactory* mSampleSinkFactory;
 
-	//std::map<std::string,SampleSink*> mSampleSinks;
-	std::vector<LaneInterpreter*> mLaneInterps;
-	std::map<LaneInterpreter*, BinaryFileSource*> mLaneFiles;
+   //std::map<std::string,SampleSink*> mSampleSinks;
+   std::vector<LaneInterpreter*>             mLaneInterps;
+   std::map<LaneInterpreter*,BinaryFileSource*> mLaneFiles;
+   
+   double mBaseLoadPeriod;
+   
+   //protected member functions, to keep the code clean and clear
+   template<typename chunk_t, typename sample_base_t>
+   bool CreateChunkInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp  );
+   template<typename sample_base_t>
+   bool CreateBlockInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Block* block, BlockInterpreter** blockInterp );
 
-	//protected member functions, to keep the code clean and clear
-	template<typename chunk_t, typename sample_base_t>
-	bool CreateChunkInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, const GnssMetadata::Chunk& chunk, Chunk** chunkInterp);
-	template<typename sample_base_t>
-	bool CreateBlockInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, const GnssMetadata::Block& block, BlockInterpreter** blockInterp);
 
 public:
 	SampleConverter(BaseSampleSinkFactory* ssFactory);

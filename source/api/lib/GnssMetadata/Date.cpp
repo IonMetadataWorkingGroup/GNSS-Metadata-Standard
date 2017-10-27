@@ -83,6 +83,7 @@ Date Date::Now()
 	ULARGE_INTEGER ull;
 	ull.LowPart = ft.dwLowDateTime;
 	ull.HighPart = ft.dwHighDateTime;
+
 	ull.QuadPart -= 116444736000000000ULL; // Since Jan 1 1970.
 	time_t t = (time_t) (ull.QuadPart / 10000000ULL);
 	ull.QuadPart -= t*10000000ULL; // Fractional 100 nano seconds.
@@ -139,6 +140,7 @@ Date::Date(double secGps, int wkGps, int secLeap)
 	_dt.tv_sec += GPS0;
 	_dt.tv_nsec = (long)((secGps - (double)tsecGps) * BILLION_VALUE);
 }
+
 
 Date::Date(const char* pszDate)
 		: _secLeap(0)

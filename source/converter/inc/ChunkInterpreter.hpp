@@ -21,6 +21,7 @@
 #include "EndianFunctions.h"
 #include <algorithm>
 
+
 template<typename chunk_t, typename sample_base_t>
 ChunkInterpreter<chunk_t, sample_base_t>::ChunkInterpreter(const uint32_t countWords, const bool rightWordShift)
 		: mSourceEndiannessIsDifferent(false), mRightWordShift(rightWordShift)

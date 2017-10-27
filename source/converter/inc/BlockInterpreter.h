@@ -36,14 +36,23 @@ protected:
 	uint32_t mFooterBytes;
 
 	std::vector<Chunk*> mChunkInterpreters;
-
-public:
+  std::vector<Chunk*> mChunkInterpreters;
+  double              mCommonChunkPeriod;
+	
+public:	
+ public:
 	BlockInterpreter(const uint32_t cycles, const uint32_t headerBytes, const uint32_t footerBytes);
 	virtual ~BlockInterpreter();
 
 	virtual void AddChunk(Chunk* newChunk);
 	virtual bool Interpret(BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess);
 	virtual bool InterpretChunk(BinaryFileSource& packedFile);
+  
+  std::vector<Chunk*>& ChunkInterpreters();
+   
+   
+   double GetChunkPeriod() const;
+   void SetChunkPeriod(const double chunkPeriod);
 };
 
 #endif //CLASS_BlockInterpreter
