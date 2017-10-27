@@ -86,7 +86,7 @@ ChunkTranslator::ChunkTranslator()
 bool ChunkTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
 	const XMLElement* pchild;
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	Chunk chunk;
 
 	bool bRetVal = true;
@@ -111,21 +111,21 @@ bool ChunkTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAd
 
 		// Parse endian [0..1]
 		pchild = elem.FirstChildElement("endian");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			chunk.Endian(ToEndian(pchild->GetText()));
 		}
 
 		// Parse padding [0..1]
 		pchild = elem.FirstChildElement("padding");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			chunk.Padding(ToWordPadding(pchild->GetText()));
 		}
 
 		// Parse shift [0..1]
 		pchild = elem.FirstChildElement("wordshift");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			chunk.Shift(ToWordShift(pchild->GetText()));
 		}
@@ -145,7 +145,7 @@ bool ChunkTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAd
 void ChunkTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Chunk* pchunk = dynamic_cast<const Chunk*>(pObject);
-	if (pchunk == NULL) throw TranslationException("ChunkTranslator cannot cast Chunk object");
+	if (pchunk == nullptr) throw TranslationException("ChunkTranslator cannot cast Chunk object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

@@ -27,7 +27,7 @@ const SampleSource* SampleFrontEnd<sample_base_t>::GetSource(const std::string s
 	if (mit == this->mSampleSinks.end())
 	{
 		printf("Error: cannot find sample source!\n");
-		return NULL;
+		return nullptr;
 	}
 
 	const SampleSource* sampleSource = dynamic_cast<const SampleSource*>(mit->second.first);
@@ -43,7 +43,7 @@ const SampleStreamInfo* SampleFrontEnd<sample_base_t>::GetSourceInfo(const std::
 	if (mit == this->mSampleSinks.end())
 	{
 		printf("Error: cannot find sample source!\n");
-		return NULL;
+		return nullptr;
 	}
 
 	return mit->second.second;

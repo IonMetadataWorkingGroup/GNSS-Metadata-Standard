@@ -178,7 +178,7 @@ namespace GnssMetadata
 		for (AttributedObject::SearchItem::List::iterator it = listResults.begin(); it != listResults.end(); ++it)
 		{
 			pResult = dynamic_cast<const Type*>(it->pObject);
-			if (pResult != NULL)
+			if (pResult != nullptr)
 			{
 				result = *pResult;
 				break;

@@ -55,7 +55,7 @@ bool LumpTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 {
 	const XMLElement* pchild;
 
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	Lump lump;
 
 	bool bRetVal = true;
@@ -76,7 +76,7 @@ bool LumpTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 
 		// Parse shift
 		pchild = elem.FirstChildElement("shift");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			lump.Shift(ToLumpShiftFormat(pchild->GetText()));
 		}
@@ -92,7 +92,7 @@ bool LumpTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 void LumpTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Lump* plump = dynamic_cast<const Lump*>(pObject);
-	if (plump == NULL) throw TranslationException("LumpTranslator cannot cast Lump object");
+	if (plump == nullptr) throw TranslationException("LumpTranslator cannot cast Lump object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

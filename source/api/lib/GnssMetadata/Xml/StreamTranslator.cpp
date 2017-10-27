@@ -86,7 +86,7 @@ StreamTranslator::StreamTranslator()
 bool StreamTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
 	const XMLElement* pchild;
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	IonStream stream;
 
 	bool bRetVal = true;
@@ -113,11 +113,11 @@ bool StreamTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorA
 
 		// Parse alignment
 		pchild = elem.FirstChildElement("alignment");
-		if (pchild != NULL) stream.Alignment(ToAlignmentFormat(pchild->GetText()));
+		if (pchild != nullptr) stream.Alignment(ToAlignmentFormat(pchild->GetText()));
 
 		// Parse shift
 		pchild = elem.FirstChildElement("shift");
-		if (pchild != NULL) stream.Shift(ToStreamShiftFormat(pchild->GetText()));
+		if (pchild != nullptr) stream.Shift(ToStreamShiftFormat(pchild->GetText()));
 
 		// Parse format
 		pchild = elem.FirstChildElement("format");
@@ -142,7 +142,7 @@ bool StreamTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorA
 void StreamTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const IonStream* pstream = dynamic_cast<const IonStream*>(pObject);
-	if (pstream == NULL) throw TranslationException("StreamTranslator cannot cast IonStream object");
+	if (pstream == nullptr) throw TranslationException("StreamTranslator cannot cast IonStream object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

@@ -44,10 +44,10 @@ static Duration::DurationFormat ToFormat(const char* pszFmt)
  */
 bool DurationTranslator::OnRead(Context & /*ctxt*/, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor != NULL)
+	if (pAdaptor != nullptr)
 	{
 		pcstr format = elem.Attribute("format");
-		if (format == NULL)
+		if (format == nullptr)
 			format = "sec";
 
 		Duration::DurationFormat fmt = ToFormat(format);
@@ -70,7 +70,7 @@ bool DurationTranslator::OnRead(Context & /*ctxt*/, const XMLElement & elem, Acc
 void DurationTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & /*ctxt*/, tinyxml2::XMLNode & elem)
 {
 	const Duration* pdur = dynamic_cast<const Duration*>(pObject);
-	if (pdur == NULL) throw TranslationException("DurationTranslator cannot cast Duration object");
+	if (pdur == nullptr) throw TranslationException("DurationTranslator cannot cast Duration object");
 
 	XMLElement* pelemf = elem.GetDocument()->NewElement(pszName);
 	pelemf->SetAttribute("format", _szfmts[pdur->Format()]);

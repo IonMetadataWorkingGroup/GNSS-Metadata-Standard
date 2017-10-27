@@ -86,7 +86,7 @@ bool MetadataTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accesso
 void MetadataTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, XMLNode & elem)
 {
 	const Metadata* pmetadata = dynamic_cast<const Metadata*>(pObject);
-	if (pmetadata == NULL) throw TranslationException("MetadataTranslator cannot cast Metadata object");
+	if (pmetadata == nullptr) throw TranslationException("MetadataTranslator cannot cast Metadata object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

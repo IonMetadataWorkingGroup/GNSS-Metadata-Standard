@@ -43,7 +43,7 @@ OscillatorTranslator::OscillatorTranslator()
  */
 bool OscillatorTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 
 	// For now, just process AttributedObject elements.
 	Oscillator osc;
@@ -59,7 +59,7 @@ bool OscillatorTranslator::OnRead(Context & ctxt, const XMLElement & elem, Acces
 void OscillatorTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Oscillator* posc = dynamic_cast<const Oscillator*>(pObject);
-	if (posc == NULL) throw TranslationException("OscillatorTranslator cannot cast to Oscillator object");
+	if (posc == nullptr) throw TranslationException("OscillatorTranslator cannot cast to Oscillator object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 	// Fill out id, artifacts, and comments last in accordance

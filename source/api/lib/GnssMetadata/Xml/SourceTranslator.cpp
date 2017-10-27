@@ -71,7 +71,7 @@ SourceTranslator::SourceTranslator()
  */
 bool SourceTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	Source source;
 
 	bool bRetVal = true;
@@ -91,15 +91,15 @@ bool SourceTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorA
 
 		// Parse type [0..1]
 		pchild = elem.FirstChildElement("type");
-		if (pchild != NULL) source.Type(ToSourceType(pchild->GetText()));
+		if (pchild != nullptr) source.Type(ToSourceType(pchild->GetText()));
 
 		// Parse polarization [0..1]
 		pchild = elem.FirstChildElement("polarization");
-		if (pchild != NULL) source.Polarization(ToSourcePolarization(pchild->GetText()));
+		if (pchild != nullptr) source.Polarization(ToSourcePolarization(pchild->GetText()));
 
 		// Parse origin [0..1]
 		pchild = elem.FirstChildElement("origin");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			AccessorAdaptor<Source, Position> adapt(&source, &Source::Origin);
 			bRetVal &= ReadElement(source, ctxt, *pchild, &adapt);
@@ -107,7 +107,7 @@ bool SourceTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorA
 
 		// Parse orientation [0..1]
 		pchild = elem.FirstChildElement("orientation");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			AccessorAdaptor<Source, Orientation> adapt(&source, &Source::Orientation);
 			bRetVal &= ReadElement(source, ctxt, *pchild, &adapt);
@@ -128,7 +128,7 @@ bool SourceTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorA
 void SourceTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Source* psource = dynamic_cast<const Source*>(pObject);
-	if (psource == NULL) throw TranslationException("SourceTranslator cannot cast Source object");
+	if (psource == nullptr) throw TranslationException("SourceTranslator cannot cast Source object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

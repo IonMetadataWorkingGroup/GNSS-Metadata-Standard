@@ -57,7 +57,7 @@ bool SessionTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accessor
 	bool bRetVal = true;
 	Session session;
 
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 
 	// Parse the AttributedObject Elements.
 	if (!ReadAttributedObject(session, ctxt, elem)) return false;
@@ -72,11 +72,11 @@ bool SessionTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accessor
 	{
 		//Parse TOA	[0..1]
 		pchild = elem.FirstChildElement("toa");
-		if (pchild != NULL) session.Toa(Date(pchild->GetText()));
+		if (pchild != nullptr) session.Toa(Date(pchild->GetText()));
 
 		//Parse Position [0..1]
 		pchild = elem.FirstChildElement("position");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			AccessorAdaptor<Session, Position> adapt(&session, &Session::Position);
 			bRetVal &= ReadElement(session, ctxt, *pchild, &adapt);
@@ -110,7 +110,7 @@ bool SessionTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accessor
 void SessionTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Session* psession = dynamic_cast<const Session*>(pObject);
-	if (psession == NULL) throw TranslationException("SessionTranslator cannot cast Session object");
+	if (psession == nullptr) throw TranslationException("SessionTranslator cannot cast Session object");
 	else if (psession->Id().length() == 0) return;
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

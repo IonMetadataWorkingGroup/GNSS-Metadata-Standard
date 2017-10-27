@@ -47,7 +47,7 @@ LaneTranslator::LaneTranslator()
  */
 bool LaneTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	Lane lane;
 
 	bool bRetVal = true;
@@ -65,7 +65,7 @@ bool LaneTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 	{
 		// Parse bandsrc [1..*]
 		const tinyxml2::XMLElement* pelem = elem.FirstChildElement("bandsrc");
-		for (; pelem != NULL; pelem = pelem->NextSiblingElement("bandsrc"))
+		for (; pelem != nullptr; pelem = pelem->NextSiblingElement("bandsrc"))
 		{
 			const char* pszidband = pelem->Attribute("idband");
 			const char* pszidsrc = pelem->Attribute("idsrc");
@@ -93,7 +93,7 @@ bool LaneTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 void LaneTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Lane* plane = dynamic_cast<const Lane*>(pObject);
-	if (plane == NULL) throw TranslationException("LaneTranslator cannot cast Lane object");
+	if (plane == nullptr) throw TranslationException("LaneTranslator cannot cast Lane object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

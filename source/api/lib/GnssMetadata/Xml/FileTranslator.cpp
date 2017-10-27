@@ -52,7 +52,7 @@ FileTranslator::FileTranslator()
 bool FileTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
 	const XMLElement* pchild;
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	File file;
 
 	bool bRetVal = true;
@@ -73,7 +73,7 @@ bool FileTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 
 		// Parse timestamp [1]
 		pchild = elem.FirstChildElement("timestamp");
-		if (pchild == NULL) throw TranslationException("FileTranslator::OnRead -> timestamp not found");
+		if (pchild == nullptr) throw TranslationException("FileTranslator::OnRead -> timestamp not found");
 		file.TimeStamp(Date(pchild->GetText()));
 
 		// Parse offset [0..1]
@@ -108,7 +108,7 @@ bool FileTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 void FileTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const File* pfile = dynamic_cast<const File*>(pObject);
-	if (pfile == NULL) throw TranslationException("FileTranslator cannot cast File object");
+	if (pfile == nullptr) throw TranslationException("FileTranslator cannot cast File object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

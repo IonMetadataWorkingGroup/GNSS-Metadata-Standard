@@ -64,7 +64,7 @@ SystemTranslator::SystemTranslator()
 bool SystemTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
 	const XMLElement* pchild;
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	System system;
 
 	bool bRetVal = true;
@@ -110,7 +110,7 @@ bool SystemTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorA
 void SystemTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const System* psystem = dynamic_cast<const System*>(pObject);
-	if (psystem == NULL) throw TranslationException("SystemTranslator cannot cast System object");
+	if (psystem == nullptr) throw TranslationException("SystemTranslator cannot cast System object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

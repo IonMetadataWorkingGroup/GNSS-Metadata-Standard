@@ -47,7 +47,7 @@ BlockTranslator::BlockTranslator()
  */
 bool BlockTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	Block block;
 
 	bool bRetVal = true;
@@ -87,7 +87,7 @@ bool BlockTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAd
 void BlockTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Block* pblock = dynamic_cast<const Block*>(pObject);
-	if (pblock == NULL) throw TranslationException("BlockTranslator cannot cast Block object");
+	if (pblock == nullptr) throw TranslationException("BlockTranslator cannot cast Block object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

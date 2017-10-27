@@ -51,7 +51,7 @@ namespace GnssMetadata
 		 * Reads the current node and translates into metadata defined
 		 * by the subclass.
 		 */
-		virtual bool OnRead(Context & ctxt, const tinyxml2::XMLElement & elem, AccessorAdaptorBase* pAdaptor = NULL) = 0;
+		virtual bool OnRead(Context & ctxt, const tinyxml2::XMLElement & elem, AccessorAdaptorBase* pAdaptor = nullptr) = 0;
 		/**
 		 * Write the current object
 		 */
@@ -62,7 +62,7 @@ namespace GnssMetadata
 		 * Accessor returns the array of allowed XML nodes for this
 		 * instance of a translator.  Translators are associated with a XML
 		 * element, and provides the information on valid sub-elements, if any.
-		 * return NULL If sub-elements are not allowed.
+		 * return nullptr If sub-elements are not allowed.
 		 */
 		NodeEntry* GetAllowedNodes() const
 		{
@@ -110,7 +110,7 @@ namespace GnssMetadata
 		{
 			bool bRetVal = true;
 			const tinyxml2::XMLElement* pelem = elem.FirstChildElement(pszName);
-			for (; pelem != NULL; pelem = pelem->NextSiblingElement(pszName))
+			for (; pelem != nullptr; pelem = pelem->NextSiblingElement(pszName))
 			{
 				ListAdaptor<A> adapt(list);
 				bRetVal &= ReadElement(*(ctxt.pContainer), ctxt, *pelem, &adapt);

@@ -43,7 +43,7 @@ RfConfigTranslator::RfConfigTranslator()
  */
 bool RfConfigTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 
 	// For now, just process AttributedObject elements.
 	RfConfiguration rfconfig;
@@ -58,7 +58,7 @@ bool RfConfigTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accesso
 void RfConfigTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const RfConfiguration* pconfig = dynamic_cast<const RfConfiguration*>(pObject);
-	if (pconfig == NULL) throw TranslationException("RfConfigTranslator cannot cast to RfConfiguration object");
+	if (pconfig == nullptr) throw TranslationException("RfConfigTranslator cannot cast to RfConfiguration object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

@@ -35,7 +35,7 @@ using namespace tinyxml2;
  */
 bool AnyUriTranslator::OnRead(Context & /*ctxt*/, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 
 	AnyUri url(elem.GetText());
 	pAdaptor->set(&url);
@@ -48,7 +48,7 @@ bool AnyUriTranslator::OnRead(Context & /*ctxt*/, const XMLElement & elem, Acces
 void AnyUriTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & /*ctxt*/, tinyxml2::XMLNode & elem)
 {
 	const AnyUri* puri = dynamic_cast<const AnyUri*>(pObject);
-	if (puri == NULL) throw TranslationException("AnyUriTranslator cannot cast to AnyUri object");
+	if (puri == nullptr) throw TranslationException("AnyUriTranslator cannot cast to AnyUri object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 	pelemc->SetText(puri->Value().c_str());

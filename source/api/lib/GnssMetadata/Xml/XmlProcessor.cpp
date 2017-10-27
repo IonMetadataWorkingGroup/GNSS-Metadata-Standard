@@ -143,7 +143,7 @@ bool XmlProcessor::Load(const char* szFilename, const bool bProcessIncludes, Met
 
 	// Find the metadata element. There should be only one per file.
 	const XMLElement* pmetadata = doc.FirstChildElement("metadata");
-	if (pmetadata == NULL)
+	if (pmetadata == nullptr)
 	{
 		char buff[512];
 		_snprintf(buff, 512, "Metadata element not found in file, %s", szFilename);
@@ -151,9 +151,9 @@ bool XmlProcessor::Load(const char* szFilename, const bool bProcessIncludes, Met
 	}
 
 	// Translate the XML data using the standard metadata translator.
-	Context ctxt(*this, NULL, &metadata);
+	Context ctxt(*this, nullptr, &metadata);
 	Translator& trans = TranslatorFromId(TE_METADATA);
-	bool bRetVal = trans.OnRead(ctxt, *pmetadata, NULL);
+	bool bRetVal = trans.OnRead(ctxt, *pmetadata, nullptr);
 
 	// If successful and caller requests processing of include
 	// elements.  Process them recursively as well.
@@ -187,7 +187,7 @@ void XmlProcessor::Save(const char* szFilename, const Metadata & metadata)
 	XMLDeclaration* decl = doc.NewDeclaration();
 	doc.InsertFirstChild(decl);
 
-	Context ctxt(*this, NULL, NULL);
+	Context ctxt(*this, nullptr, nullptr);
 
 	// Translate metadata into XML and Save if successful.
 	Translator& trans = TranslatorFromId(TE_METADATA);
@@ -208,7 +208,7 @@ bool XmlProcessor::ReadElement(Context & ctxt, const tinyxml2::XMLElement & elem
 	// Use the current translator if available to lookup appropriate
 	// translator for the current element. If not available,
 	// do a global search.
-	if (ctxt.pParent != NULL)
+	if (ctxt.pParent != nullptr)
 	{
 		id = TranslatorIdFromElemName(szNodeName, ctxt.pParent->GetAllowedNodes());
 	}
@@ -217,7 +217,7 @@ bool XmlProcessor::ReadElement(Context & ctxt, const tinyxml2::XMLElement & elem
 		for (unsigned int i = 0; i < COUNT_TRANSLATORS && id == TE_END; i++)
 		{
 			NodeEntry* pNodes = _Translators[i].translator.GetAllowedNodes();
-			if (pNodes == NULL) continue;
+			if (pNodes == nullptr) continue;
 
 			id = TranslatorIdFromElemName(szNodeName, pNodes);
 		}
@@ -238,7 +238,7 @@ void XmlProcessor::WriteElement(const Object * pObject, const char* pszName, Con
 	// Use the current translator if available to lookup appropriate
 	// translator for the current element. If not available,
 	// do a global search.
-	if (ctxt.pParent != NULL)
+	if (ctxt.pParent != nullptr)
 	{
 		id = TranslatorIdFromElemName(pszName, ctxt.pParent->GetAllowedNodes());
 	}
@@ -247,7 +247,7 @@ void XmlProcessor::WriteElement(const Object * pObject, const char* pszName, Con
 		for (unsigned int i = 0; i < COUNT_TRANSLATORS && id == TE_END; i++)
 		{
 			NodeEntry* pNodes = _Translators[i].translator.GetAllowedNodes();
-			if (pNodes == NULL) continue;
+			if (pNodes == nullptr) continue;
 
 			id = TranslatorIdFromElemName(pszName, pNodes);
 		}

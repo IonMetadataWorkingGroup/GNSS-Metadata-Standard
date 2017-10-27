@@ -45,10 +45,10 @@ static Frequency::FrequencyFormat ToFormat(const char* pszFmt)
 bool FrequencyTranslator::OnRead(Context & /*ctxt*/, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
 	// The node as been tested as a Frequency Translator
-	if (pAdaptor != NULL)
+	if (pAdaptor != nullptr)
 	{
 		pcstr format = elem.Attribute("format");
-		if (format == NULL) format = "Hz";
+		if (format == nullptr) format = "Hz";
 
 		Frequency::FrequencyFormat fmt = ToFormat(format);
 		Frequency freq;
@@ -82,7 +82,7 @@ bool FrequencyTranslator::OnRead(Context & /*ctxt*/, const XMLElement & elem, Ac
 void FrequencyTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & /*ctxt*/, tinyxml2::XMLNode & elem)
 {
 	const Frequency* pfreq = dynamic_cast<const Frequency*>(pObject);
-	if (pfreq == NULL) throw TranslationException("FrequencyTranslator cannot cast frequency object");
+	if (pfreq == nullptr) throw TranslationException("FrequencyTranslator cannot cast frequency object");
 
 	XMLElement* pelemf = elem.GetDocument()->NewElement(pszName);
 	pelemf->SetAttribute("format", _szfmts[pfreq->Format()]);

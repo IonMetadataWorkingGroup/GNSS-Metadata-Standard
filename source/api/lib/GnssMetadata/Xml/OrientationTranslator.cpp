@@ -33,7 +33,7 @@ using namespace tinyxml2;
  */
 bool OrientationTranslator::OnRead(Context & /*ctxt*/, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor != NULL)
+	if (pAdaptor != nullptr)
 	{
 		try
 		{
@@ -61,7 +61,7 @@ bool OrientationTranslator::OnRead(Context & /*ctxt*/, const XMLElement & elem, 
 void OrientationTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & /*ctxt*/, tinyxml2::XMLNode & elem)
 {
 	const Orientation* pori = dynamic_cast<const Orientation*>(pObject);
-	if (pori == NULL) throw TranslationException("OrientationTranslator cannot cast Position object");
+	if (pori == nullptr) throw TranslationException("OrientationTranslator cannot cast Position object");
 
 	XMLElement* pelem = elem.GetDocument()->NewElement(pszName);
 

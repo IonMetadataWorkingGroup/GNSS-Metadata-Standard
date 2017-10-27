@@ -53,7 +53,7 @@ void Translator::WriteElement(const Object * pObject, pcstr pszName, Context & c
 {
 	// Create a context for attributed object and then
 	// process with the translator.
-	Context ctxtnew(ctxt.proc, this, NULL);
+	Context ctxtnew(ctxt.proc, this, nullptr);
 
 	return ctxt.proc.WriteElement(pObject, pszName, ctxtnew, elem);
 }
@@ -65,12 +65,12 @@ bool Translator::ReadAttributedObject(AttributedObject& aobj, Context& /*ctxt*/,
 {
 	// Grab the ID.
 	pcstr szid = elem.Attribute("id");
-	if (szid == NULL && bIdAttributeRequired) throw GnssMetadata::TranslationException("Required id attribute not defined.");
+	if (szid == nullptr && bIdAttributeRequired) throw GnssMetadata::TranslationException("Required id attribute not defined.");
 	aobj.Id(szid);
 
 	// Parse the comments.
 	const XMLElement* pelem = elem.FirstChildElement("comment");
-	for (; pelem != NULL; pelem = pelem->NextSiblingElement("comment"))
+	for (; pelem != nullptr; pelem = pelem->NextSiblingElement("comment"))
 	{
 		const char* szFmt = pelem->Attribute("format");
 		Comment::CommentFormat fmt = (strcmp(szFmt, "text") == 0) ? Comment::text : Comment::html;
@@ -80,7 +80,7 @@ bool Translator::ReadAttributedObject(AttributedObject& aobj, Context& /*ctxt*/,
 
 	// Parse the Artifacts.
 	pelem = elem.FirstChildElement("artifact");
-	for (; pelem != NULL; pelem = pelem->NextSiblingElement("artifact"))
+	for (; pelem != nullptr; pelem = pelem->NextSiblingElement("artifact"))
 	{
 		AnyUri auri(pelem->GetText());
 		aobj.Artifacts().push_back(auri);
@@ -131,7 +131,7 @@ void Translator::WriteAttributedObject(const AttributedObject& aobj, Context& /*
 bool Translator::ReadFirstElement(const char* pszelem, const tinyxml2::XMLElement& container, bool bRequired, bool bDefault)
 {
 	const XMLElement* pchild = container.FirstChildElement(pszelem);
-	if (pchild == NULL)
+	if (pchild == nullptr)
 	{
 		if (!bRequired)
 		{
@@ -153,7 +153,7 @@ bool Translator::ReadFirstElement(const char* pszelem, const tinyxml2::XMLElemen
 const char* Translator::ReadFirstElement(const char* pszelem, const tinyxml2::XMLElement& container, bool bRequired, const char* pszDefault)
 {
 	const XMLElement* pchild = container.FirstChildElement(pszelem);
-	if (pchild == NULL)
+	if (pchild == nullptr)
 	{
 		if (!bRequired)
 		{
@@ -176,7 +176,7 @@ const char* Translator::ReadFirstElement(const char* pszelem, const tinyxml2::XM
 size_t Translator::ReadFirstElement(const char* pszelem, const tinyxml2::XMLElement& container, bool bRequired, size_t iDefault)
 {
 	const XMLElement* pchild = container.FirstChildElement(pszelem);
-	if (pchild == NULL)
+	if (pchild == nullptr)
 	{
 		if (!bRequired)
 		{
@@ -198,7 +198,7 @@ size_t Translator::ReadFirstElement(const char* pszelem, const tinyxml2::XMLElem
 double Translator::ReadFirstElement(const char* pszelem, const tinyxml2::XMLElement& container, bool bRequired, double dDefault)
 {
 	const XMLElement* pchild = container.FirstChildElement(pszelem);
-	if (pchild == NULL)
+	if (pchild == nullptr)
 	{
 		if (!bRequired)
 		{

@@ -49,7 +49,7 @@ BandTranslator::BandTranslator()
 bool BandTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
 	const XMLElement* pchild;
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	Band band;
 
 	bool bRetVal = true;
@@ -80,7 +80,7 @@ bool BandTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 
 		// delaybias
 		pchild = elem.FirstChildElement("delaybias");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			AccessorAdaptor<Band, Duration> adpt(&band, &Band::DelayBias);
 			bRetVal &= ReadElement(band, ctxt, *pchild, &adpt);
@@ -88,7 +88,7 @@ bool BandTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 
 		// Parse bandwidth
 		pchild = elem.FirstChildElement("bandwidth");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			AccessorAdaptor<Band, Frequency> adpt(&band, &Band::Bandwidth);
 			bRetVal = ReadElement(band, ctxt, *pchild, &adpt);
@@ -106,7 +106,7 @@ bool BandTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAda
 void BandTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Band* pband = dynamic_cast<const Band*>(pObject);
-	if (pband == NULL) throw TranslationException("BandTranslator cannot cast Band object");
+	if (pband == nullptr) throw TranslationException("BandTranslator cannot cast Band object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

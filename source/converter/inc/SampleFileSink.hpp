@@ -23,7 +23,7 @@
 template<typename sample_base_t>
 SampleFileSink<sample_base_t>::SampleFileSink(std::string fileName, unsigned int numSamplesPerBuffer)
 		:
-		        mSampleBuffer(NULL),
+		        mSampleBuffer(nullptr),
 		        mBufferSize(0),
 		        mIndexOfNextSample(0),
 		        mRequestedNumberOfSamplesPerBuffer(numSamplesPerBuffer),
@@ -65,7 +65,7 @@ bool SampleFileSink<sample_base_t>::Open()
 
 	// now allocate the buffer
 	mSampleBuffer = new (std::nothrow) sample_base_t[mBufferSize];
-	if (mSampleBuffer == NULL)
+	if (mSampleBuffer == nullptr)
 	{
 		printf("Cannot create SampleFileSink  - cannot allocate enough memory");
 	}
@@ -81,10 +81,10 @@ void SampleFileSink<sample_base_t>::Close()
 {
 	this->mIsOpen = false;
 
-	if (mSampleBuffer != NULL)
+	if (mSampleBuffer != nullptr)
 	{
 		delete[] reinterpret_cast<char*>(mSampleBuffer);
-		mSampleBuffer = NULL;
+		mSampleBuffer = nullptr;
 	}
 
 	mSampleFile.close();

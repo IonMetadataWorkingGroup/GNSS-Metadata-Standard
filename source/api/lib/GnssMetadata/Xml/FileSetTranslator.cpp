@@ -42,7 +42,7 @@ FileSetTranslator::FileSetTranslator()
  */
 bool FileSetTranslator::OnRead(Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor)
 {
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	FileSet fileset;
 
 	bool bRetVal = true;
@@ -74,7 +74,7 @@ bool FileSetTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accessor
 void FileSetTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const FileSet* pfileset = dynamic_cast<const FileSet*>(pObject);
-	if (pfileset == NULL) throw TranslationException("FileSetTranslator cannot cast FileSet object");
+	if (pfileset == nullptr) throw TranslationException("FileSetTranslator cannot cast FileSet object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

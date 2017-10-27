@@ -43,7 +43,7 @@ protected:
 
 public:
 	BinaryFileSource()
-			: mIsOpen(false), mBinfile(NULL)
+			: mIsOpen(false), mBinfile(nullptr)
 	{
 	}
 
@@ -77,16 +77,16 @@ public:
 
 	size_t Skip(size_t bytesToSkip)
 	{
-		return Get(NULL, bytesToSkip);
+		return Get(nullptr, bytesToSkip);
 	}
 
 	void Close()
 	{
-		if (mBinfile != NULL)
+		if (mBinfile != nullptr)
 		{
 			mBinfile->close();
 			delete mBinfile;
-			mBinfile = NULL;
+			mBinfile = nullptr;
 		}
 		mIsOpen = false;
 	}
@@ -133,7 +133,7 @@ public:
 			//now copy out the bytes
 			size_t copyBytes = std::min(size_t(requestedBytes - deliveredBytes), size_t(mEndBuffer - mStartBuffer));
 
-			if (pData != NULL)
+			if (pData != nullptr)
 			{
 				std::memcpy(static_cast<uint8_t*>(pData) + deliveredBytes, &(*mStartBuffer), copyBytes);
 			}

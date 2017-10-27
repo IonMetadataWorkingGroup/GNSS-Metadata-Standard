@@ -48,7 +48,7 @@ bool ClusterTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accessor
 {
 	const XMLElement* pchild;
 
-	if (pAdaptor == NULL) return false;
+	if (pAdaptor == nullptr) return false;
 	Cluster cluster;
 
 	bool bRetVal = true;
@@ -66,7 +66,7 @@ bool ClusterTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accessor
 	{
 		// Parse Position [0..1]
 		pchild = elem.FirstChildElement("position");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			AccessorAdaptor<Cluster, Position> adapt(&cluster, &Cluster::Position);
 			bRetVal &= ReadElement(cluster, ctxt, *pchild, &adapt);
@@ -74,7 +74,7 @@ bool ClusterTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accessor
 
 		// Parse Orientation [0..1]
 		pchild = elem.FirstChildElement("orientation");
-		if (pchild != NULL)
+		if (pchild != nullptr)
 		{
 			AccessorAdaptor<Cluster, Orientation> adapt(&cluster, &Cluster::Orientation);
 			bRetVal &= ReadElement(cluster, ctxt, *pchild, &adapt);
@@ -101,7 +101,7 @@ bool ClusterTranslator::OnRead(Context & ctxt, const XMLElement & elem, Accessor
 void ClusterTranslator::OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem)
 {
 	const Cluster* pcluster = dynamic_cast<const Cluster*>(pObject);
-	if (pcluster == NULL) throw TranslationException("ClusterTranslator cannot cast Cluster object");
+	if (pcluster == nullptr) throw TranslationException("ClusterTranslator cannot cast Cluster object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement(pszName);
 

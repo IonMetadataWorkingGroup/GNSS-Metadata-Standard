@@ -106,7 +106,7 @@ bool SampleInterpreterFactory<chunk_t, sample_base_t>::Create(
 		// otherwise proceed with a generic SampleInterpreter
 		smplIntrp = new SinkedSampleInterpreter<chunk_t, sample_base_t>(
 		        BitWidth(fmt, qnt),
-		        NULL,
+		        nullptr,
 		        mFormatFunctionMap[GnssMetadata::IonStream::Int8IQ],
 		        sampleSink,
 		        callOrder
