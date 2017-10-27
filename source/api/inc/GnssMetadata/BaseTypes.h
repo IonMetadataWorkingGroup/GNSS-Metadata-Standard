@@ -1,15 +1,15 @@
 /**
  * File: BaseTypes.h
  * Author: M.B. Mathews
-  *  
+ *
  * Copyright(c) 2014 Institute of Navigation
  * http://www.ion.org
- *  
+ *
  * This Metadata API is free software; you can redistribute it and/or
  * modify it under the terms of the Lesser GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,12 +25,11 @@
 #include <string>
 #include <stdexcept>
 
-
 namespace GnssMetadata
 {
 	/**
-	* Standard string type used throughout the API.
-	*/
+	 * Standard string type used throughout the API.
+	 */
 	typedef std::string IonString;
 
 	/**
@@ -40,14 +39,13 @@ namespace GnssMetadata
 	{
 	public:
 		static const IonString DefaultFormat;
-		
-	public:
+
+		virtual ~Object() = 0;
 		/**
 		 * Returns a string representation of the object.
 		 */
-		virtual IonString toString( const IonString& sFormat =  DefaultFormat ) const = 0;
+		virtual IonString toString(const IonString& sFormat = DefaultFormat) const = 0;
 	};
-	
 
 	/**
 	 * Standard API exception
@@ -63,17 +61,18 @@ namespace GnssMetadata
 			TranslationError,
 			NotImplemented
 		};
-	public:
-		ApiException( const IonString& _What, ErrorType errType = Unspecified )
-			: std::runtime_error( _What), _error(errType)
-		{
-		}
 
-		ApiException( const std::runtime_error& _That) : std::runtime_error( _That),
-			_error( Unspecified)
-		{
-		}
-		ErrorType Error() const { return _error;}
+		ApiException(const IonString& _What, ErrorType errType = Unspecified)
+				: std::runtime_error(_What), _error(errType)
+		{}
+
+		ApiException(const std::runtime_error& _That)
+				: std::runtime_error(_That),
+				        _error(Unspecified)
+		{}
+
+		ErrorType Error() const { return _error; }
+
 	private:
 		ErrorType _error;
 	};
@@ -84,11 +83,9 @@ namespace GnssMetadata
 	class ArgumentException : public ApiException
 	{
 	public:
-		ArgumentException( const IonString& _What = "Argument Error",
-			ErrorType errType = ArgumentError)
-			: ApiException( _What, errType)
-		{
-		}
+		ArgumentException(const IonString& _What = "Argument Error", ErrorType errType = ArgumentError)
+				: ApiException(_What, errType)
+		{}
 	};
 
 	/**
@@ -97,12 +94,10 @@ namespace GnssMetadata
 	class OutOfRangeException : public ArgumentException
 	{
 	public:
-		OutOfRangeException( const IonString& _What = "Argument out of range")
-			: ArgumentException( _What, OutOfRange)
-		{
-		}
+		OutOfRangeException(const IonString& _What = "Argument out of range")
+				: ArgumentException(_What, OutOfRange)
+		{}
 	};
-
 
 	/**
 	 * Exception thrown whenever a file parsing error occurs.
@@ -110,11 +105,10 @@ namespace GnssMetadata
 	class TranslationException : public ApiException
 	{
 	public:
-		TranslationException( const IonString& _What = "Translation Error", int  iderror = 0)
-			: ApiException( _What, TranslationError), XmlError( iderror)
-		{
-		
-		}
+		TranslationException(const IonString& _What = "Translation Error", int iderror = 0)
+				: ApiException(_What, TranslationError), XmlError(iderror)
+		{}
+
 		size_t XmlError;
 	};
 
@@ -124,23 +118,20 @@ namespace GnssMetadata
 	class NotImplementedException : public ApiException
 	{
 	public:
-		NotImplementedException( const IonString& _What = "Not Implemented")
-			: ApiException( _What, NotImplemented)
-		{
-		}
+		NotImplementedException(const IonString& _What = "Not Implemented")
+				: ApiException(_What, NotImplemented)
+		{}
 	};
 
 	/**
-	* Template validates the range of a value. Throwns OutOfRangeException if invalid.
-	*/
-	template< class ctype> void ValidateRange( const ctype& val, const ctype& min, 
-		const ctype& max, const char* const& paramName)
+	 * Template validates the range of a value. Throws OutOfRangeException if invalid.
+	 */
+	template<class ctype> void ValidateRange(const ctype& val, const ctype& min,
+	        const ctype& max, const char* const & paramName)
 	{
-		if( val < min || val > max ) throw GnssMetadata::OutOfRangeException( paramName);
+		if (val < min || val > max) throw GnssMetadata::OutOfRangeException(paramName);
 	}
 
-
 }
-
 
 #endif

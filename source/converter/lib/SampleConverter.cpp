@@ -1,14 +1,14 @@
 /**
  * Author: James T. Curran
- *  
+ *
  * Copyright(c) 2015 Institute of Navigation
  * http://www.ion.org
- *  
+ *
  * This Metadata Converter is free software; you can redistribute it and/or
  * modify it under the terms of the Lesser GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -18,32 +18,28 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <fstream>
 #include "SampleFileSink.h"
 #include "SampleConverter.h"
 #include "SampleInterpreterFactory.h"
 
-
-SampleConverter::SampleConverter(BaseSampleSinkFactory* ssFactory):
+SampleConverter::SampleConverter(BaseSampleSinkFactory* ssFactory)
+     :
 mIsOpen(false),
-mSampleSinkFactory(ssFactory)
+mSampleSinkFactory(ssFactory),
+mBaseLoadPeriod(1)
 {
-
-   
-      
-};
+}
 
 SampleConverter::~SampleConverter()
 {
-
-   //just check that it has been closed
-   Close();
-
-};
+	// just check that it has been closed
+	Close();
+}
 
 void SampleConverter::Close()
 {
+
 
    if( mIsOpen )
    {
@@ -59,6 +55,11 @@ void SampleConverter::Close()
       
    }
    mIsOpen = false;
+};
+
+double SampleConverter::BaseLoadPeriod() const
+{
+   return mBaseLoadPeriod;
 };
 
 
@@ -112,7 +113,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
 
 
 
-bool SampleConverter::Load( const uint32_t chunksToProcess )
+bool SampleConverter::Load( const double secondsToProcess )
 {
    
    if( !mIsOpen )
@@ -128,6 +129,12 @@ bool SampleConverter::Load( const uint32_t chunksToProcess )
       return false;
    }
    
+   // JTC ToDo:
+   //
+   // Make sure that secondsToProcess is an integer multiple of BaseLoadPeriod
+   //
+   //
+   
    
    bool readAllOK = true;
    
@@ -135,25 +142,28 @@ bool SampleConverter::Load( const uint32_t chunksToProcess )
    for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
    {
       
-      uint32_t chunksProcessed = 0;
-      
       //for now, just decode the first Lane
       LaneInterpreter* laneInterpreter= (*lnIt);
       
       bool readBlockOK = false;
          
-      for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
+      //for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
       {
+         std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin();
          BlockInterpreter* block = (*It);
-         //read the entire block
+         
+         //determine how many chunks to interpret
+         uint32_t chunksToLoad = static_cast<uint32_t>( round( secondsToProcess / block->GetChunkPeriod() ) );
+         //
+         uint32_t chunksLoaded = 0;
          do
          {
-            readBlockOK = block->InterpretChunk( *mLaneFiles[laneInterpreter] );
-            chunksProcessed++;
+            readBlockOK = block->InterpretChunks( *mLaneFiles[laneInterpreter] );
+            chunksLoaded++;
          }
-         while( readBlockOK && chunksProcessed < chunksToProcess );
+         while( readBlockOK && chunksLoaded < chunksToLoad );
          
-         readAllOK = readAllOK && ( chunksProcessed == chunksToProcess );
+         readAllOK = readAllOK && ( chunksToLoad == chunksLoaded );
       }
       
       
@@ -161,7 +171,5 @@ bool SampleConverter::Load( const uint32_t chunksToProcess )
 
    return readAllOK;
 };
-
-
 
 

@@ -110,6 +110,7 @@ set( api_sources
     Xml/StreamTranslator.cpp
     Xml/SystemTranslator.cpp
     Xml/Translator.cpp
+    Xml/XmlDefs.cpp
     Xml/XmlProcessor.cpp
 )
 	

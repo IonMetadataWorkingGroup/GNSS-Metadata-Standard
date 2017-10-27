@@ -32,116 +32,118 @@
 
 class BinaryFileSource
 {
-   
+
 protected:
-   
-   bool mIsOpen;
-   std::ifstream*                 mBinfile;
-   std::vector<uint8_t>           mData;
-   std::vector<uint8_t>::iterator mStartBuffer;
-   std::vector<uint8_t>::iterator mEndBuffer;
-   
+
+	bool mIsOpen;
+	std::ifstream* mBinfile;
+	std::vector<uint8_t> mData;
+	std::vector<uint8_t>::iterator mStartBuffer;
+	std::vector<uint8_t>::iterator mEndBuffer;
+
 public:
-   BinaryFileSource():
-   mIsOpen(false)
-   {};
-   
-   BinaryFileSource(const std::string filename)
-   {
-      Open(filename);
-   };
-   
-   ~BinaryFileSource()
-   {
-      Close();
-   }
-   
-   bool Open(const std::string filename)
-   {
-      
-      mBinfile = new std::ifstream;
-      mBinfile->open( filename, std::ios::binary );
-      
-      mIsOpen = mBinfile->is_open();
-      
-      if( mIsOpen )
-      {
-         mData.resize(BinaryFileSource_READ_SIZE);
-         mStartBuffer = mData.end();
-         mEndBuffer   = mStartBuffer;
-      }
-      
-      return mIsOpen;
-   };
-   
-   size_t Skip(size_t bytesToSkip)
-   {
-      return Get(NULL,bytesToSkip);
-   }
-   
-   void Close()
-   {
-      if( mBinfile != NULL)
-      {
-         mBinfile->close();
-         delete mBinfile;
-         mBinfile = NULL;
-      }
-      mIsOpen = false;
-   };
-   
-   bool IsOpen() const
-   {
-      return mIsOpen;
-   };
-   
-   bool Load()
-   {
-      if( !mIsOpen )
-      {
-         return false;
-      }
-      
-      //read the data
-      mStartBuffer = mData.begin();
-      mBinfile->read( reinterpret_cast<char*>(&(*mStartBuffer)) , BinaryFileSource_READ_SIZE);
-      mEndBuffer = mStartBuffer + mBinfile->gcount();
-      
-      //make sure that we have actually loaded something (we may have reached eof)
-      return !(mStartBuffer == mEndBuffer);
-   }
-   
-   size_t Get( void* pData, size_t requestedBytes )
-   {
-      if( !mIsOpen )
-      {
-         return 0;
-      }
-      
-      size_t deliveredBytes = 0;
-      while( deliveredBytes < requestedBytes )
-      {
-         //make sure we have data
-         if( mStartBuffer == mEndBuffer )
-         {
-            if( !Load() )
-            {
-               break;
-            }
-         }
-         //now copy out the bytes
-         size_t copyBytes = std::min( size_t(requestedBytes-deliveredBytes), size_t(mEndBuffer-mStartBuffer) );
-         
-         if( pData != NULL )
-         {
-            std::memcpy( static_cast<uint8_t*>(pData) + deliveredBytes, &(*mStartBuffer), copyBytes);
-         }
-         mStartBuffer   += copyBytes;
-         deliveredBytes += copyBytes;
-      }
-      
-      return deliveredBytes;
-   };
-   
+	BinaryFileSource()
+			: mIsOpen(false), mBinfile(nullptr)
+	{
+	}
+
+	BinaryFileSource(const std::string filename)
+	{
+		Open(filename);
+	}
+
+	~BinaryFileSource()
+	{
+		Close();
+	}
+
+	bool Open(const std::string filename)
+	{
+
+		mBinfile = new std::ifstream;
+		mBinfile->open(filename, std::ios::binary);
+
+		mIsOpen = mBinfile->is_open();
+
+		if (mIsOpen)
+		{
+			mData.resize(BinaryFileSource_READ_SIZE);
+			mStartBuffer = mData.end();
+			mEndBuffer = mStartBuffer;
+		}
+
+		return mIsOpen;
+	}
+
+	size_t Skip(size_t bytesToSkip)
+	{
+		return Get(nullptr, bytesToSkip);
+	}
+
+	void Close()
+	{
+		if (mBinfile != nullptr)
+		{
+			mBinfile->close();
+			delete mBinfile;
+			mBinfile = nullptr;
+		}
+		mIsOpen = false;
+	}
+
+	bool IsOpen() const
+	{
+		return mIsOpen;
+	}
+
+	bool Load()
+	{
+		if (!mIsOpen)
+		{
+			return false;
+		}
+
+		//read the data
+		mStartBuffer = mData.begin();
+		mBinfile->read(reinterpret_cast<char*>(&(*mStartBuffer)), BinaryFileSource_READ_SIZE);
+		mEndBuffer = mStartBuffer + mBinfile->gcount();
+
+		//make sure that we have actually loaded something (we may have reached eof)
+		return !(mStartBuffer == mEndBuffer);
+	}
+
+	size_t Get(void* pData, size_t requestedBytes)
+	{
+		if (!mIsOpen)
+		{
+			return 0;
+		}
+
+		size_t deliveredBytes = 0;
+		while (deliveredBytes < requestedBytes)
+		{
+			//make sure we have data
+			if (mStartBuffer == mEndBuffer)
+			{
+				if (!Load())
+				{
+					break;
+				}
+			}
+			//now copy out the bytes
+			size_t copyBytes = std::min(size_t(requestedBytes - deliveredBytes), size_t(mEndBuffer - mStartBuffer));
+
+			if (pData != nullptr)
+			{
+				std::memcpy(static_cast<uint8_t*>(pData) + deliveredBytes, &(*mStartBuffer), copyBytes);
+			}
+			mStartBuffer += copyBytes;
+			deliveredBytes += copyBytes;
+		}
+
+		return deliveredBytes;
+	}
+
 };
+
 #endif //CLASS_BinaryFileSource

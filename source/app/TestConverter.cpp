@@ -3,12 +3,12 @@
 #include <stdint.h>
 
 #ifdef _WIN32
-   #include <direct.h>
-   #define change_dir _chdir
+#include <direct.h>
+#define change_dir _chdir
 #elif defined __linux__ || __APPLE__
-   #include <sys/stat.h>
-   #include <unistd.h>
-   #define change_dir chdir
+#include <sys/stat.h>
+#include <unistd.h>
+#define change_dir chdir
 #endif
 
 #include <iostream>
@@ -20,153 +20,178 @@
 
 // process triple frequency data from JRC
 template<typename sample_base_t>
-int Convert( std::string xmlFileName )
+int Convert(std::string xmlFileName)
 {
 
-   printf("\n----------------n");
-   printf("Running `Convert()' test:\n");
+	printf("\n----------------n");
+	printf("Running `Convert()' test:\n");
 
-   GnssMetadata::Metadata md;
-   GnssMetadata::XmlProcessor xproc;
+	GnssMetadata::Metadata md;
+	GnssMetadata::XmlProcessor xproc;
 
-   if( !xproc.Load( xmlFileName.c_str(), false, md) )
-   {
-      printf("Could not load metadata. Terminating.\n");
-      return -1;
-   }
+	if (!xproc.Load(xmlFileName.c_str(), false, md))
+	{
+		printf("Could not load metadata. Terminating.\n");
+		return -1;
+	}
 
-   //create the factory for the sample-sinks used in the converter
-   //
-   // Dump the samples to file
-   SampleSinkFactory<SampleFileSink<sample_base_t> > sampleSinkFactory;
+	//create the factory for the sample-sinks used in the converter
+	//
+	// Dump the samples to file
+	SampleSinkFactory<SampleFileSink<sample_base_t> > sampleSinkFactory;
 
-   //create the converter
-   SampleConverter spcv( &sampleSinkFactory );
+	//create the converter
+	SampleConverter spcv(&sampleSinkFactory);
 
-   //open the Metadata Converter
-   spcv.Open<sample_base_t>( md );
+	//open the Metadata Converter
+	spcv.Open<sample_base_t>(md);
 
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
    {
-      //load 5000 chunks (equal to 1ms)
-      spcv.Load( 5000 );
+      //load equal to 1ms
+      spcv.Load( 0.001 );
       
    }
 
-   //close the converter
-   spcv.Close();
+	//close the converter
+	spcv.Close();
 
-   return 0;
+	return 0;
 }
 
-
 template<typename sample_base_t>
-int ComputeStatistics( std::string xmlFileName )
+int ComputeStatistics(std::string xmlFileName)
 {
 
-   printf("\n----------------n");
-   printf("Running `Statistics()' test:\n");
+	printf("\n----------------n");
+	printf("Running `Statistics()' test:\n");
 
-   GnssMetadata::Metadata md;
-   GnssMetadata::XmlProcessor xproc;
+	GnssMetadata::Metadata md;
+	GnssMetadata::XmlProcessor xproc;
 
-   if( !xproc.Load( xmlFileName.c_str(), false, md) )
-   {
-      printf("Could not load metadata. Terminating.\n");
-      return -1;
-   }
+	if (!xproc.Load(xmlFileName.c_str(), false, md))
+	{
+		printf("Could not load metadata. Terminating.\n");
+		return -1;
+	}
 
-   //create the factory for the sample-sinks used in the converter
-   //
-   // Compute statistics of the samples:
-   SampleSinkFactory<SampleStatisticsSink<sample_base_t> > sampleSinkFactory;
+	//create the factory for the sample-sinks used in the converter
+	//
+	// Compute statistics of the samples:
+	SampleSinkFactory<SampleStatisticsSink<sample_base_t> > sampleSinkFactory;
 
+	//create the converter
+	SampleConverter spcv(&sampleSinkFactory);
 
-   //create the converter
-   SampleConverter spcv( &sampleSinkFactory );
-
-   //open the Metadata Converter
-   spcv.Open<sample_base_t>( md );
+	//open the Metadata Converter
+	spcv.Open<sample_base_t>(md);
 
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
    {
-      //load 5000 chunks (equal to 1ms)
-      spcv.Load( 5000 );
+      //load equal to 1ms
+      spcv.Load( 0.001 );
 
-   }
 
-   //close the converter
-   spcv.Close();
+	}
 
-   return 0;
+	//close the converter
+	spcv.Close();
+
+	return 0;
 }
-
 
 template<typename sample_base_t>
-int FrontEnd( std::string xmlFileName )
+int FrontEnd(std::string xmlFileName)
 {
 
-   printf("\n----------------n");
-   printf("Running `FrontEnd()' test:\n");
+	printf("\n----------------n");
+	printf("Running `FrontEnd()' test:\n");
 
-   GnssMetadata::Metadata md;
-   GnssMetadata::XmlProcessor xproc;
+	GnssMetadata::Metadata md;
+	GnssMetadata::XmlProcessor xproc;
 
-   if( !xproc.Load( xmlFileName.c_str(), false, md) )
-   {
-      printf("Could not load metadata. Terminating.\n");
-      return -1;
-   }
+	if (!xproc.Load(xmlFileName.c_str(), false, md))
+	{
+		printf("Could not load metadata. Terminating.\n");
+		return -1;
+	}
 
-   //create the factory for the sample-sinks used in the converter, this is just a set of named buffers
-   SampleFrontEnd<sample_base_t> frontEnd;
-   //open the Metadata Converter
-   frontEnd.template Open<sample_base_t>( md );
-
-   //load 5000 chunks
-   frontEnd.Load( 5000 );
-
-   uint32_t nSamples = 0;
-   const sample_base_t* pbuff;
-
-   // ask the front-end for the SampleSource corresponding to the channel
-   //(there might be a way to enumerate this better)
-   //
-   // the sources will have as many samples as correspond all of the
-   // previous Load( nChunks ) calls, since the last call to Clear()
-   std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > sourceMap = frontEnd.GetSources();
-   for(std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> >::iterator src_it = sourceMap.begin(); src_it != sourceMap.end(); src_it++)
-   {
-      std::string             sourceName  = src_it->first;
-      const SampleSource*     pSource     = frontEnd.GetSource( sourceName );
-      const SampleStreamInfo* pSourceInfo = frontEnd.GetSampleStreamInfo( sourceName );
-
-      pSourceInfo->Print();
-
-      nSamples = pSource->GetSamples( pbuff );
-      printf("Samples: ");
-      for(int i=0;i<20;i++)
-         printf("% 4d ", pbuff[i]);
-      printf("\n");
-   }
-
-   //clear the sample buffers, otherwise the next Load will append the samples
-   frontEnd.Clear();
+	//create the factory for the sample-sinks used in the converter, this is just a set of named buffers
+	SampleFrontEnd<sample_base_t> frontEnd;
+	//open the Metadata Converter
+	frontEnd.template Open<sample_base_t>(md);
+   //load 1ms
+   frontEnd.Load( 0.001 );
 
 
-   //close the converter
-   frontEnd.Close();
+	//load 5000 chunks
+	frontEnd.Load(5000);
 
-   return 0;
+	uint32_t nSamples = 0;
+	const sample_base_t* pbuff;
+
+	// ask the front-end for the SampleSource corresponding to the channel
+	//(there might be a way to enumerate this better)
+	//
+	// the sources will have as many samples as correspond all of the
+	// previous Load( nChunks ) calls, since the last call to Clear()
+	for (const auto& source : frontEnd.GetSources())
+	{
+		std::string sourceName = source.first;
+		const SampleSource* pSource = frontEnd.GetSource(sourceName);
+		const SampleStreamInfo* pSourceInfo = frontEnd.GetSampleStreamInfo(sourceName);
+
+		pSourceInfo->Print();
+
+		nSamples = pSource->GetSamples(pbuff);
+		printf("Samples: ");
+		for (int i = 0; i < 20; i++)
+			printf("% 4d ", pbuff[i]);
+		printf("\n");
+	}
+
+	//clear the sample buffers, otherwise the next Load will append the samples
+	frontEnd.Clear();
+
+	//close the converter
+	frontEnd.Close();
+
+	return 0;
 }
-
 
 int main(int argc, char* argv[])
 {
     int res[3];
     std::string xmlFileName;
+
+    // if we are passed two arguments, then interpret as:
+    // argv[1] -> 'path' 
+    // argv[2] -> 'xml-file'
+    // then process this file instead of the standard tests below.
+    if( argc == 3 )
+    {
+
+       // process data from command-line-args
+       std::string xmlDirName  = std::string( argv[1] );
+       std::string xmlFileName = std::string( argv[2] );
+       printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       std::cout << xmlFileName << std::endl;
+       printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       change_dir( xmlDirName.c_str() );
+       res[0] = Convert<int16_t>(    xmlFileName );
+       res[1] = ComputeStatistics<int16_t>( xmlFileName );
+       res[2] = FrontEnd<int16_t>(   xmlFileName );
+       std::cout << "Result: "
+       << (res[0]==0?"ok ":"failed ")
+       << (res[1]==0?"ok ":"failed ")
+       << (res[2]==0?"ok ":"failed ")
+       << "\n\n";
+       change_dir( ".." );
+       
+       return 0;
+    }
 
     try
     {
@@ -237,18 +262,34 @@ int main(int argc, char* argv[])
                   << "\n\n";
         change_dir( ".." );
 
+        // Process CODC data.
+        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        std::cout << "CODC data case\n";
+        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        change_dir( "CODC" );
+        xmlFileName = "20170911_1118Z.sdrx";
+        res[0] = Convert<int16_t>(    xmlFileName );
+        res[1] = ComputeStatistics<int16_t>( xmlFileName );
+        res[2] = FrontEnd<int16_t>(   xmlFileName );
+        std::cout << "Result: "
+                  << (res[0]==0?"ok ":"failed ")
+                  << (res[1]==0?"ok ":"failed ")
+                  << (res[2]==0?"ok ":"failed ")
+                  << "\n\n";
+        change_dir( ".." );
+
 	}
-	catch ( GnssMetadata::ApiException &e)
+	catch (GnssMetadata::ApiException &e)
 	{
-		std::cout << "caught API exception: " << e.what( ) << "\n";
+		std::cout << "caught API exception: " << e.what() << "\n";
 	}
 	catch (std::exception &e)
 	{
-		std::cout << "caught exception: " << e.what( ) << "\n";
+		std::cout << "caught exception: " << e.what() << "\n";
 	}
-	catch( ... )
+	catch (...)
 	{
 		std::cout << "unknown exception\n";
 	}
-		return 0;
+	return 0;
 }

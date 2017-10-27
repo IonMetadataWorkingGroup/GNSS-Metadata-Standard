@@ -18,13 +18,14 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "SampleFileSink.h"
 #include "SampleStatisticsSink.h"
+#include <math.h>
 
 template<typename sample_base_t>
-bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix )
+bool SampleConverter::Open(GnssMetadata::Metadata& md, std::string path_prefix)
 {
+
    std::string fullpath;
 
    if( mIsOpen )
@@ -101,8 +102,58 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
       }
    }
 
-   //try to add some info here
    
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   //determine the minimum common load period
+   std::vector<double> chunkPeriods;
+   //loop over lanes/blocks/chunks
+   for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
+   {
+      //for now, just decode the first Lane
+      LaneInterpreter* laneInterpreter= (*lnIt);
+      
+      for( std::vector<BlockInterpreter*>::iterator BkIt = laneInterpreter->Blocks().begin(); BkIt != laneInterpreter->Blocks().end(); ++BkIt )
+      {
+         BlockInterpreter* block = (*BkIt);
+         //
+         std::vector<double> chunkPeriodsThisBlock;
+         for( std::vector<Chunk*>::iterator ckIt = block->ChunkInterpreters().begin(); ckIt != block->ChunkInterpreters().end(); ++ckIt )
+         {
+            //make a list of the chunk periods, consiering the entire system
+            chunkPeriods.push_back((*ckIt)->ChunkPeriod());
+            //also make a list locally, per block (important for timing when unpacking)
+            chunkPeriodsThisBlock.push_back((*ckIt)->ChunkPeriod());
+         }
+         
+         //check that the same period of time is covered for each sample-stream
+         for( size_t p=1; p<chunkPeriodsThisBlock.size(); p++ )
+         {
+            if( chunkPeriodsThisBlock[0] != chunkPeriodsThisBlock[p] )
+            {
+               printf("Warning: found chunks with unequal period in a single block.\n");
+            }
+         }
+         
+         //now we should register the chunk period in this block to make it available to the converter
+         block->SetChunkPeriod( chunkPeriodsThisBlock[0] );
+         
+      }
+   }//end for( lnIt )
+   
+   //determine a load time that is the smallest integer multiple of all chunkPeriods and of the basePeriod
+   mBaseLoadPeriod = 0;
+   bool foundBaseLoadPeriod = true;
+   do
+   {  //while the base period is not an integer multiple of all chunk periods, increase the base period
+      mBaseLoadPeriod += 1.0 / ( commonSampleInfo.mBaseFrequency.toHertz() );
+
+      for(size_t p=0; p<chunkPeriods.size(); p++)
+      {
+         foundBaseLoadPeriod |= ( (mBaseLoadPeriod/chunkPeriods[p]) == floor( mBaseLoadPeriod/chunkPeriods[p] ) );
+      }
+      
+   }while( !foundBaseLoadPeriod );
+      
    //if this worked, then flag the converter as being open
    mIsOpen = true;
 
@@ -110,62 +161,58 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
 
 };
 
-
-
 template<typename sample_base_t>
-bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Block* block, BlockInterpreter** blockInterp )
+bool SampleConverter::CreateBlockInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, const GnssMetadata::Block& block,
+        BlockInterpreter** blockInterp)
 {
-   
-   //create a block
-   *blockInterp = new BlockInterpreter(
-                                       static_cast<uint32_t>( block->Cycles() ),
-                                       static_cast<uint32_t>( block->SizeHeader() ),
-                                       static_cast<uint32_t>( block->SizeFooter() )
-                                       );
-         
-   for( GnssMetadata::ChunkList::iterator ckIt = block->Chunks().begin(); ckIt != block->Chunks().end(); ++ckIt )
-   {
-      Chunk* chunk;
 
-      //create the cunk interpreter using the md and info form ckIt
-      switch( ckIt->SizeWord() )
-      {
-      case 1:
-         CreateChunkInterpreter< uint8_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
-         break;
-      case 2:
-         CreateChunkInterpreter<uint16_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
-         break;
-      case 4:
-         CreateChunkInterpreter<uint32_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
-         break;
-      case 8:
-         CreateChunkInterpreter<uint64_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
-         break;
-      default:
-         printf("Error: unsupported Chunk::SizeWord(): %ld\n",ckIt->SizeWord());
-         return false;
-      }
-      
-      chunk->SetSourceEndianness( (*ckIt).Endian() );
-      
-      //now add it to the current block
-      (*blockInterp)->AddChunk(chunk);
-   }
-        
-   //
-   // ToDo: make meaningful return value
-   //
-   return true;
+	// create a block
+	*blockInterp = new BlockInterpreter(
+	        static_cast<uint32_t>(block.Cycles()),
+	        static_cast<uint32_t>(block.SizeHeader()),
+	        static_cast<uint32_t>(block.SizeFooter())
+	        );
 
-};
+	for (const GnssMetadata::Chunk& chunk : block.Chunks())
+	{
+		Chunk* chkInterp;
 
+		// create the chunk interpreter using the md and info from chk
+		switch (chunk.SizeWord())
+		{
+		case 1:
+			CreateChunkInterpreter<uint8_t, sample_base_t>(md, commonSampleInfo, chunk, &chkInterp);
+			break;
+		case 2:
+			CreateChunkInterpreter<uint16_t, sample_base_t>(md, commonSampleInfo, chunk, &chkInterp);
+			break;
+		case 4:
+			CreateChunkInterpreter<uint32_t, sample_base_t>(md, commonSampleInfo, chunk, &chkInterp);
+			break;
+		case 8:
+			CreateChunkInterpreter<uint64_t, sample_base_t>(md, commonSampleInfo, chunk, &chkInterp);
+			break;
+		default:
+			printf("Error: unsupported Chunk::SizeWord(): %ld\n", chunk.SizeWord());
+			return false;
+		}
 
+		chkInterp->SetSourceEndianness(chunk.Endian());
+
+		// now add it to the current block
+		(*blockInterp)->AddChunk(chkInterp);
+	}
+
+	//
+	// ToDo: make meaningful return value
+	//
+	return true;
+}
 
 template<typename chunk_t, typename sample_base_t>
-bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp )
+bool SampleConverter::CreateChunkInterpreter(GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, const GnssMetadata::Chunk& chunk, Chunk** chunkInterp)
 {
-   
+  
    
    //create the chunk interpreter and keep a local type-specific reference here for now
    bool rightShiftWord = ( chunk->Shift() == GnssMetadata::Chunk::Right );
@@ -175,6 +222,8 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
    
    uint32_t totalOccupiedBitsInChunk   = 0;
    	
+   std::vector<double> periodEachChunk;
+   
    for (GnssMetadata::LumpList::iterator lpIt = chunk->Lumps().begin(); lpIt != chunk->Lumps().end(); ++lpIt)
    {
 
@@ -189,65 +238,68 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 	   }
 
 	   uint16_t lnLumpRepeat = ( chunk->SizeWord() * chunk->CountWords() * 8 ) / numBitsInLump;
+      double   lumpPeriod   = 0;
+      
 
 		for (uint16_t lr = 0; lr < lnLumpRepeat; lr++)
 		{
-
+         
+         //make a list of the period of each set of samples in the lump, check they are the same after...
+         std::vector<double> periodEachStream;
+         
 			uint16_t totalNumSampleInterpreters = 0;
-			for (GnssMetadata::StreamList::iterator smIt = lpIt->Streams().begin(); smIt != lpIt->Streams().end(); ++smIt)
+			for (const GnssMetadata::IonStream& stream : lump.Streams())
 			{
 
-				//get or create the sample sink
-				SampleSink*       sampleSink = mSampleSinkFactory->GetSampleSink( smIt->toString() );
-            SampleStreamInfo* sampleInfo = mSampleSinkFactory->GetSampleStreamInfo( smIt->toString() );
-            
-				uint16_t numSmpInterp = static_cast<uint32_t>(smIt->RateFactor());
-				uint16_t numPaddingBits = static_cast<uint32_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
+				// get or create the sample sink
+				SampleSink* sampleSink = mSampleSinkFactory->GetSampleSink(stream.toString());
+				SampleStreamInfo* sampleInfo = mSampleSinkFactory->GetSampleStreamInfo(stream.toString());
+
+				uint16_t numSmpInterp = static_cast<uint32_t>(stream.RateFactor());
+				uint16_t numPaddingBits = static_cast<uint32_t>(stream.Packedbits()
+				        - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(stream.Format(), stream.Quantization())));
 
 				uint16_t nextCallOrder = totalNumSampleInterpreters;
-				//offset the call-order based on the shift-direction of the Lumps
-				if( lpIt->Shift() == GnssMetadata::Lump::shiftRight )
+				// offset the call-order based on the shift-direction of the Lumps
+				if (lump.Shift() == GnssMetadata::Lump::shiftRight)
 					nextCallOrder += (lnLumpRepeat - lr) * numSampleInterpretersPerLump;
 				else
 					nextCallOrder += lr * numSampleInterpretersPerLump;
 
-				if (smIt->Shift() == GnssMetadata::IonStream::shiftRight)
+				if (stream.Shift() == GnssMetadata::IonStream::shiftRight)
 					nextCallOrder += numSmpInterp;
 
 				std::deque<SampleInterpreter*> streamSplIntrps;
 				for (uint32_t si = 0; si < numSmpInterp; si++)
 				{
-					// take the templated-typed chunkInterpreter and use it to create the appropriate type of sample intepreter
+					// take the templated-typed chunkInterpreter and use it to create the appropriate type of sample interpreter
 					SampleInterpreter* splIntrp;
-					chunkIntrp->mSampleInterpFactory.Create(sampleSink, smIt->Format(), smIt->Encoding(), smIt->Quantization(), splIntrp, nextCallOrder);
+					chunkIntrp->mSampleInterpFactory.Create(sampleSink, stream.Format(), stream.Encoding(), stream.Quantization(), splIntrp, nextCallOrder);
 					// and add it to the ordered list
 					streamSplIntrps.push_back(splIntrp);
 
-					if (smIt->Shift() == GnssMetadata::IonStream::shiftRight)
+					if (stream.Shift() == GnssMetadata::IonStream::shiftRight)
 						nextCallOrder--;
 					else
 						nextCallOrder++;
 				}
 
-				if (numPaddingBits > 0 && (smIt->Alignment() != GnssMetadata::IonStream::Undefined))
+				if (numPaddingBits > 0 && (stream.Alignment() != GnssMetadata::IonStream::Undefined))
 				{
-					//if necessary, make a padding-interpreter (it does nothing other than occupy space)
+					// if necessary, make a padding-interpreter (it does nothing other than occupy space)
 					SampleInterpreter* splIntrp = new SampleInterpreter(numPaddingBits, 0);
-					if (smIt->Alignment() == GnssMetadata::IonStream::Right)
+					if (stream.Alignment() == GnssMetadata::IonStream::Right)
 						streamSplIntrps.push_front(splIntrp);
 					else
 						streamSplIntrps.push_back(splIntrp);
 
 				}
 
-				//now add all of the interpreters for this stream to the chunk-interpreter
-				for (std::deque<SampleInterpreter*>::iterator it = streamSplIntrps.begin(); it != streamSplIntrps.end(); ++it)
-				{
-					chunkIntrp->AddSampleInterpreter((*it));
-				}
-				//keep a count of the total bit-occupation of the chunk
-				totalOccupiedBitsInChunk += static_cast<uint32_t>(smIt->Packedbits());
-				//keep track of the total number of sample interpreters
+				// now add all of the interpreters for this stream to the chunk-interpreter
+				for (SampleInterpreter* i : streamSplIntrps) chunkIntrp->AddSampleInterpreter(i);
+				// keep a count of the total bit-occupation of the chunk
+				totalOccupiedBitsInChunk += static_cast<uint32_t>(stream.Packedbits());
+				// keep track of the total number of sample interpreters
 				totalNumSampleInterpreters += numSmpInterp;
 
             /////////////////////////////////
@@ -270,12 +322,41 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
             sampleInfo->mTranslatedFrequency = GnssMetadata::Frequency( band.TranslatedFrequency().toHertz() );
             sampleInfo->mDelayBias           = band.DelayBias();
 
+            //log the period covered for each sample-stream
+            periodEachStream.push_back( static_cast<double>(smIt->RateFactor())/sampleInfo->mSampleFrequency.toHertz() );
             //
 			} //end iteration over sample-streams
+         
+         //check that the same period of time is covered for each sample-stream
+         for( size_t p=1; p<periodEachStream.size(); p++ )
+         {
+            if( periodEachStream[0] != periodEachStream[p] )
+            {
+               printf("Warning: found lump with unequal period for each sample-stream.\n");
+            }
+         }
+         lumpPeriod = periodEachStream[0];
+         
 		}//end lump-repeat
+      
+      //log the period of the chunk, as calculated based on this lump
+      periodEachChunk.push_back( lnLumpRepeat * lumpPeriod );
+      
 	} //end iteration over lumps
 
-	
+
+   //check that the same period of time is covered for each sample-stream
+   for( size_t p=1; p<periodEachChunk.size(); p++ )
+   {
+      if( periodEachChunk[0] != periodEachChunk[p] )
+      {
+         printf("Warning: found chunk with unequal period for each lump.\n");
+      }
+   }
+
+   //set the chunk period
+   chunkIntrp->SetChunkPeriod( periodEachChunk[0] );
+   
    //now apply some padding to fill out the remainder of the chunk bits
    uint32_t numChunkPaddingBits = 8*sizeof(chunk_t)*static_cast<uint32_t>(chunk->CountWords()) - totalOccupiedBitsInChunk;
    if( numChunkPaddingBits > 0 && (chunk->Padding() != GnssMetadata::Chunk::None) )
@@ -290,4 +371,5 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
    return true;
 
 };
+
 

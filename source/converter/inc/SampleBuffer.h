@@ -1,14 +1,14 @@
 /**
  * Author: James T. Curran
- *  
+ *
  * Copyright(c) 2015 Institute of Navigation
  * http://www.ion.org
- *  
+ *
  * This Metadata Converter is free software; you can redistribute it and/or
  * modify it under the terms of the Lesser GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,26 +35,24 @@ class SampleBuffer : public SampleSinkT<sample_base_t>, public SampleSourceT<sam
 {
 
 protected:
-   std::vector<sample_base_t> mSampleBuffer;
-   int32_t                    mBufferSize;
-   int32_t                    mBufferPos;
-   
-   bool            Open();
-   inline void     DoAddSample( sample_base_t x );
-   inline void     DoAddSample( sample_base_t x, sample_base_t y );
-   inline uint32_t DoGetSamples( const void** buff ) const;
+	std::vector<sample_base_t> mSampleBuffer;
+	int32_t mBufferSize;
+	int32_t mBufferPos;
+
+	bool Open();
+	inline void DoAddSample(sample_base_t x);
+	inline void DoAddSample(sample_base_t x, sample_base_t y);
+	inline uint32_t DoGetSamples(const void** buff) const;
 
 public:
-   SampleBuffer( std::string fileName );
-   virtual ~SampleBuffer(void);
+	SampleBuffer(std::string fileName);
+	virtual ~SampleBuffer(void);
 
-   void Flush();
-   void Close();
+	void Flush();
+	void Close();
 
-   
 };
 
 #include "SampleBuffer.hpp"
 
 #endif // CLASS_SampleBuffer
-

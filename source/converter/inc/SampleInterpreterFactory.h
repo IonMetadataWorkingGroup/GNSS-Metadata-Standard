@@ -27,39 +27,37 @@
 #include "SinkedSampleInterpreter.h"
 #include <GnssMetadata/Metadata.h>
 
-
-
 template<typename chunk_t, typename sample_base_t>
 class SampleInterpreterFactory
 {
 
 protected:
 
-   //make a typedef for the encoder function pointers (too many template args for compiler)
-   typedef sample_base_t (* encFuncPtr_t)( const chunk_t*, uint32_t, uint32_t, uint32_t );
-   //create a map of the encoder functions:
-   std::map< const std::string, encFuncPtr_t> mEncoderFunctionMap;
-   
-   //make a typedef for the format function pointers (too many template args for compiler)
-   typedef void (* fmtFuncPtr_t)( sample_base_t (* )( const chunk_t* , uint32_t, uint32_t, uint32_t ) , const chunk_t*, uint32_t, uint32_t, uint32_t, SampleSink*);
-   //create a map of the format functions
-   std::map< const GnssMetadata::IonStream::SampleFormat, fmtFuncPtr_t > mFormatFunctionMap;
+	//make a typedef for the encoder function pointers (too many template args for compiler)
+	typedef sample_base_t (*encFuncPtr_t)(const chunk_t*, uint32_t, uint32_t, uint32_t);
+	//create a map of the encoder functions:
+	std::map<const std::string, encFuncPtr_t> mEncoderFunctionMap;
+
+	//make a typedef for the format function pointers (too many template args for compiler)
+	typedef void (*fmtFuncPtr_t)(sample_base_t (*)(const chunk_t*, uint32_t, uint32_t, uint32_t), const chunk_t*, uint32_t, uint32_t, uint32_t, SampleSink*);
+	//create a map of the format functions
+	std::map<const GnssMetadata::IonStream::SampleFormat, fmtFuncPtr_t> mFormatFunctionMap;
 
 public:
-   SampleInterpreterFactory();
+	SampleInterpreterFactory();
 	~SampleInterpreterFactory();
 
-   static uint32_t BitWidth( const GnssMetadata::IonStream::SampleFormat& fmt, const size_t& qnt );
-   
-   bool Create(
-               SampleSink* sampleSink,
-               const GnssMetadata::IonStream::SampleFormat& fmt,
-               const std::string&  enc,
-               const uint8_t& qnt, 
-               SampleInterpreter* &smplIntrp,
-               const uint16_t callOrder
-               );
-	
+	static uint32_t BitWidth(const GnssMetadata::IonStream::SampleFormat& fmt, const size_t& qnt);
+
+	bool Create(
+	        SampleSink* sampleSink,
+	        const GnssMetadata::IonStream::SampleFormat& fmt,
+	        const std::string& enc,
+	        const uint8_t& qnt,
+	        SampleInterpreter* &smplIntrp,
+	        const uint16_t callOrder
+	        );
+
 };
 
 #include "SampleInterpreterFactory.hpp"

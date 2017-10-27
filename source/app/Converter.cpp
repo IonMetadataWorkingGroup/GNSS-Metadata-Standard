@@ -1,3 +1,4 @@
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -76,8 +77,8 @@ int main(int argc, char* argv[])
 	validFileOutputType[ "int16_t" ] = kInt16;
 	validFileOutputType[ "int32_t" ] = kInt32;
 	validFileOutputType[ "int64_t" ] = kInt64;
-	validFileOutputType[ "float"   ] = kFloat;
-	validFileOutputType[ "double"  ] = kDouble;
+   validFileOutputType[ "float"   ] = kFloat;
+  	validFileOutputType[ "double"  ] = kDouble;
 
 	outputTypes fileOutputType = kInt8;
 	if (validFileOutputType.find(argv[2]) != validFileOutputType.end())
@@ -89,30 +90,30 @@ int main(int argc, char* argv[])
 	try
     {
 
-        // process JRC data
+        //
         std::cout << "--- GNSS MetaData Converter ---\n";
 		
-		switch (fileOutputType)
-		{
-		case kInt8:
-			Convert<int8_t>(argv[1]);
-			break;
-		case kInt16:
-			Convert<int16_t>(argv[1]);
-			break;
-		case kInt32:
-			Convert<int32_t>(argv[1]);
-			break;
-		case kInt64:
-			Convert<int64_t>(argv[1]);
-			break;
-		case kFloat:
-			Convert<float>(argv[1]);
-			break;
-		case kDouble:
-			Convert<double>(argv[1]);
-			break;
-		}
+		   switch (fileOutputType)
+		   {
+            case kInt8:
+               Convert<int8_t>(argv[1]);
+               break;
+            case kInt16:
+               Convert<int16_t>(argv[1]);
+               break;
+            case kInt32:
+               Convert<int32_t>(argv[1]);
+               break;
+            case kInt64:
+               Convert<int64_t>(argv[1]);
+               break;
+		      case kFloat:
+      	      Convert<float>(argv[1]);
+ 			      break;
+ 		      case kDouble:
+ 			      Convert<double>(argv[1]);
+ 			      break;
+		   }
 		
 		
 
@@ -132,3 +133,5 @@ int main(int argc, char* argv[])
 	}
 		return 0;
 }
+
+

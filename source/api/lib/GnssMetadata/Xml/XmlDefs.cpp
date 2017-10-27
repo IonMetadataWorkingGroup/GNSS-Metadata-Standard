@@ -1,6 +1,5 @@
 /**
- * File: FrequencyTranslator.h
- * Author: M.B. Mathews
+ * File: XmlDefs.cpp
  *
  * Copyright(c) 2014 Institute of Navigation
  * http://www.ion.org
@@ -19,33 +18,8 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FREQUENCYTRANSLATOR_H_H
-#define FREQUENCYTRANSLATOR_H_H
+#include "XmlDefs.h"
 
-#include <GnssMetadata/BaseTypes.h>
-#include <GnssMetadata/Xml/Translator.h>
+using namespace GnssMetadata;
 
-namespace GnssMetadata
-{
-	/**
-	 * Class implements XML translation for Frequency Types.
-	 */
-	class FrequencyTranslator : public Translator
-	{
-
-	public:
-		FrequencyTranslator() {}
-
-	protected:
-		/**
-		 * Reads a node from the document and parses into metadata.
-		 */
-		virtual bool OnRead(Context & ctxt, const tinyxml2::XMLElement & elem, AccessorAdaptorBase* pAdaptor = nullptr);
-		/**
-		 * Write the current object
-		 */
-		virtual void OnWrite(const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem);
-	};
-}
-
-#endif
+AccessorAdaptorBase::~AccessorAdaptorBase() {}
