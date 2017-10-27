@@ -8,10 +8,8 @@
 %                 (or some reference), returning true upon succes
 %  'CleanData.m': should delete the converted files 
 
-testDirectories = {'FHG', 'IFEN', 'JRC', 'TRIGR', 'SJTU'};
 
-
-
+testDirectories = { 'CODC', 'FHG', 'IFEN', 'JRC', 'TRIGR', 'SJTU' };
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Purge all of the old converted sample files, to ensure that the 
@@ -35,13 +33,10 @@ fprintf('Done.\n');
 binName    = 'TestConverter';
 testDir    = pwd;
 if ismac
-    installDir = './';
     cmdString  = ['./'   binName  ' > log.txt'];
 elseif isunix
-    installDir = './';
     cmdString  = ['./'   binName  ' > log.txt'];
 elseif ispc
-    installDir = '';
     cmdString  = [binName ' > log.txt'];
 else
     disp('Operating system not supported\nPlease manually modify script (check_converter.m : line 18) to continue.\n')
@@ -54,7 +49,6 @@ isMatlab = ~isOctave;
 
 % run the converter 
 fprintf('Running the test converter ("%s"): ',binName);
-cd(installDir);
 installDir = pwd();
 system(cmdString);
 cd(testDir);

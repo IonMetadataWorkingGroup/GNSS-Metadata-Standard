@@ -42,6 +42,8 @@ protected:
    std::vector<LaneInterpreter*>             mLaneInterps;
    std::map<LaneInterpreter*,BinaryFileSource*> mLaneFiles;
    
+   double mBaseLoadPeriod;
+   
    //protected member functions, to keep the code clean and clear
    template<typename chunk_t, typename sample_base_t>
    bool CreateChunkInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp  );
@@ -56,7 +58,8 @@ public:
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" );
    void Close();
    void Convert( const uint32_t bytesToProcess = 0 );
-   bool Load( const uint32_t chunksToProcess );
+   bool Load( const double secondsToLoad );
+   double BaseLoadPeriod() const;
  
 };
 

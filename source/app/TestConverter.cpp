@@ -49,8 +49,8 @@ int Convert( std::string xmlFileName )
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
    {
-      //load 5000 chunks (equal to 1ms)
-      spcv.Load( 5000 );
+      //load equal to 1ms
+      spcv.Load( 0.001 );
       
    }
 
@@ -92,8 +92,8 @@ int ComputeStatistics( std::string xmlFileName )
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
    {
-      //load 5000 chunks (equal to 1ms)
-      spcv.Load( 5000 );
+      //load equal to 1ms
+      spcv.Load( 0.001 );
 
    }
 
@@ -125,8 +125,8 @@ int FrontEnd( std::string xmlFileName )
    //open the Metadata Converter
    frontEnd.template Open<sample_base_t>( md );
 
-   //load 5000 chunks
-   frontEnd.Load( 5000 );
+   //load 1ms
+   frontEnd.Load( 0.001 );
 
    uint32_t nSamples = 0;
    const sample_base_t* pbuff;
@@ -167,6 +167,33 @@ int main(int argc, char* argv[])
 {
     int res[3];
     std::string xmlFileName;
+
+    // if we are passed two arguments, then interpret as:
+    // argv[1] -> 'path' 
+    // argv[2] -> 'xml-file'
+    // then process this file instead of the standard tests below.
+    if( argc == 3 )
+    {
+
+       // process data from command-line-args
+       std::string xmlDirName  = std::string( argv[1] );
+       std::string xmlFileName = std::string( argv[2] );
+       printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       std::cout << xmlFileName << std::endl;
+       printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       change_dir( xmlDirName.c_str() );
+       res[0] = Convert<int16_t>(    xmlFileName );
+       res[1] = ComputeStatistics<int16_t>( xmlFileName );
+       res[2] = FrontEnd<int16_t>(   xmlFileName );
+       std::cout << "Result: "
+       << (res[0]==0?"ok ":"failed ")
+       << (res[1]==0?"ok ":"failed ")
+       << (res[2]==0?"ok ":"failed ")
+       << "\n\n";
+       change_dir( ".." );
+       
+       return 0;
+    }
 
     try
     {
@@ -230,6 +257,22 @@ int main(int argc, char* argv[])
         res[0] = Convert<int8_t>(    xmlFileName );
         res[1] = ComputeStatistics<int8_t>( xmlFileName );
         res[2] = FrontEnd<int8_t>(   xmlFileName );
+        std::cout << "Result: "
+                  << (res[0]==0?"ok ":"failed ")
+                  << (res[1]==0?"ok ":"failed ")
+                  << (res[2]==0?"ok ":"failed ")
+                  << "\n\n";
+        change_dir( ".." );
+
+        // Process CODC data.
+        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        std::cout << "CODC data case\n";
+        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        change_dir( "CODC" );
+        xmlFileName = "20170911_1118Z.sdrx";
+        res[0] = Convert<int16_t>(    xmlFileName );
+        res[1] = ComputeStatistics<int16_t>( xmlFileName );
+        res[2] = FrontEnd<int16_t>(   xmlFileName );
         std::cout << "Result: "
                   << (res[0]==0?"ok ":"failed ")
                   << (res[1]==0?"ok ":"failed ")
