@@ -43,7 +43,7 @@ NODELIST_BEGIN(_SystemNodes)
 	NODELIST_ENTRY( "artifact",  TE_SIMPLE_TYPE)
 NODELIST_END
 
-static const char* _szTypes[] = {"Processor","Receiver", "Simulator", "Undefined"};
+static const char* _szTypes[] = {"Undefined", "Processor", "Receiver", "Simulator"};
 System::SystemType ToSystemType( const char* pszFmt)
 {
     for( unsigned int i = 0; i < 4; i++)

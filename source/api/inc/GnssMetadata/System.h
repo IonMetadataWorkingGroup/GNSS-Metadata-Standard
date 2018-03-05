@@ -40,9 +40,9 @@ namespace GnssMetadata
 		enum SystemType
 		{
 			Undefined=0,
-			Processor,
-			Receiver,
-			Simulator
+            Processor=1,
+            Receiver=2,
+            Simulator=3
 		};
 	public:
 		System( const IonString& id = "", bool bIsReference = false) 
