@@ -29,7 +29,7 @@ mFileURL(fileURL)
 	
 	mBlockInterpreters.resize(0);
 			
-};
+}
 
 LaneInterpreter::~LaneInterpreter()
 {
@@ -37,24 +37,24 @@ LaneInterpreter::~LaneInterpreter()
 	for( std::vector<BlockInterpreter*>::iterator It = mBlockInterpreters.begin(); It != mBlockInterpreters.end(); ++It)
 		delete (*It);
 	
-};
+}
 
 void LaneInterpreter::AddBlock( BlockInterpreter* newBlock )
 {
    
    mBlockInterpreters.push_back( newBlock );
    
-};
+}
 
 std::vector<BlockInterpreter*>& LaneInterpreter::Blocks()
 {
    
    return mBlockInterpreters;
    
-};
+}
 
 const std::string LaneInterpreter::FileURL() const
 {
    return mFileURL;
-};
+}
 

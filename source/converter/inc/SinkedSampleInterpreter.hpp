@@ -40,7 +40,7 @@ template<typename chunk_t,typename sample_base_t>
 SinkedSampleInterpreter<chunk_t,sample_base_t>::~SinkedSampleInterpreter( )
 { 
 
-};
+}
 
 template<typename chunk_t,typename sample_base_t>
 void SinkedSampleInterpreter<chunk_t,sample_base_t>::SetChunkOffset( const uint32_t chunkOffsetInBits )
@@ -56,6 +56,6 @@ void SinkedSampleInterpreter<chunk_t,sample_base_t>::Interpret( const void* vChu
    const chunk_t* pChunk = reinterpret_cast<const chunk_t*>( vChunk );
    (*mFormatFunc)( mEncodingFunc, pChunk, mChunkIndex, mResidualBitIndex, mBitWidth, mSampleSink );
 
-};
+}
 
 

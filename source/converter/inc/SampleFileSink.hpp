@@ -41,7 +41,7 @@ SampleFileSink<sample_base_t>::~SampleFileSink(void)
    //close the stream, if it is not done so already.
    Close();
 
-};
+}
 
 template<typename sample_base_t>
 bool SampleFileSink<sample_base_t>::Open( )
@@ -109,7 +109,7 @@ void SampleFileSink<sample_base_t>::DoAddSample( sample_base_t x )
    if( mIndexOfNextSample == mBufferSize)
       Flush();
    
-};
+}
 
 template<typename sample_base_t>
 void SampleFileSink<sample_base_t>::DoAddSample( sample_base_t x, sample_base_t y )
@@ -127,7 +127,7 @@ void SampleFileSink<sample_base_t>::DoAddSample( sample_base_t x, sample_base_t 
    if( mIndexOfNextSample == mBufferSize)
       Flush();
    
-};
+}
 
 template<typename sample_base_t>
 void SampleFileSink<sample_base_t>::Flush()

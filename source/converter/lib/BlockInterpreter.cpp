@@ -29,7 +29,7 @@ mFooterBytes(footerBytes)
 
 	mChunkInterpreters.resize(0);
 
-};
+}
 
 BlockInterpreter::~BlockInterpreter()
 {
@@ -37,14 +37,14 @@ BlockInterpreter::~BlockInterpreter()
    for( std::vector<Chunk*>::iterator It = mChunkInterpreters.begin(); It != mChunkInterpreters.end(); ++It )
       delete (*It);
 
-};
+}
 
 void BlockInterpreter::AddChunk(Chunk* newChunk)
 {
 
 	mChunkInterpreters.push_back(newChunk);
 
-};
+}
 
 
 bool BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess )
@@ -101,7 +101,7 @@ bool BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint32_t& bytesP
    
    //otherwise, a full block was read
    return true;
-};
+}
 
 
 
@@ -145,7 +145,7 @@ bool BlockInterpreter::InterpretChunk( BinaryFileSource& packedFile )
    
    //a full chunk set was read
    return true;
-};
+}
 
 
 

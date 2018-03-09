@@ -57,14 +57,14 @@ SampleInterpreterFactory<chunk_t,sample_base_t>::SampleInterpreterFactory()
    //specialized FormatFunctions (native types)
    mFormatFunctionMap[ GnssMetadata::IonStream::Int8IQ ] = &SampleFormatFunctions::Int8IQ<chunk_t,sample_base_t>;
 
-};
+}
 
 template<typename chunk_t, typename sample_base_t>
 SampleInterpreterFactory<chunk_t,sample_base_t>::~SampleInterpreterFactory()
 {
 
 
-};
+}
 
 template<typename chunk_t, typename sample_base_t>
 bool SampleInterpreterFactory<chunk_t,sample_base_t>::Create(
@@ -130,7 +130,7 @@ bool SampleInterpreterFactory<chunk_t,sample_base_t>::Create(
 
    return true;
 
-};
+}
 
 template<typename chunk_t, typename sample_base_t>
 uint32_t SampleInterpreterFactory<chunk_t,sample_base_t>::BitWidth( const GnssMetadata::IonStream::SampleFormat& fmt, const size_t& qnt )
@@ -146,5 +146,5 @@ uint32_t SampleInterpreterFactory<chunk_t,sample_base_t>::BitWidth( const GnssMe
          return 2 * static_cast<uint32_t>(qnt);
    }
 
-};
+}
 

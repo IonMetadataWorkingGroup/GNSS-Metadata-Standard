@@ -32,7 +32,7 @@ mSampleSinkFactory(ssFactory)
 
    
       
-};
+}
 
 SampleConverter::~SampleConverter()
 {
@@ -40,7 +40,7 @@ SampleConverter::~SampleConverter()
    //just check that it has been closed
    Close();
 
-};
+}
 
 void SampleConverter::Close()
 {
@@ -59,7 +59,7 @@ void SampleConverter::Close()
       
    }
    mIsOpen = false;
-};
+}
 
 
 void SampleConverter::Convert( const uint32_t bytesToProcess )
@@ -107,7 +107,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
       while( readBlockOK );
 
    }//end for( lnIt )
-};
+}
 
 
 
@@ -160,7 +160,7 @@ bool SampleConverter::Load( const uint32_t chunksToProcess )
    }//end for( lnIt )
 
    return readAllOK;
-};
+}
 
 
 
