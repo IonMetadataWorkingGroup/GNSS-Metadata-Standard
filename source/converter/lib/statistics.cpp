@@ -20,8 +20,8 @@ mRangeMax(0)
 Statistics::Statistics(double rangeMin, double rangeMax, int64_t samplesToSkip ):
 mMean(0.0),
 mPower(0.0),
-mMin( 1.0e308 ),
-mMax( -1.0e308 ),
+mMin( MaxPossibleValue ),
+mMax( MinPossibleValue ),
 mNumSamples(0),
 mNumCalls(0),
 mSamplesToSkip(samplesToSkip),
@@ -41,8 +41,8 @@ Statistics::~Statistics(void)
 void Statistics::Reset()
 {
    mMean          = 0.0;
-   mMin           = 1.0e308;
-   mMax           = -1.0e308;
+   mMin           = MaxPossibleValue;
+   mMax           = MinPossibleValue;
    mPower         = 0.0;
    mNumSamples    = 0;
    mNumCalls      = 0;
