@@ -41,7 +41,7 @@ NODELIST_END
 ClusterTranslator::ClusterTranslator() 
 : Translator( (NodeEntry*) _ClusterNodes)
 {
-};
+}
 
 /**
  * Reads a node from the document and parses into metadata.

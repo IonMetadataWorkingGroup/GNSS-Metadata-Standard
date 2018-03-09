@@ -29,7 +29,7 @@ mRightWordShift(rightWordShift)
    // make sure that there is sufficient space for the chunk data
    // no checks made later!
    mDataChunk.resize(countWords);
-};
+}
 
 template<typename chunk_t,typename sample_base_t>
 ChunkInterpreter<chunk_t, sample_base_t>::~ChunkInterpreter()
@@ -39,7 +39,7 @@ ChunkInterpreter<chunk_t, sample_base_t>::~ChunkInterpreter()
    for( std::deque<SampleInterpreter*>::iterator it = mSampleInterpreters.begin(); it != mSampleInterpreters.end(); ++it )
       delete (*it);
 
-};
+}
 
 template<typename chunk_t,typename sample_base_t>
 void ChunkInterpreter<chunk_t, sample_base_t>::AddSampleInterpreter( SampleInterpreter* splIntrp, const bool front )
@@ -69,7 +69,7 @@ void ChunkInterpreter<chunk_t, sample_base_t>::AddSampleInterpreter( SampleInter
 
    mCallOrderedSampleInterpreters.sort( SampleInterpreter::callOrderSortAscend );
 
-};
+}
 
 template<typename chunk_t,typename sample_base_t>
 void* ChunkInterpreter<chunk_t, sample_base_t>::GetChunk()
@@ -77,14 +77,14 @@ void* ChunkInterpreter<chunk_t, sample_base_t>::GetChunk()
    // we should be sure that enough space is allocated, but as we define
    // the ChunkSize at construction time, shouldn't change...
    return &( mDataChunk[0] );
-};
+}
 
 template<typename chunk_t,typename sample_base_t>
 uint32_t ChunkInterpreter<chunk_t, sample_base_t>::BytesPerChunk() const
 {
    //so that we can read/memcopy into it
    return ( sizeof( chunk_t ) * static_cast<uint32_t>( mDataChunk.size() ) );
-};
+}
 
 
 template<typename chunk_t,typename sample_base_t>
@@ -108,7 +108,7 @@ void ChunkInterpreter<chunk_t, sample_base_t>::SetSourceEndianness( const GnssMe
     //printf("I am %s endian.\n",(myEndianness==GnssMetadata::Chunk::Little?"Little":"Big"));
 
     mSourceEndiannessIsDifferent = ( myEndianness != srcEndianness );
-};
+}
 
 template<typename chunk_t,typename sample_base_t>
 void ChunkInterpreter<chunk_t, sample_base_t>::ChangeCunkEndianness( )
@@ -123,7 +123,7 @@ void ChunkInterpreter<chunk_t, sample_base_t>::ChangeCunkEndianness( )
       (*it) = EndianFunctions::ChangeEndianness( *it );
    }
 
-};
+}
 
 
 template<typename chunk_t,typename sample_base_t>
@@ -145,4 +145,4 @@ void ChunkInterpreter<chunk_t, sample_base_t>::Interpret( )
       (*it)->Interpret( &mDataChunk[0] );
    }
 
-};
+}

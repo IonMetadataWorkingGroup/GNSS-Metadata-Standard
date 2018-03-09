@@ -25,7 +25,7 @@ SampleSinkFactory<sample_sink_t>::SampleSinkFactory()
    
    mSampleSinks.clear();
    
-};
+}
 
 template<typename sample_sink_t>
 SampleSinkFactory<sample_sink_t>::~SampleSinkFactory()
@@ -58,7 +58,7 @@ SampleSink* SampleSinkFactory<sample_sink_t>::GetSampleSink( const std::string s
    
    return mSampleSinks[sinkName].first;
    
-};
+}
 
 template<typename sample_sink_t>
 SampleStreamInfo* SampleSinkFactory<sample_sink_t>::GetSampleStreamInfo(const std::string sinkName)
@@ -68,5 +68,5 @@ SampleStreamInfo* SampleSinkFactory<sample_sink_t>::GetSampleStreamInfo(const st
    
    return mSampleSinks[sinkName].second;
    
-};
+}
 

@@ -38,7 +38,7 @@ SampleBuffer<sample_base_t>::~SampleBuffer(void)
    //close the stream, if it is not done so already.
    Close();
 
-};
+}
 
 template<typename sample_base_t>
 bool SampleBuffer<sample_base_t>::Open( )
@@ -53,7 +53,7 @@ bool SampleBuffer<sample_base_t>::Open( )
    mBufferPos  = -1;
    
    return this->mIsOpen;
-};
+}
 
 
 template<typename sample_base_t>
@@ -64,7 +64,7 @@ void SampleBuffer<sample_base_t>::Close()
 
    Flush();
 
-};
+}
 
 template<typename sample_base_t>
 void SampleBuffer<sample_base_t>::Flush()
@@ -75,7 +75,7 @@ void SampleBuffer<sample_base_t>::Flush()
 
    mBufferPos = -1;
 
-};
+}
 
 template<typename sample_base_t>
 void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x )
@@ -97,7 +97,7 @@ void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x )
    
    mSampleBuffer[mBufferPos] = x;
    
-};
+}
 
 template<typename sample_base_t>
 void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x, sample_base_t y )
@@ -119,7 +119,7 @@ void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x, sample_base_t y 
    mSampleBuffer[mBufferPos-1] = x;
    mSampleBuffer[mBufferPos]   = y;
    
-};
+}
 
 
 template<typename sample_base_t>
@@ -130,7 +130,7 @@ uint32_t SampleBuffer<sample_base_t>:: DoGetSamples( const void** pbuff ) const
 
    //indicate how many samples are there
    return static_cast<uint32_t>(mBufferPos+1);
-};
+}
 
 
 

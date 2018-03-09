@@ -35,13 +35,13 @@ namespace EndianFunctions
    uint8_t ChangeEndianness( const uint8_t in )
 	{
 		return in;
-	};
+    }
 
 	uint16_t ChangeEndianness( const uint16_t in )
 	{
 		return  ( in >> 8 ) |   //move byte 1 to 0
 				  ( in << 8 );    //move byte 0 to 1
-	};
+    }
 
 	uint32_t ChangeEndianness( const uint32_t in )
 	{
@@ -49,7 +49,7 @@ namespace EndianFunctions
 				  (( in >>  8 ) & 0x0000ff00 ) |	// move byte 1 to byte 2
 				  (( in <<  8 ) & 0x00ff0000 ) |	// move byte 2 to byte 1
 				  (( in << 24 ) & 0xff000000 );	// move byte 0 to byte 3;
-	};
+    }
 
 	uint64_t ChangeEndianness( const uint64_t in )
 	{
@@ -62,6 +62,6 @@ namespace EndianFunctions
 				  (( in << 24 ) &  0x0000ff0000000000) |  // move byte 2 to byte 5
 				  (( in << 40 ) &  0x00ff000000000000) |  // move byte 1 to byte 6
 				  (( in << 56 ) &  0xff00000000000000);   // move byte 0 to byte 7
-	};	
+    }
 	
-};//end namespace EndianFunctions
+}//end namespace EndianFunctions
