@@ -274,4 +274,4 @@ void Translator::WriteElement( const char* pszElemName, double dvalue,
 }
 
 
-};
+}

@@ -35,7 +35,7 @@ const SampleSource* SampleFrontEnd<sample_base_t>::GetSource( const std::string 
    
    return sampleSource;
  
-};
+}
 
 template<typename sample_base_t>
 const SampleStreamInfo* SampleFrontEnd<sample_base_t>::GetSourceInfo( const std::string sinkName ) const
@@ -51,7 +51,7 @@ const SampleStreamInfo* SampleFrontEnd<sample_base_t>::GetSourceInfo( const std:
    
    return mit->second.second;
  
-};
+}
 
 
 template<typename sample_base_t>
@@ -69,7 +69,7 @@ std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> >
    
    return sourceMap;
    
-};
+}
 
 
 template<typename sample_base_t>
@@ -86,6 +86,6 @@ void SampleFrontEnd<sample_base_t>::Clear(  )
          pSampleBuff->Flush();
    }
  
-};
+}
 
 

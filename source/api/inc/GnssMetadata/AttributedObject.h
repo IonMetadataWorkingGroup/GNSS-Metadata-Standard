@@ -221,7 +221,7 @@ namespace GnssMetadata
       }
 
       return nFound;
-    };
+    }
 	
 }
 

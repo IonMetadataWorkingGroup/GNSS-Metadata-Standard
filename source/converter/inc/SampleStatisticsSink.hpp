@@ -38,7 +38,7 @@ SampleStatisticsSink<sample_base_t>::~SampleStatisticsSink(void)
    //close the stream, if it is not done so already.
    Close();
 
-};
+}
 
 template<typename sample_base_t>
 bool SampleStatisticsSink<sample_base_t>::Open( )
@@ -104,7 +104,7 @@ void SampleStatisticsSink<sample_base_t>::Report()
    printf("\n");
    
 
-};
+}
 
 
 
