@@ -24,7 +24,8 @@
 template<typename chunk_t,typename sample_base_t>
 ChunkInterpreter<chunk_t, sample_base_t>::ChunkInterpreter( const uint32_t countWords, const bool rightWordShift ) :
 mSourceEndiannessIsDifferent(false),
-mRightWordShift(rightWordShift)
+mRightWordShift(rightWordShift),
+mChunkPeriod(1)
 {
    // make sure that there is sufficient space for the chunk data
    // no checks made later!
@@ -85,6 +86,19 @@ uint32_t ChunkInterpreter<chunk_t, sample_base_t>::BytesPerChunk() const
    //so that we can read/memcopy into it
    return ( sizeof( chunk_t ) * static_cast<uint32_t>( mDataChunk.size() ) );
 }
+
+template<typename chunk_t,typename sample_base_t>
+void ChunkInterpreter<chunk_t, sample_base_t>::SetChunkPeriod(const double chunkPeriod)
+{
+   mChunkPeriod = chunkPeriod;
+};
+
+
+template<typename chunk_t,typename sample_base_t>
+double ChunkInterpreter<chunk_t, sample_base_t>::ChunkPeriod() const
+{
+   return mChunkPeriod;
+};
 
 
 template<typename chunk_t,typename sample_base_t>

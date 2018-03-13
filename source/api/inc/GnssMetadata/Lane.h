@@ -156,9 +156,7 @@ namespace GnssMetadata
 		 */
 		virtual size_t FindObject( SearchItem::List& listResults, 
 			const IonString& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
-			
-		GnssMetadata::Block** blockArray;		
-		int blockCount;
+
 
 	private:
 		GnssMetadata::SessionList _sessionlist;		

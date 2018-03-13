@@ -43,15 +43,13 @@ namespace GnssMetadata
 		typedef const char* pcstr;
 		
 	public:
-		Translator( NodeEntry* nodesAllowed) : _nodesAllowed(nodesAllowed)
-		{
-		}
-
+		Translator(NodeEntry* nodesAllowed) : _nodesAllowed(nodesAllowed) { };
+      virtual ~Translator();
 		/**
 		 * Reads the current node and translates into metadata defined
 		 * by the subclass.
 		 */
-		virtual bool OnRead( Context & ctxt, const tinyxml2::XMLElement & elem, AccessorAdaptorBase* pAdaptor = NULL) = 0;
+		virtual bool OnRead( Context & ctxt, const tinyxml2::XMLElement & elem, AccessorAdaptorBase* pAdaptor = nullptr) = 0;
 		/**
 		 * Write the current object 
 		 */

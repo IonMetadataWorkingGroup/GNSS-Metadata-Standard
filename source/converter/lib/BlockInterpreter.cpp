@@ -24,7 +24,8 @@ BlockInterpreter::BlockInterpreter( const uint32_t cycles, const uint32_t header
 mCycles(cycles),
 mChunkIndex(0),
 mHeaderBytes(headerBytes),
-mFooterBytes(footerBytes)
+mFooterBytes(footerBytes),
+mCommonChunkPeriod(1)
 {
 
 	mChunkInterpreters.resize(0);
@@ -45,6 +46,21 @@ void BlockInterpreter::AddChunk(Chunk* newChunk)
 	mChunkInterpreters.push_back(newChunk);
 
 }
+
+double BlockInterpreter::GetChunkPeriod() const
+{
+   return mCommonChunkPeriod;
+};
+
+void BlockInterpreter::SetChunkPeriod(const double chunkPeriod)
+{
+   mCommonChunkPeriod = chunkPeriod;
+};
+
+std::vector<Chunk*>& BlockInterpreter::ChunkInterpreters()
+{
+   return mChunkInterpreters;
+};
 
 
 bool BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess )
@@ -105,7 +121,7 @@ bool BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint32_t& bytesP
 
 
 
-bool BlockInterpreter::InterpretChunk( BinaryFileSource& packedFile )
+bool BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
 {
    
    if(mChunkIndex == 0)

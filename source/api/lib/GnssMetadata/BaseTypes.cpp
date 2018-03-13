@@ -20,3 +20,6 @@
 
 
 #include <GnssMetadata/BaseTypes.h>
+
+using namespace GnssMetadata;
+Object::~Object() {};

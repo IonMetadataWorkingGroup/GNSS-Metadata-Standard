@@ -8,10 +8,8 @@
 %                 (or some reference), returning true upon succes
 %  'CleanData.m': should delete the converted files 
 
-testDirectories = {'FHG', 'IFEN', 'JRC', 'TRIGR', 'SJTU'};
 
-
-
+testDirectories = { 'CODC', 'FHG', 'IFEN', 'JRC', 'TRIGR', 'SJTU' };
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Purge all of the old converted sample files, to ensure that the 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
+
+  <lane id="SingleFreqL1">
+    <bandsrc idband="L1" idsrc="PatchAntenna"/>
+    <system id="BladeRF"/>
+
+    <block>
+      <cycles>0</cycles>
+      <sizeheader>0</sizeheader>
+      <sizefooter>0</sizefooter>
+      <chunk>
+        <sizeword>2</sizeword>
+        <countwords>2</countwords>
+        <endian>Little</endian>
+        <lump>
+          <stream id="L1">
+            <ratefactor>1</ratefactor>
+            <quantization>16</quantization>
+            <packedbits>32</packedbits>
+            <format>IQ</format>
+            <encoding>TC</encoding>
+            <band id="L1"/>
+          </stream>
+        </lump>
+      </chunk>		
+    </block>
+  </lane>
+
+  <system id="BladeRF">
+    <freqbase format="MHz">5.0</freqbase>
+    <equipment>Nuand BladeRF</equipment>
+    <source id="PatchAntenna">
+      <type>Patch</type>
+      <polarization>RHCP</polarization>
+      <idcluster>Antenna</idcluster>
+    </source>
+    <cluster id="Antenna"/>
+  </system>
+
+  <band id="L1">
+    <centerfreq format="GHz">1.57542</centerfreq>
+    <translatedfreq format="kHz">0</translatedfreq>
+    <delaybias format="sec">0.0</delaybias>
+    <bandwidth format="MHz">3.84</bandwidth>
+  </band>		
+
+  <session id="0">
+    <toa>2015-04-08T12:52:45Z</toa>
+    <position lat="21.004557925" lon="105.8439199" height="46.600"/>
+    <contact>Cillian O'Driscoll</contact>
+    <campaign>ION GNSS Metadata Collection</campaign>
+    <scenario>Static rooftop, obscured sky view</scenario>
+  </session>
+
+  <file>
+    <url>20170911_1118Z.dat</url>
+    <timestamp>2017-09-11T11:18Z</timestamp>
+    <owner>CODC</owner>
+    <lane id="SingleFreqL1"/>
+  </file>
+
+</metadata>
+

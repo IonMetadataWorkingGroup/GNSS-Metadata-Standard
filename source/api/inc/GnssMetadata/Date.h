@@ -18,26 +18,32 @@
  * You should have received a copy of the Lesser GNU General Public License
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef DATE_H_H
+ #ifndef DATE_H_H
 #define DATE_H_H
 
 #include <time.h>
 
 ////Grab os time type.
-#if defined(_POSIX_C_SOURCE)
-    typedef struct timespec IonTimespec;
+#if defined(_WIN32) || defined(_WIN64)
+#include <time.h>
+//this is definedin <time.h> for Visual Studio 2015 on
+struct IonTimespec
+{
+   time_t tv_sec;
+   long tv_nsec;
+};
 
-    #define GMTIME( ptm, pt) gmtime_r(pt, ptm)
+#define GMTIME( ptm, pt) gmtime_s(ptm, pt)
 #else
-	// this is defined in <time.h> for Visual Studio 2015 on
-	struct IonTimespec
-	{
-		time_t tv_sec;
-		long tv_nsec;
-	};
+#include <time.h>
+//this is definedin <time.h> for Visual Studio 2015 on
+struct IonTimespec
+{
+   time_t tv_sec;
+   long tv_nsec;
+};
 
-	#define GMTIME( ptm, pt) gmtime_s(ptm, pt)
+#define GMTIME( ptm, pt) gmtime_r(pt, ptm)
 #endif
 
 

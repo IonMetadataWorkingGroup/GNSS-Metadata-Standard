@@ -27,7 +27,8 @@
 
 SampleConverter::SampleConverter(BaseSampleSinkFactory* ssFactory):
 mIsOpen(false),
-mSampleSinkFactory(ssFactory)
+mSampleSinkFactory(ssFactory),
+mBaseLoadPeriod(1)
 {
 
    
@@ -60,6 +61,11 @@ void SampleConverter::Close()
    }
    mIsOpen = false;
 }
+
+double SampleConverter::BaseLoadPeriod() const
+{
+   return mBaseLoadPeriod;
+};
 
 
 void SampleConverter::Convert( const uint32_t bytesToProcess )
@@ -112,7 +118,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
 
 
 
-bool SampleConverter::Load( const uint32_t chunksToProcess )
+bool SampleConverter::Load( const double secondsToProcess )
 {
    
    if( !mIsOpen )
@@ -128,6 +134,12 @@ bool SampleConverter::Load( const uint32_t chunksToProcess )
       return false;
    }
    
+   // JTC ToDo:
+   //
+   // Make sure that secondsToProcess is an integer multiple of BaseLoadPeriod
+   //
+   //
+   
    
    bool readAllOK = true;
    
@@ -135,25 +147,28 @@ bool SampleConverter::Load( const uint32_t chunksToProcess )
    for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
    {
       
-      uint32_t chunksProcessed = 0;
-      
       //for now, just decode the first Lane
       LaneInterpreter* laneInterpreter= (*lnIt);
       
       bool readBlockOK = false;
          
-      for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
+      //for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
       {
+         std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin();
          BlockInterpreter* block = (*It);
-         //read the entire block
+         
+         //determine how many chunks to interpret
+         uint32_t chunksToLoad = static_cast<uint32_t>( round( secondsToProcess / block->GetChunkPeriod() ) );
+         //
+         uint32_t chunksLoaded = 0;
          do
          {
-            readBlockOK = block->InterpretChunk( *mLaneFiles[laneInterpreter] );
-            chunksProcessed++;
+            readBlockOK = block->InterpretChunks( *mLaneFiles[laneInterpreter] );
+            chunksLoaded++;
          }
-         while( readBlockOK && chunksProcessed < chunksToProcess );
+         while( readBlockOK && chunksLoaded < chunksToLoad );
          
-         readAllOK = readAllOK && ( chunksProcessed == chunksToProcess );
+         readAllOK = readAllOK && ( chunksToLoad == chunksLoaded );
       }
       
       
@@ -161,6 +176,15 @@ bool SampleConverter::Load( const uint32_t chunksToProcess )
 
    return readAllOK;
 }
+
+
+
+
+
+
+
+
+
 
 
 

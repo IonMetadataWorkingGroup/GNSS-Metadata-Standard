@@ -190,10 +190,7 @@ namespace GnssMetadata
 		 */
 		virtual size_t FindObject( SearchItem::List& listResults, const IonString& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
 
-		//TODO: Privatize and write a method.
-		GnssMetadata::Lump** lumpArray;
-		int lumpCount;
-
+		
 
 	private:
 		size_t		_countWords;

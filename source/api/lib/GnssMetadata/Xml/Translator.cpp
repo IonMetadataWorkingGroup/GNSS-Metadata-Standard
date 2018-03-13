@@ -25,12 +25,17 @@
 using namespace GnssMetadata;
 using namespace tinyxml2;
 
-
 /******************************************************************************
 * Translator Implementation
 ******************************************************************************/
 namespace GnssMetadata
 {
+
+
+Translator::~Translator()
+{
+};
+
 
 /**
  * Processes the current element within the context of the attributed object, delegates
