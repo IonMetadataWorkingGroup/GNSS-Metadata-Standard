@@ -258,6 +258,15 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 				SampleSink*       sampleSink = mSampleSinkFactory->GetSampleSink( smIt->toString() );
             SampleStreamInfo* sampleInfo = mSampleSinkFactory->GetSampleStreamInfo( smIt->toString() );
             
+            //JTC: ToDo
+            //
+            // At this point it should be possible to determine the scale factor for the samples in the case that
+            // we intend to scale float/double to the interval +/1.0.    
+            //
+            // o we might choose to always set a sampleSink scale-factor ( sampleSink->SetScaleFactor( X ) )
+            //   but only apply it in the <float> <double> overridden SampleSink::DoAddSample() function implementation 
+            //
+
 				uint16_t numSmpInterp = static_cast<uint32_t>(smIt->RateFactor());
 				uint16_t numPaddingBits = static_cast<uint32_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
 

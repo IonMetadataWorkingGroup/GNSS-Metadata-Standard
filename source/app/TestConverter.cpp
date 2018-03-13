@@ -38,7 +38,7 @@ int Convert( std::string xmlFileName )
    //create the factory for the sample-sinks used in the converter
    //
    // Dump the samples to file
-   SampleSinkFactory<SampleFileSink<sample_base_t> > sampleSinkFactory;
+   SampleSinkFactory< SampleFileSink<sample_base_t> > sampleSinkFactory;
 
    //create the converter
    SampleConverter spcv( &sampleSinkFactory );
