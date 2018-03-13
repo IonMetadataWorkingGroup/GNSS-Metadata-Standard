@@ -1,6 +1,12 @@
 # GNSS-Metadata-Standard
 
 
+
+The master branch has been frozen for the duration of the RFC ending Dec 30th 2017.
+
+If you wish to contribute code, please use the devel branch
+
+
 This project uses CMake. To create a project for your IDE follow the steps below.
 
 

@@ -50,7 +50,7 @@ namespace SampleEncoderFunctions
    sample_base_t Sign( const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization )
    {
       return ( (pChunk[chunkIndex] >> shift ) & 0x1 ? -1 : 1 );
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> 
    sample_base_t TwosCompliment( const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization )
@@ -70,7 +70,7 @@ namespace SampleEncoderFunctions
 
       //either return the bits or add the sign extension
       return static_cast<sample_base_t>(  ( sign ?  bits | signExtension : bits ) );
-   };
+   }
 
 
    template<typename chunk_t, typename sample_base_t>
@@ -91,7 +91,7 @@ namespace SampleEncoderFunctions
 
 	   //either return the bits or add the sign extension, offset by +1
 	   return static_cast<sample_base_t>((sign ? bits | signExtension : bits) + 1 );
-   };
+   }
    
 
    template<typename chunk_t, typename sample_base_t>
@@ -111,7 +111,7 @@ namespace SampleEncoderFunctions
 	   sample_base_t ans = (sign ? -mag : mag);
 	   return ans;
 
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t>
    sample_base_t SignMagnitudeAdjusted(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
@@ -131,7 +131,7 @@ namespace SampleEncoderFunctions
 	   //either return the bits or add the sign extension
 	   sample_base_t ans = (sign ? -mag : mag);
 	   return ans;
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t>
    sample_base_t OffsetBinary(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
@@ -145,7 +145,7 @@ namespace SampleEncoderFunctions
 	   chunk_t offset = 0x1 << (quantization - 1);
 
 	   return static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t>
    sample_base_t OffsetBinaryAdjusted(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
@@ -159,7 +159,7 @@ namespace SampleEncoderFunctions
 	   chunk_t offset = (0x1 << quantization) - 1;
 
 	   return static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
-   };
+   }
 
 
    template<typename chunk_t, typename sample_base_t>
@@ -180,7 +180,7 @@ namespace SampleEncoderFunctions
 	   chunk_t offset = 0x1 << (quantization - 1);
 
 	   return static_cast<sample_base_t>(gray) - static_cast<sample_base_t>(offset);
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t>
    sample_base_t OffsetGrayAdjusted(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
@@ -200,7 +200,7 @@ namespace SampleEncoderFunctions
 	   chunk_t offset = (0x1 << quantization) - 1;
 
 	   return static_cast<sample_base_t>(gray << 1) - static_cast<sample_base_t>(offset);
-   };
+   }
 
 
    template<typename chunk_t, typename sample_base_t>
@@ -210,10 +210,10 @@ namespace SampleEncoderFunctions
 	   int8_t sample =  static_cast<int8_t>( (pChunk[chunkIndex] >> shift) & 0xff );
 
 	   return static_cast<sample_base_t>(sample);
-   };
+   }
 
 
-};// end namespace SampleEncoderFunctions
+}// end namespace SampleEncoderFunctions
 
 
 #endif //NAMESPACE_EncoderFunctions

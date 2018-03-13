@@ -36,7 +36,7 @@ namespace EndianFunctions
    T ChangeEndianness( const T in )
    {
       return in;
-   };
+   }
 
 	uint16_t ChangeEndianness( const uint16_t in );
 
@@ -45,6 +45,6 @@ namespace EndianFunctions
 	uint64_t ChangeEndianness( const uint64_t in );
 
 	
-};//end namespace EndianFunctions
+}//end namespace EndianFunctions
 
 #endif //NAMESPACE_EndianFunctions

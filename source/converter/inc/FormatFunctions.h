@@ -69,7 +69,7 @@ namespace SampleFormatFunctions
 
       sampleSink->AddSample( IF );
 	
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> void IFn( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
    {
@@ -80,7 +80,7 @@ namespace SampleFormatFunctions
 
       sampleSink->AddSample( IF );
 	
-   };
+   }
 
 
    template<typename chunk_t, typename sample_base_t> void IQ( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
@@ -95,7 +95,7 @@ namespace SampleFormatFunctions
       sampleSink->AddSample( I, Q );
       //sampleSink->AddSample( Q );
 	
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> void IQn( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
    {
@@ -109,7 +109,7 @@ namespace SampleFormatFunctions
       sampleSink->AddSample( I, Q );
       //sampleSink->AddSample( Q );
 	
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> void InQ( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
    {
@@ -123,7 +123,7 @@ namespace SampleFormatFunctions
       sampleSink->AddSample( I, Q );
       //sampleSink->AddSample( Q );
 	
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> void InQn( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
    {
@@ -137,7 +137,7 @@ namespace SampleFormatFunctions
       sampleSink->AddSample( I, Q );
       //sampleSink->AddSample( Q );
 	
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> void QI( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
    {
@@ -151,7 +151,7 @@ namespace SampleFormatFunctions
       sampleSink->AddSample( I, Q );
       //sampleSink->AddSample( Q );
 	
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> void QIn( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
    {
@@ -165,7 +165,7 @@ namespace SampleFormatFunctions
       sampleSink->AddSample( I, Q );
       //sampleSink->AddSample( Q );
 	
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> void QnI( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
    {
@@ -179,7 +179,7 @@ namespace SampleFormatFunctions
       sampleSink->AddSample( I, Q );
       //sampleSink->AddSample( Q );
 	
-   };
+   }
 
    template<typename chunk_t, typename sample_base_t> void QnIn( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
    {
@@ -192,7 +192,7 @@ namespace SampleFormatFunctions
       
       sampleSink->AddSample( I, Q );
       
-   };
+   }
    
 
    // Specialized FormatFunctions (including native type encoder functions
@@ -207,8 +207,8 @@ namespace SampleFormatFunctions
       
       sampleSink->AddSample( I, Q );
 
-   };
+   }
 
-};//end namespace SampleFormatFunctions
+}//end namespace SampleFormatFunctions
 
 #endif //NAMESPACE_FormatFunctions

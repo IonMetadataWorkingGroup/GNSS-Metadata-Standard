@@ -30,7 +30,7 @@ mCommonChunkPeriod(1)
 
 	mChunkInterpreters.resize(0);
 
-};
+}
 
 BlockInterpreter::~BlockInterpreter()
 {
@@ -38,14 +38,14 @@ BlockInterpreter::~BlockInterpreter()
    for( std::vector<Chunk*>::iterator It = mChunkInterpreters.begin(); It != mChunkInterpreters.end(); ++It )
       delete (*It);
 
-};
+}
 
 void BlockInterpreter::AddChunk(Chunk* newChunk)
 {
 
 	mChunkInterpreters.push_back(newChunk);
 
-};
+}
 
 double BlockInterpreter::GetChunkPeriod() const
 {
@@ -117,7 +117,7 @@ bool BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint32_t& bytesP
    
    //otherwise, a full block was read
    return true;
-};
+}
 
 
 
@@ -161,7 +161,7 @@ bool BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
    
    //a full chunk set was read
    return true;
-};
+}
 
 
 

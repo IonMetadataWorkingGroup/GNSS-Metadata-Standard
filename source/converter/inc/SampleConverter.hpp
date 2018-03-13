@@ -159,7 +159,7 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
 
    return mIsOpen;
 
-};
+}
 
 
 
@@ -209,7 +209,7 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
    //
    return true;
 
-};
+}
 
 
 
@@ -375,5 +375,5 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
    //
    return true;
 
-};
+}
 

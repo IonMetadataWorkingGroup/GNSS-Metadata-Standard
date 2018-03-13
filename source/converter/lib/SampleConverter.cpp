@@ -33,7 +33,7 @@ mBaseLoadPeriod(1)
 
    
       
-};
+}
 
 SampleConverter::~SampleConverter()
 {
@@ -41,7 +41,7 @@ SampleConverter::~SampleConverter()
    //just check that it has been closed
    Close();
 
-};
+}
 
 void SampleConverter::Close()
 {
@@ -60,7 +60,7 @@ void SampleConverter::Close()
       
    }
    mIsOpen = false;
-};
+}
 
 double SampleConverter::BaseLoadPeriod() const
 {
@@ -113,7 +113,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
       while( readBlockOK );
 
    }//end for( lnIt )
-};
+}
 
 
 
@@ -175,7 +175,7 @@ bool SampleConverter::Load( const double secondsToProcess )
    }//end for( lnIt )
 
    return readAllOK;
-};
+}
 
 
 
