@@ -270,6 +270,18 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 				uint16_t numSmpInterp = static_cast<uint32_t>(smIt->RateFactor());
 				uint16_t numPaddingBits = static_cast<uint32_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
 
+
+            ////////////////////////////////////////////////////
+            //
+            // This section of code produces a queue of SampleInterpreter pointers
+            // 
+            //  o each element of the queue processes the cunk and extracts one sample or one sample pair
+            //    and then passes these sampels into the corresponding sample-sink
+            //  o we need to ensure that the samples are passed to the sink(s) in chronological order
+            //    and so it is necessary to call the SampleInterpreters in the correct oder
+            //  o the code below ensures that the ordering of the SampleInterprerters in the queue corresponds
+            //    tho the chronological order in wich the samples were actually captured
+            //
 				uint16_t nextCallOrder = totalNumSampleInterpreters;
 				//offset the call-order based on the shift-direction of the Lumps
 				if( lpIt->Shift() == GnssMetadata::Lump::shiftRight )
