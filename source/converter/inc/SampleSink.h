@@ -28,12 +28,17 @@ class SampleSink
 {
 protected:
    bool         mIsOpen;
+   double       mScaleValue;
    virtual bool Open() = 0;
+   
+   SampleSink(){ mScaleValue = 1.0; };
 
 public:
    
    virtual ~SampleSink(){};
-  
+   
+   virtual void SetScaleValue( const double scale ){ mScaleValue = scale; };
+   
    virtual void AddSample( int8_t  x ) = 0;
    virtual void AddSample( int16_t x ) = 0;
    virtual void AddSample( int32_t x ) = 0;
@@ -63,7 +68,7 @@ protected:
 public:
    
    virtual ~SampleSinkT(){};
-  
+
    // This is a little ugly, but accommodates the parsing of multiple SampleFileSinks, which
    // have different template arguments, in one container. Hopefully the optimizer can take 
    // care of removing the extra function calls. Is there a better way?
@@ -71,15 +76,15 @@ public:
    void AddSample( int16_t x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
    void AddSample( int32_t x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
    void AddSample( int64_t x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
-   void AddSample( float   x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
-   void AddSample( double  x ){ DoAddSample( static_cast<sample_base_t>( x ) ); };
+   void AddSample( float   x ){ DoAddSample( static_cast<sample_base_t>( x ) * mScaleValue ); };
+   void AddSample( double  x ){ DoAddSample( static_cast<sample_base_t>( x ) * mScaleValue ); };
    
    void AddSample( int8_t  x, int8_t  y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
    void AddSample( int16_t x, int16_t y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
    void AddSample( int32_t x, int32_t y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
    void AddSample( int64_t x, int64_t y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
-   void AddSample( float   x, float   y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
-   void AddSample( double  x, double  y ){ DoAddSample( static_cast<sample_base_t>( x ), static_cast<sample_base_t>( y ) ); };
+   void AddSample( float   x, float   y ){ DoAddSample( static_cast<sample_base_t>( x ) * mScaleValue, static_cast<sample_base_t>( y ) * mScaleValue ); };
+   void AddSample( double  x, double  y ){ DoAddSample( static_cast<sample_base_t>( x ) * mScaleValue, static_cast<sample_base_t>( y ) * mScaleValue ); };
    
    
 };

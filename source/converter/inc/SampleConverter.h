@@ -44,6 +44,8 @@ protected:
    
    double mBaseLoadPeriod;
    
+   bool mNormalizeSampleStreams;//indicate whether or not to scale output samples to +/-1.0;
+   
    //protected member functions, to keep the code clean and clear
    template<typename chunk_t, typename sample_base_t>
    bool CreateChunkInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp  );
@@ -51,7 +53,7 @@ protected:
    bool CreateBlockInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Block* block, BlockInterpreter** blockInterp );
 
 public:
-   SampleConverter( BaseSampleSinkFactory* ssFactory );
+   SampleConverter( BaseSampleSinkFactory* ssFactory, const bool normalizeSamples = false );
    virtual ~SampleConverter(void);
 
    template<typename sample_base_t>
@@ -60,6 +62,7 @@ public:
    void Convert( const uint32_t bytesToProcess = 0 );
    bool Load( const double secondsToLoad );
    double BaseLoadPeriod() const;
+
  
 };
 

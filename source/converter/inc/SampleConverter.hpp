@@ -266,10 +266,12 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
             // o we might choose to always set a sampleSink scale-factor ( sampleSink->SetScaleFactor( X ) )
             //   but only apply it in the <float> <double> overridden SampleSink::DoAddSample() function implementation 
             //
-
-				uint16_t numSmpInterp = static_cast<uint32_t>(smIt->RateFactor());
-				uint16_t numPaddingBits = static_cast<uint32_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
-
+            if( mNormalizeSampleStreams )
+            {
+               int32_t maxSampleValue = ( 0x1 << smIt->Quantization() );
+               double  sampleScaleValue = 1.0 / static_cast<double>( maxSampleValue );
+               sampleSink->SetScaleValue( sampleScaleValue );
+            }
 
             ////////////////////////////////////////////////////
             //
@@ -282,7 +284,10 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
             //  o the code below ensures that the ordering of the SampleInterprerters in the queue corresponds
             //    tho the chronological order in wich the samples were actually captured
             //
-				uint16_t nextCallOrder = totalNumSampleInterpreters;
+            uint16_t numSmpInterp = static_cast<uint32_t>(smIt->RateFactor());
+            uint16_t numPaddingBits = static_cast<uint32_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
+            
+            uint16_t nextCallOrder = totalNumSampleInterpreters;
 				//offset the call-order based on the shift-direction of the Lumps
 				if( lpIt->Shift() == GnssMetadata::Lump::shiftRight )
 					nextCallOrder += (lnLumpRepeat - lr) * numSampleInterpretersPerLump;

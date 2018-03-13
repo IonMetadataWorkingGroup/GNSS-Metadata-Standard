@@ -25,10 +25,13 @@
 #include "SampleInterpreterFactory.h"
 
 
-SampleConverter::SampleConverter(BaseSampleSinkFactory* ssFactory):
+SampleConverter::SampleConverter(BaseSampleSinkFactory* ssFactory, const bool normalizeSamples):
 mIsOpen(false),
 mSampleSinkFactory(ssFactory),
-mBaseLoadPeriod(1)
+mBaseLoadPeriod(1),
+// tells the sample converter to normalize samples to +/-1.0 when converting to float/double
+// normalization is configured such that the maximum input value (i.e. 2^QuantBits) maps to +1.0
+mNormalizeSampleStreams(normalizeSamples)
 {
 
    
