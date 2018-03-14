@@ -2,10 +2,9 @@
 
 
 
-The master branch has been frozen for the duration of the RFC ending Dec 30th 2017.
+The 'master' branch is frozen between major updates inlucind requests for comment, and opdated once or twice annually. 
 
-If you wish to contribute code, please use the devel branch
-
+Ongoing development and latests updates are available on the 'deve' branch. If you wish to submit code or pull-requests, please use the 'deve' branch. Pull requests for 'master' will be rejected. 
 
 This project uses CMake. To create a project for your IDE follow the steps below.
 
