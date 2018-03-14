@@ -31,11 +31,13 @@ SampleInterpreterFactory<chunk_t,sample_base_t>::SampleInterpreterFactory()
 
    mEncoderFunctionMap["OB"]  = (encFuncPtr_t)&SampleEncoderFunctions::OffsetBinary;
    mEncoderFunctionMap["SM"]  = (encFuncPtr_t)&SampleEncoderFunctions::SignMagnitude;
+   mEncoderFunctionMap["MS"]  = (encFuncPtr_t)&SampleEncoderFunctions::MagnitudeSign;
    mEncoderFunctionMap["TC"] = (encFuncPtr_t)&SampleEncoderFunctions::TwosCompliment;
    mEncoderFunctionMap["OG"] = (encFuncPtr_t)&SampleEncoderFunctions::OffsetGray;
 
    mEncoderFunctionMap["OBA"] = (encFuncPtr_t)&SampleEncoderFunctions::OffsetBinaryAdjusted;
    mEncoderFunctionMap["SMA"] = (encFuncPtr_t)&SampleEncoderFunctions::SignMagnitudeAdjusted;
+   mEncoderFunctionMap["MSA"] = (encFuncPtr_t)&SampleEncoderFunctions::MagnitudeSignAdjusted;
    mEncoderFunctionMap["TCA"] = (encFuncPtr_t)&SampleEncoderFunctions::TwosComplimentAdjusted;
    mEncoderFunctionMap["OGA"] = (encFuncPtr_t)&SampleEncoderFunctions::OffsetGrayAdjusted;
 
