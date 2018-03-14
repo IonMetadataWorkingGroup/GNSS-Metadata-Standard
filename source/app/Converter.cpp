@@ -16,41 +16,8 @@
 // include the converter
 #include "Converter.h"
 
-// process triple frequency data from JRC
 template<typename sample_base_t>
-int Convert( std::string xmlFileName )
-{
-
-   GnssMetadata::Metadata md;
-   GnssMetadata::XmlProcessor xproc;
-
-   if( !xproc.Load( xmlFileName.c_str(), false, md) )
-   {
-      printf("Could not load metadata. Terminating.\n");
-      return -1;
-   }
-
-   //create the factory for the sample-sinks used in the converter
-   //
-   // Dump the samples to file
-   SampleSinkFactory<SampleFileSink<sample_base_t> > sampleSinkFactory;
-
-   //create the converter
-   SampleConverter spcv( &sampleSinkFactory );
-
-   //open the Metadata Converter
-   spcv.Open<sample_base_t>( md );
-
-   //perform the conversion
-   spcv.Convert();
-
-
-   //close the converter
-   spcv.Close();
-
-   return 0;
-}
-
+int Convert( std::string xmlFileName );
 
 
 int main(int argc, char* argv[])
@@ -129,4 +96,42 @@ int main(int argc, char* argv[])
 	}
 		return 0;
 }
+
+
+
+// process triple frequency data from JRC
+template<typename sample_base_t>
+int Convert( std::string xmlFileName )
+{
+
+   GnssMetadata::Metadata md;
+   GnssMetadata::XmlProcessor xproc;
+
+   if( !xproc.Load( xmlFileName.c_str(), false, md) )
+   {
+      printf("Could not load metadata. Terminating.\n");
+      return -1;
+   }
+
+   //create the factory for the sample-sinks used in the converter
+   //
+   // Dump the samples to file
+   SampleSinkFactory<SampleFileSink<sample_base_t> > sampleSinkFactory;
+
+   //create the converter
+   SampleConverter spcv( &sampleSinkFactory );
+
+   //open the Metadata Converter
+   spcv.Open<sample_base_t>( md );
+
+   //perform the conversion
+   spcv.Convert();
+
+
+   //close the converter
+   spcv.Close();
+
+   return 0;
+}
+
 

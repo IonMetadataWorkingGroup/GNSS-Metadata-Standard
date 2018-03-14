@@ -18,6 +18,160 @@
 // include the converter
 #include "Converter.h"
 
+template<typename sample_base_t>
+int Convert( std::string xmlFileName );
+
+template<typename sample_base_t>
+int ComputeStatistics( std::string xmlFileName );
+
+template<typename sample_base_t>
+int FrontEnd( std::string xmlFileName );
+
+void PrintEncoderTables();
+
+int main(int argc, char* argv[])
+{
+
+    // uncomment to see console print-out of standard binary encoder formats
+    //PrintEncoderTables();
+    //return 0;
+    
+    int res[3];
+    std::string xmlFileName;
+
+    // if we are passed two arguments, then interpret as:
+    // argv[1] -> 'path' 
+    // argv[2] -> 'xml-file'
+    // then process this file instead of the standard tests below.
+    if( argc == 3 )
+    {
+
+       // process data from command-line-args
+       std::string xmlDirName  = std::string( argv[1] );
+       std::string xmlFileName = std::string( argv[2] );
+       printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       std::cout << xmlFileName << std::endl;
+       printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       change_dir( xmlDirName.c_str() );
+       res[0] = Convert<int16_t>(    xmlFileName );
+       res[1] = ComputeStatistics<int16_t>( xmlFileName );
+       res[2] = FrontEnd<int16_t>(   xmlFileName );
+       std::cout << "Result: "
+       << (res[0]==0?"ok ":"failed ")
+       << (res[1]==0?"ok ":"failed ")
+       << (res[2]==0?"ok ":"failed ")
+       << "\n\n";
+       change_dir( ".." );
+       
+       return 0;
+    }
+
+    try
+    {
+       
+       // process JRC data
+       printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       std::cout << "JRC data case\n";
+       printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+       change_dir( "JRC" );
+       xmlFileName = "150408_125245_UTC.xml";
+       res[0] = Convert<int8_t>(    xmlFileName );
+       res[1] = ComputeStatistics<int8_t>( xmlFileName );
+       res[2] = FrontEnd<int8_t>(   xmlFileName );
+       std::cout << "Result: "
+       << (res[0]==0?"ok ":"failed ")
+       << (res[1]==0?"ok ":"failed ")
+       << (res[2]==0?"ok ":"failed ")
+       << "\n\n";
+       change_dir( ".." );
+
+       
+        // process IFEN data
+        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        std::cout << "IFEN data case\n";
+        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+        change_dir( "IFEN" );
+        xmlFileName = "SX3_AltBOC_DualRF.smfx";
+        res[0] = Convert<int8_t>(    xmlFileName );
+        res[1] = ComputeStatistics<int8_t>( xmlFileName );
+        res[2] = FrontEnd<int8_t>(   xmlFileName );
+        std::cout << "Result: "
+                  << (res[0]==0?"ok ":"failed ")
+                  << (res[1]==0?"ok ":"failed ")
+                  << (res[2]==0?"ok ":"failed ")
+                  << "\n\n";
+        change_dir( ".." );
+
+        // process Fraunhofer data
+        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        std::cout << "FHG data case\n";
+        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        change_dir( "FHG" );
+        xmlFileName = "L125_III1b_15s.usbx";
+        res[0] = Convert<int8_t>(    xmlFileName );
+        res[1] = ComputeStatistics<int8_t>( xmlFileName );
+        res[2] = FrontEnd<int8_t>(   xmlFileName );
+        std::cout << "Result: "
+                  << (res[0]==0?"ok ":"failed ")
+                  << (res[1]==0?"ok ":"failed ")
+                  << (res[2]==0?"ok ":"failed ")
+                  << "\n\n";
+        change_dir( ".." );
+
+        // Process TRIGR data.
+        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        std::cout << "TRIGR data case\n";
+        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        change_dir( "TRIGR" );
+        xmlFileName = "WideBand_1bit_L1_L2_E5a_E5b_000.tgx";
+        res[0] = Convert<int8_t>(    xmlFileName );
+        res[1] = ComputeStatistics<int8_t>( xmlFileName );
+        res[2] = FrontEnd<int8_t>(   xmlFileName );
+        std::cout << "Result: "
+                  << (res[0]==0?"ok ":"failed ")
+                  << (res[1]==0?"ok ":"failed ")
+                  << (res[2]==0?"ok ":"failed ")
+                  << "\n\n";
+        change_dir( ".." );
+
+        // Process CODC data.
+        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        std::cout << "CODC data case\n";
+        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        change_dir( "CODC" );
+        xmlFileName = "20170911_1118Z.sdrx";
+        res[0] = Convert<int16_t>(    xmlFileName );
+        res[1] = ComputeStatistics<int16_t>( xmlFileName );
+        res[2] = FrontEnd<int16_t>(   xmlFileName );
+        std::cout << "Result: "
+                  << (res[0]==0?"ok ":"failed ")
+                  << (res[1]==0?"ok ":"failed ")
+                  << (res[2]==0?"ok ":"failed ")
+                  << "\n\n";
+        change_dir( ".." );
+
+	}
+	catch ( GnssMetadata::ApiException &e)
+	{
+		std::cout << "caught API exception: " << e.what( ) << "\n";
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "caught exception: " << e.what( ) << "\n";
+	}
+	catch( ... )
+	{
+		std::cout << "unknown exception\n";
+	}
+		return 0;
+}
+
+
+
+
+
+
 // process triple frequency data from JRC
 template<typename sample_base_t>
 int Convert( std::string xmlFileName )
@@ -162,136 +316,35 @@ int FrontEnd( std::string xmlFileName )
    return 0;
 }
 
-
-int main(int argc, char* argv[])
+void PrintEncoderTables()
 {
-    int res[3];
-    std::string xmlFileName;
+   
+   uint8_t sample;
 
-    // if we are passed two arguments, then interpret as:
-    // argv[1] -> 'path' 
-    // argv[2] -> 'xml-file'
-    // then process this file instead of the standard tests below.
-    if( argc == 3 )
-    {
+   for( uint32_t qnt=2; qnt<=5; qnt++)
+   {
+      printf("%d-Bit Formats\n",qnt);
+      printf(" HEX |  OB | OBA |  SM | SMA |  MS | MSA |  TC | TCA |  OG | OGA |\n");
+      for(size_t i=0; i<(1<<qnt); i++)
+      {
+         sample = static_cast<uint8_t>(i);
 
-       // process data from command-line-args
-       std::string xmlDirName  = std::string( argv[1] );
-       std::string xmlFileName = std::string( argv[2] );
-       printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-       std::cout << xmlFileName << std::endl;
-       printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-       change_dir( xmlDirName.c_str() );
-       res[0] = Convert<int16_t>(    xmlFileName );
-       res[1] = ComputeStatistics<int16_t>( xmlFileName );
-       res[2] = FrontEnd<int16_t>(   xmlFileName );
-       std::cout << "Result: "
-       << (res[0]==0?"ok ":"failed ")
-       << (res[1]==0?"ok ":"failed ")
-       << (res[2]==0?"ok ":"failed ")
-       << "\n\n";
-       change_dir( ".." );
-       
-       return 0;
-    }
+         printf("  %02x | %+03d | %+03d | %+03d | %+03d | %+03d | %+03d | %+03d | %+03d | %+03d | %+03d |\n",
+            sample,
+            SampleEncoderFunctions::OffsetBinary<uint8_t,int8_t>(&sample,0,0,qnt),   
+            SampleEncoderFunctions::OffsetBinaryAdjusted<uint8_t,int8_t>(&sample,0,0,qnt),   
+            SampleEncoderFunctions::SignMagnitude<uint8_t,int8_t>(&sample,0,0,qnt),   
+            SampleEncoderFunctions::SignMagnitudeAdjusted<uint8_t,int8_t>(&sample,0,0,qnt),   
+            SampleEncoderFunctions::MagnitudeSign<uint8_t,int8_t>(&sample,0,0,2),   
+            SampleEncoderFunctions::MagnitudeSignAdjusted<uint8_t,int8_t>(&sample,0,0,qnt),   
+            SampleEncoderFunctions::TwosCompliment<uint8_t,int8_t>(&sample,0,0,qnt),   
+            SampleEncoderFunctions::TwosComplimentAdjusted<uint8_t,int8_t>(&sample,0,0,qnt),   
+            SampleEncoderFunctions::OffsetGray<uint8_t,int8_t>(&sample,0,0,qnt),   
+            SampleEncoderFunctions::OffsetGrayAdjusted<uint8_t,int8_t>(&sample,0,0,qnt)
+         );   
+      }
+      printf("\n\n\n");
+   }
+   
+};
 
-    try
-    {
-       
-       // process JRC data
-       printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-       std::cout << "JRC data case\n";
-       printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-       change_dir( "JRC" );
-       xmlFileName = "150408_125245_UTC.xml";
-       res[0] = Convert<int8_t>(    xmlFileName );
-       res[1] = ComputeStatistics<int8_t>( xmlFileName );
-       res[2] = FrontEnd<int8_t>(   xmlFileName );
-       std::cout << "Result: "
-       << (res[0]==0?"ok ":"failed ")
-       << (res[1]==0?"ok ":"failed ")
-       << (res[2]==0?"ok ":"failed ")
-       << "\n\n";
-       change_dir( ".." );
-
-       
-        // process IFEN data
-        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        std::cout << "IFEN data case\n";
-        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
-        change_dir( "IFEN" );
-        xmlFileName = "SX3_AltBOC_DualRF.smfx";
-        res[0] = Convert<int8_t>(    xmlFileName );
-        res[1] = ComputeStatistics<int8_t>( xmlFileName );
-        res[2] = FrontEnd<int8_t>(   xmlFileName );
-        std::cout << "Result: "
-                  << (res[0]==0?"ok ":"failed ")
-                  << (res[1]==0?"ok ":"failed ")
-                  << (res[2]==0?"ok ":"failed ")
-                  << "\n\n";
-        change_dir( ".." );
-
-        // process Fraunhofer data
-        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        std::cout << "FHG data case\n";
-        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        change_dir( "FHG" );
-        xmlFileName = "L125_III1b_15s.usbx";
-        res[0] = Convert<int8_t>(    xmlFileName );
-        res[1] = ComputeStatistics<int8_t>( xmlFileName );
-        res[2] = FrontEnd<int8_t>(   xmlFileName );
-        std::cout << "Result: "
-                  << (res[0]==0?"ok ":"failed ")
-                  << (res[1]==0?"ok ":"failed ")
-                  << (res[2]==0?"ok ":"failed ")
-                  << "\n\n";
-        change_dir( ".." );
-
-        // Process TRIGR data.
-        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        std::cout << "TRIGR data case\n";
-        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        change_dir( "TRIGR" );
-        xmlFileName = "WideBand_1bit_L1_L2_E5a_E5b_000.tgx";
-        res[0] = Convert<int8_t>(    xmlFileName );
-        res[1] = ComputeStatistics<int8_t>( xmlFileName );
-        res[2] = FrontEnd<int8_t>(   xmlFileName );
-        std::cout << "Result: "
-                  << (res[0]==0?"ok ":"failed ")
-                  << (res[1]==0?"ok ":"failed ")
-                  << (res[2]==0?"ok ":"failed ")
-                  << "\n\n";
-        change_dir( ".." );
-
-        // Process CODC data.
-        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        std::cout << "CODC data case\n";
-        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        change_dir( "CODC" );
-        xmlFileName = "20170911_1118Z.sdrx";
-        res[0] = Convert<int16_t>(    xmlFileName );
-        res[1] = ComputeStatistics<int16_t>( xmlFileName );
-        res[2] = FrontEnd<int16_t>(   xmlFileName );
-        std::cout << "Result: "
-                  << (res[0]==0?"ok ":"failed ")
-                  << (res[1]==0?"ok ":"failed ")
-                  << (res[2]==0?"ok ":"failed ")
-                  << "\n\n";
-        change_dir( ".." );
-
-	}
-	catch ( GnssMetadata::ApiException &e)
-	{
-		std::cout << "caught API exception: " << e.what( ) << "\n";
-	}
-	catch (std::exception &e)
-	{
-		std::cout << "caught exception: " << e.what( ) << "\n";
-	}
-	catch( ... )
-	{
-		std::cout << "unknown exception\n";
-	}
-		return 0;
-}
