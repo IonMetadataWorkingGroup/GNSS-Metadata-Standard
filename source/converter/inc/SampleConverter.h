@@ -53,10 +53,10 @@ protected:
    bool CreateBlockInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Block* block, BlockInterpreter** blockInterp );
 
 public:
-   SampleConverter( BaseSampleSinkFactory* ssFactory, const bool normalizeSamples = false );
+   SampleConverter( const bool normalizeSamples = false );
    virtual ~SampleConverter(void);
 
-   template<typename sample_base_t>
+   template<typename sample_source_t, typename sample_base_t>
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" );
    void Close();
    void Convert( const uint32_t bytesToProcess = 0 );

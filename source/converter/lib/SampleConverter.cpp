@@ -25,9 +25,9 @@
 #include "SampleInterpreterFactory.h"
 
 
-SampleConverter::SampleConverter(BaseSampleSinkFactory* ssFactory, const bool normalizeSamples):
+SampleConverter::SampleConverter(const bool normalizeSamples):
 mIsOpen(false),
-mSampleSinkFactory(ssFactory),
+mSampleSinkFactory(NULL),
 mBaseLoadPeriod(1),
 // tells the sample converter to normalize samples to +/-1.0 when converting to float/double
 // normalization is configured such that the maximum input value (i.e. 2^QuantBits) maps to +1.0
@@ -60,6 +60,8 @@ void SampleConverter::Close()
          mLaneSources.erase(*It);
       }
       
+      //delete the sampel sink factory
+      delete mSampleSinkFactory;
       
    }
    mIsOpen = false;

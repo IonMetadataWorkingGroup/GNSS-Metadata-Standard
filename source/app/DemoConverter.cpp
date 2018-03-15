@@ -205,17 +205,16 @@ int Convert( std::string xmlFileName )
       printf("Could not load metadata. Terminating.\n");
       return -1;
    }
-
-   //create the factory for the sample-sinks used in the converter
-   //
-   // Dump the samples to file
-   SampleSinkFactory< SampleFileSink<sample_base_t> > sampleSinkFactory;
-
+   
    //create the converter
-   SampleConverter spcv( &sampleSinkFactory );
-
+   SampleConverter spcv;
+   
+   //define what sort of sample converter we want: create a 'SampleSinkFactory' that makes 'SampleFileSinks' writing type 'sample_base_t'
+   typedef SampleSinkFactory<SampleFileSink<sample_base_t>> sample_sink_factory;
+   
    //open the Metadata Converter
-   spcv.Open<sample_base_t>( md );
+   spcv.Open< sample_sink_factory, sample_base_t>( md );
+   
 
    //perform the conversion, in parts of 1ms
    for( int i=0; i<200; i++ )
@@ -248,18 +247,16 @@ int ComputeStatistics( std::string xmlFileName )
       return -1;
    }
 
-   //create the factory for the sample-sinks used in the converter
-   //
-   // Compute statistics of the samples:
-   SampleSinkFactory<SampleStatisticsSink<sample_base_t> > sampleSinkFactory;
-
-
    //create the converter
-   SampleConverter spcv( &sampleSinkFactory );
-
+   SampleConverter spcv;
+   
+   //define what sort of sample converter we want: create a 'SampleSinkFactory' that makes 'SampleStatisticsSink' operating on type 'sample_base_t'
+   typedef SampleSinkFactory<SampleStatisticsSink<sample_base_t>> sample_sink_factory;
+   
    //open the Metadata Converter
-   spcv.Open<sample_base_t>( md );
-
+   spcv.Open< sample_sink_factory, sample_base_t>( md );
+   
+   
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
    {
@@ -292,9 +289,9 @@ int FrontEnd( std::string xmlFileName )
    }
 
    //create the factory for the sample-sinks used in the converter, this is just a set of named buffers
-   SampleFrontEnd<sample_base_t> frontEnd;
+   SampleFrontEnd frontEnd;
    //open the Metadata Converter
-   frontEnd.template Open<sample_base_t>( md );
+   frontEnd.Open<sample_base_t>( md );
 
    //load 1ms
    frontEnd.Load( 0.001 );
@@ -312,7 +309,7 @@ int FrontEnd( std::string xmlFileName )
    {
       std::string             sourceName  = src_it->first;
       const SampleSource*     pSource     = frontEnd.GetSource( sourceName );
-      const SampleStreamInfo* pSourceInfo = frontEnd.GetSampleStreamInfo( sourceName );
+      const SampleStreamInfo* pSourceInfo = frontEnd.GetSourceInfo( sourceName );
 
       pSourceInfo->Print();
 

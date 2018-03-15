@@ -48,9 +48,8 @@ public:
    SampleBuffer( std::string fileName );
    virtual ~SampleBuffer(void);
 
-   void Flush();
+   void Clear();
    void Close();
-
    
 };
 

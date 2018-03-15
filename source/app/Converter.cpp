@@ -110,16 +110,14 @@ int Convert( std::string xmlFileName )
       return -1;
    }
 
-   //create the factory for the sample-sinks used in the converter
-   //
-   // Dump the samples to file
-   SampleSinkFactory<SampleFileSink<sample_base_t> > sampleSinkFactory;
-
    //create the converter
-   SampleConverter spcv( &sampleSinkFactory );
+   SampleConverter spcv;
 
+   //define what sort of sample converter we want: create a 'SampleSinkFactory' that makes 'SampleFileSinks' writing type 'sample_base_t'
+   typedef SampleSinkFactory<SampleFileSink<sample_base_t>> sample_sink_factory;
+   
    //open the Metadata Converter
-   spcv.Open<sample_base_t>( md );
+   spcv.Open< sample_sink_factory, sample_base_t>( md );
 
    //perform the conversion
    spcv.Convert();

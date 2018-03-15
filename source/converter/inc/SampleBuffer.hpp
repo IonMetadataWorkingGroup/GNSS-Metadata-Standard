@@ -33,7 +33,7 @@ template<typename sample_base_t>
 SampleBuffer<sample_base_t>::~SampleBuffer(void)
 {
    //flush the stream
-   Flush();
+   Clear();
    
    //close the stream, if it is not done so already.
    Close();
@@ -62,12 +62,12 @@ void SampleBuffer<sample_base_t>::Close()
    
    this->mIsOpen = false;
 
-   Flush();
+   Clear();
 
 }
 
 template<typename sample_base_t>
-void SampleBuffer<sample_base_t>::Flush()
+void SampleBuffer<sample_base_t>::Clear()
 {
 
    if( !this->mIsOpen )

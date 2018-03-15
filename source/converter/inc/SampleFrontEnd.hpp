@@ -19,52 +19,47 @@
  */
 #include "SampleFrontEnd.h"
 
-template<typename sample_base_t>
-const SampleSource* SampleFrontEnd<sample_base_t>::GetSource( const std::string sinkName ) const
+const SampleSource* SampleFrontEnd::GetSource( const std::string sinkName ) const
 {
-   
-   std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>>::const_iterator mit = this->mSampleSinks.find( sinkName );
-   
-   if( mit == this->mSampleSinks.end() )
+
+   if( ! mSampleSinkFactory->HasSampleSink( sinkName ) )
    {
       printf("Error: cannot find sample source!\n");
       return NULL;
    }
    
-   const SampleSource* sampleSource = dynamic_cast<const SampleSource*>( mit->second.first );
+   const SampleSource* sampleSource = dynamic_cast<const SampleSource*>( mSampleSinkFactory->GetSampleSink( sinkName ) );
    
    return sampleSource;
  
 }
 
-template<typename sample_base_t>
-const SampleStreamInfo* SampleFrontEnd<sample_base_t>::GetSourceInfo( const std::string sinkName ) const
+const SampleStreamInfo* SampleFrontEnd::GetSourceInfo( const std::string sinkName ) const
 {
    
-   std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>>::const_iterator mit = this->mSampleSinks.find( sinkName );
-   
-   if( mit == this->mSampleSinks.end() )
+   if( ! mSampleSinkFactory->HasSampleSink( sinkName ) )
    {
       printf("Error: cannot find sample source!\n");
       return NULL;
    }
    
-   return mit->second.second;
+   return mSampleSinkFactory->GetSampleStreamInfo( sinkName );
  
 }
 
 
-template<typename sample_base_t>
-std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > SampleFrontEnd<sample_base_t>::GetSources( ) const
+std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > SampleFrontEnd::GetSources( ) const
 {
 
    const SampleSource* pSampleBuff;
    std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > sourceMap;
    
-   for(std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>>::const_iterator mit = this->mSampleSinks.begin(); mit != this->mSampleSinks.end(); mit++)
+   sampleSinkInfo_map_t    sinkMap = mSampleSinkFactory->GetSampleSinkInfoMap();
+   for(sampleSinkInfo_map_t::iterator sinkIt = sinkMap.begin(); sinkIt != sinkMap.end(); sinkIt++)
    {
-      pSampleBuff = dynamic_cast<const SampleSource*>( mit->second.first );
-      sourceMap[ mit->first ] = std::make_pair( pSampleBuff, mit->second.second );
+      pSampleBuff = dynamic_cast<const SampleSource*>( sinkIt->second.first );
+      
+      sourceMap[ sinkIt->first ] = std::make_pair( pSampleBuff, sinkIt->second.second );
    }
    
    return sourceMap;
@@ -72,18 +67,19 @@ std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> >
 }
 
 
-template<typename sample_base_t>
-void SampleFrontEnd<sample_base_t>::Clear(  )
+void SampleFrontEnd::Clear(  )
 {
    
    //temporary pointer
-   SampleBuffer<sample_base_t>* pSampleBuff;
+   SampleSource* pSampleSource;
+   
+   sampleSinkInfo_map_t    sinkMap = mSampleSinkFactory->GetSampleSinkInfoMap();
 
-   for(std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>>::iterator mit = this->mSampleSinks.begin(); mit != this->mSampleSinks.end(); mit++)
+   for(sampleSinkInfo_map_t::iterator sinkIt = sinkMap.begin(); sinkIt != sinkMap.end(); sinkIt++)
    {
-      pSampleBuff = dynamic_cast<SampleBuffer<sample_base_t>*>( mit->second.first );
-      if( pSampleBuff )
-         pSampleBuff->Flush();
+      pSampleSource = dynamic_cast<SampleSource*>( sinkIt->second.first );
+      if( pSampleSource )
+         pSampleSource->Clear();
    }
  
 }

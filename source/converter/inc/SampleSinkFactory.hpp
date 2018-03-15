@@ -47,7 +47,7 @@ void SampleSinkFactory<sample_sink_t>::TryGetSampleSink(const std::string sinkNa
       std::string fileName = sinkName + ".dat";
       mSampleSinks[sinkName]= std::make_pair( new sample_sink_t( fileName ), new SampleStreamInfo );
    }
-
+   
 }
 
 template<typename sample_sink_t>

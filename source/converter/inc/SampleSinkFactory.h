@@ -26,15 +26,42 @@
 #include "SampleSink.h"
 #include "SampleStreamInfo.h"
 
+typedef std::map< std::string, std::pair<SampleSink*,SampleStreamInfo*> > sampleSinkInfo_map_t;
+
 class BaseSampleSinkFactory
 {
-
+protected:
+   std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>> mSampleSinks;
+   
 public:
    BaseSampleSinkFactory(){};
    virtual ~BaseSampleSinkFactory(){};
+   
    virtual SampleSink* GetSampleSink(const std::string sinkName) = 0;
    virtual SampleStreamInfo* GetSampleStreamInfo(const std::string sinkName) = 0;
 
+   bool HasSampleSink(const std::string sinkName)
+   {
+      //if we don't aleady have a SampleSink for this stream, then create one
+      if( mSampleSinks.find( sinkName ) == mSampleSinks.end() )
+      {
+         return false;
+      }
+      return true;
+   }
+   
+   sampleSinkInfo_map_t GetSampleSinkInfoMap()
+   {
+      sampleSinkInfo_map_t sinkMap;
+      
+      for(std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>>::const_iterator mit = mSampleSinks.begin(); mit != mSampleSinks.end(); mit++)
+      {
+         sinkMap[ mit->first ] = std::make_pair( mit->second.first, mit->second.second );
+      }
+      
+      return sinkMap;
+   };
+   
 };
 
 
@@ -43,14 +70,14 @@ class SampleSinkFactory : public BaseSampleSinkFactory
 {
 
 protected:
-   std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>> mSampleSinks;
+   
    void TryGetSampleSink(const std::string sinkName);
 
 public:
    SampleSinkFactory();
    ~SampleSinkFactory();
 
-   SampleSink* GetSampleSink(const std::string sinkName);
+   SampleSink*       GetSampleSink(const std::string sinkName);
    SampleStreamInfo* GetSampleStreamInfo(const std::string sinkName);
 	
 };

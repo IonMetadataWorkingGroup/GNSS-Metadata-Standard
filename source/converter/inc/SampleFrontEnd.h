@@ -25,8 +25,7 @@
 #include "SampleBuffer.h"
 #include "SampleConverter.h"
 
-template<typename sample_base_t>
-class SampleFrontEnd : public SampleSinkFactory< SampleBuffer<sample_base_t> >, public SampleConverter
+class SampleFrontEnd : public SampleConverter
 {
 
 public:
@@ -37,6 +36,13 @@ public:
    SampleConverter(this)
    {};
 
+   template<typename sample_base_t>
+   bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" )
+   {
+      typedef SampleSinkFactory<SampleBuffer<sample_base_t>> frontend_sinkfactory_t;
+      return SampleConverter::Open<frontend_sinkfactory_t,sample_base_t>( md, path_prefix );
+   };
+   
    // return a SampelSource by name
    const SampleSource*     GetSource(const std::string sinkName) const;
    const SampleStreamInfo* GetSourceInfo( const std::string sinkName ) const;

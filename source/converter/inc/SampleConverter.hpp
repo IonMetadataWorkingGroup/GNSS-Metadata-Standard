@@ -23,7 +23,7 @@
 #include "SampleStatisticsSink.h"
 #include <math.h>
 
-template<typename sample_base_t>
+template<typename sample_source_t, typename sample_base_t>
 bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix )
 {
    std::string fullpath;
@@ -32,6 +32,9 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
    {
       throw std::runtime_error("Error: Already open");
    }
+   
+   //assign a sample sink factory
+   mSampleSinkFactory = new sample_source_t();
 
    //find the files
    for( GnssMetadata::FileList::iterator  flIt = md.Files().begin(); flIt != md.Files().end(); ++flIt)
