@@ -110,11 +110,12 @@ uint64_t BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
       //packedFile.Skip( mHeaderBytes );
       if( mHeaderBytes > 0 )
       {
-         std::ofstream hfile("headers.dat",std::ios::app);
+         std::ofstream hfile("headers.dat", std::ios::out | std::ios::binary | std::ios::app );
          std::vector<uint8_t> headerBytes;
          headerBytes.resize(mHeaderBytes);
          packedFile.Get( &headerBytes[0], mHeaderBytes );
          hfile.write(reinterpret_cast<const char*>(&headerBytes[0]), mHeaderBytes);
+         hfile.flush();
       }
    }
    

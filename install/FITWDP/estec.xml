@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
+    
+	<lane id="RFI-Mon">
+        
+		<bandsrc idband="L1" idsrc="RoofAntenn"/>
+		<bandsrc idband="L5" idsrc="RoofAntenn"/>
+        
+		<system id="FITWDP"/>
+        
+		<block>
+            <cycles>65536</cycles>
+            <sizeheader>512</sizeheader>
+            <sizefooter>0</sizefooter>
+			<chunk>
+            
+             <sizeword>2</sizeword>
+             <countwords>1</countwords>
+             <endian>Little</endian>
+             <padding>Tail</padding>
+             <wordshift>Undefined</wordshift>
+				<lump>
+									
+					<stream id="L1">
+						<ratefactor>1</ratefactor>
+						<quantization>1</quantization>
+						<packedbits>2</packedbits>
+						<alignment>Left</alignment>
+						<shift>Left</shift>
+						<format>InQn</format>
+						<encoding>SIGN</encoding>
+						<band id="L1"/>
+					</stream>
+
+					<stream id="L5">
+						<ratefactor>1</ratefactor>
+						<quantization>1</quantization>
+						<packedbits>2</packedbits>
+						<alignment>Left</alignment>
+						<shift>Left</shift>
+						<format>InQn</format>
+						<encoding>SIGN</encoding>
+						<band id="L5"/>
+					</stream>
+					
+                </lump>
+            </chunk>		
+        </block>
+    </lane>
+	
+    <system id="FITWDP">
+        <freqbase format="MHz">24.0</freqbase>
+        <equipment>FITWDP</equipment>
+        <source id="RoofAntenna">
+            <type>Patch</type>
+            <polarization>RHCP</polarization>
+            <idcluster>Antenna</idcluster>
+        </source>
+        <cluster id="Antenna"/>
+    </system>
+	
+	<band id="L1">
+		<centerfreq format="GHz">1.575</centerfreq>
+		<translatedfreq format="kHz">420.0</translatedfreq>
+		<delaybias format="sec">0.0</delaybias>
+		<bandwidth format="MHz">24.0</bandwidth>
+	</band>		
+	<band id="L5">
+		<centerfreq format="GHz">1.176</centerfreq>
+		<translatedfreq format="kHz">450.0</translatedfreq>
+		<delaybias format="sec">0.0</delaybias>
+		<bandwidth format="MHz">24.0</bandwidth>
+	</band>		
+
+	<session id="0">
+		<toa>2015-04-08T12:52:45Z</toa>
+		<position lat="21.004557925" lon="105.8439199" height="46.600"/>
+		<contact>Aiden Morrison</contact>
+		<campaign>ESTEC RFI Monitoring</campaign>
+		<scenario>Continuous Monitoring</scenario>
+	</session>
+    
+	<file>
+		<url>estec.dat</url>
+		<timestamp>2015-04-08T17:30:0.0Z</timestamp>
+        <owner>SINTEF</owner>
+        <lane id="RFI-Mon"/>
+    </file>
+
+</metadata>

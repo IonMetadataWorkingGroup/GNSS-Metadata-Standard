@@ -28,7 +28,6 @@
 class BlockInterpreter
 {
 
-
 protected:	
 
    uint32_t            mCycles;
@@ -49,7 +48,6 @@ public:
    virtual uint64_t InterpretChunks( BinaryFileSource& packedFile );
    
    std::vector<Chunk*>& ChunkInterpreters();
-   
    
    double GetChunkPeriod() const;
    void SetChunkPeriod(const double chunkPeriod);

@@ -9,7 +9,7 @@ if ismac
 elseif isunix
     cmdString  = ['../'   binName ' ' xmlFileName ' ' outputType];
 elseif ispc
-    cmdString  = ['../'   binName ' ' xmlFileName ' ' outputType];
+    cmdString  = ['..\\'   binName ' ' xmlFileName ' ' outputType];
 else
     disp('Operating system not supported\nPlease manually modify script (check_converter.m : line 18) to continue.\n')
     return;

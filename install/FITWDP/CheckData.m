@@ -42,10 +42,6 @@ else
 end
 
 
-
-
-
-
 fileL5Original = fopen('L5_ref.dat', 'rb');
 
 dataL5Original = fread( fileL5Original, nSamples, origFileDataType );
@@ -76,8 +72,6 @@ else
         fprintf('File L5 Missing!\n')
     end
 end
-
-
 
 
 
@@ -113,8 +107,6 @@ else
         fprintf('File Header Missing!\n')
     end
 end
-
-
 
 fclose all;
 

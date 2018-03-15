@@ -9,7 +9,7 @@
 %  'CleanData.m': should delete the converted files 
 
 
-testDirectories = { 'CODC' , 'FHG', 'FITWDP', 'IFEN', 'JRC', 'TRIGR' };
+testDirectories = {'FITWDP'};%{ 'CODC' , 'FHG', 'FITWDP', 'IFEN', 'JRC', 'TRIGR' };
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Purge all of the old converted sample files, to ensure that the 
@@ -29,28 +29,19 @@ fprintf('Done.\n');
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Run the Converter
-
+doSilent = 1;
 binName    = 'Converter';
 testDir    = pwd;
 
 % check the system (xmlread not supported under Octave) 
-isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
-isMatlab = ~isOctave;
-% 
-% % run the converter 
-% fprintf('Running the test converter ("%s"): ',binName);
-% installDir = pwd();
-% system(cmdString);
-% cd(testDir);
-% fprintf('Done.\n');
+%isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+%isMatlab = ~isOctave;
 
 fprintf('Running the test converter ("%s"): ',binName);
 for t=1:numel(testDirectories)
        
-    cd(testDirectories{t});
-    
+    cd(testDirectories{t});  
     RunConverter( doSilent );
-    
     cd('..');
 
 end
@@ -59,7 +50,6 @@ fprintf('\Conversion completed.\n\n');
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Check each of the files
-doSilent = 1;
 fprintf('Checking the converted output: \n');
 for t=1:numel(testDirectories)
     
