@@ -40,7 +40,7 @@ protected:
 
    //std::map<std::string,SampleSink*> mSampleSinks;
    std::vector<LaneInterpreter*>             mLaneInterps;
-   std::map<LaneInterpreter*,BinaryFileSource*> mLaneFiles;
+   std::map<LaneInterpreter*,BinarySource*>  mLaneSources;
    
    double mBaseLoadPeriod;
    

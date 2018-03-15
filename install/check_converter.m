@@ -9,7 +9,7 @@
 %  'CleanData.m': should delete the converted files 
 
 
-testDirectories = {'FITWDP'};%{ 'CODC' , 'FHG', 'FITWDP', 'IFEN', 'JRC', 'TRIGR' };
+testDirectories = { 'CODC' , 'FHG', 'FITWDP', 'IFEN', 'JRC', 'TRIGR' };
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Purge all of the old converted sample files, to ensure that the 

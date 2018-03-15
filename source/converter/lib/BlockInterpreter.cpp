@@ -63,7 +63,7 @@ std::vector<Chunk*>& BlockInterpreter::ChunkInterpreters()
 };
 
 
-uint64_t BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint64_t bytesToProcess )
+uint64_t BlockInterpreter::Interpret( BinarySource* packedFile, uint64_t bytesToProcess )
 {
 
    uint64_t bytesProcessed   = 0;
@@ -99,10 +99,10 @@ uint64_t BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint64_t byt
 
 
 
-uint64_t BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
+uint64_t BlockInterpreter::InterpretChunks( BinarySource* packedFile )
 {
 
-   uint64_t startBytes = packedFile.FilePos();
+   uint64_t startBytes = packedFile->SourcePos();
    
    if(mChunkIndex == 0)
    {
@@ -113,7 +113,7 @@ uint64_t BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
          std::ofstream hfile("headers.dat", std::ios::out | std::ios::binary | std::ios::app );
          std::vector<uint8_t> headerBytes;
          headerBytes.resize(mHeaderBytes);
-         packedFile.Get( &headerBytes[0], mHeaderBytes );
+         packedFile->Get( &headerBytes[0], mHeaderBytes );
          hfile.write(reinterpret_cast<const char*>(&headerBytes[0]), mHeaderBytes);
          hfile.flush();
       }
@@ -129,7 +129,7 @@ uint64_t BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
       uint32_t nBytes = (*ckIt)->BytesPerChunk();
       
       //read one chunk
-      if( packedFile.Get( pChunk, nBytes ) == static_cast<std::streamsize>(nBytes) )
+      if( packedFile->Get( pChunk, nBytes ) == static_cast<std::streamsize>(nBytes) )
       {
          (*ckIt)->Interpret( );
       }
@@ -144,12 +144,12 @@ uint64_t BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
    if(mChunkIndex == mCycles)
    {
       //finally skip the footer-bytes
-      packedFile.Skip( mFooterBytes );
+      packedFile->Skip( mFooterBytes );
       mChunkIndex = 0;
    }
    
    //a full chunk-set was read, return number of bytes read
-   return ( packedFile.FilePos() - startBytes );
+   return ( packedFile->SourcePos() - startBytes );
 }
 
 

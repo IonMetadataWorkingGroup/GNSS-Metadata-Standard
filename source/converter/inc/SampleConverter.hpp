@@ -44,7 +44,6 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
    SampleStreamInfo commonSampleInfo;
    
    //////////////////////////////////////////////////////////////
-   // processs it as though it is a non-standard/custom format
    for( GnssMetadata::LaneList::iterator  lnIt = md.Lanes().begin(); lnIt != md.Lanes().end(); ++lnIt)
    {
 
@@ -91,12 +90,13 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
       //JTC ToDo - check that it is ok!
       mLaneInterps.push_back( laneInterpreter );
 	  
-      //now open the first file for each lane
-      mLaneFiles[ mLaneInterps.back() ] = new BinaryFileSource;
-      //and open the file for reading binary
-	  fullpath = path_prefix + mLaneInterps.back()->FileURL();
-      mLaneFiles[ mLaneInterps.back() ]->Open( fullpath );
-      if( !mLaneFiles[ mLaneInterps.back() ]->IsOpen() )
+      //now open the first file for each lane  - note that we might source the data from somehwere else (other than a file)
+      //and so might create some other sort of BinarySource, provided it inherits from BinarySource()
+      mLaneSources[ mLaneInterps.back() ] = new BinaryFileSource;
+      //and open the source
+      fullpath = path_prefix + mLaneInterps.back()->FileURL();
+      mLaneSources[ mLaneInterps.back() ]->Open( fullpath );
+      if( !mLaneSources[ mLaneInterps.back() ]->IsOpen() )
       {
 		 throw std::runtime_error( "SampleConverter: Could not open file" );
       }
@@ -183,7 +183,7 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
       //create the cunk interpreter using the md and info form ckIt
       switch( ckIt->SizeWord() )
       {
-      case 1:
+      case 1:               //templated by <chunk-type, sample-output-type>
          CreateChunkInterpreter< uint8_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
          break;
       case 2:

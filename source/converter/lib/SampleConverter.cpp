@@ -55,9 +55,9 @@ void SampleConverter::Close()
       for( std::vector<LaneInterpreter*>::iterator It = mLaneInterps.begin(); It != mLaneInterps.end(); ++It )
       {
          delete (*It);
-         mLaneFiles[*It]->Close();
-         delete mLaneFiles[*It];
-         mLaneFiles.erase(*It);
+         mLaneSources[*It]->Close();
+         delete mLaneSources[*It];
+         mLaneSources.erase(*It);
       }
       
       
@@ -100,7 +100,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
       {
          BlockInterpreter* block = (*It);
          //read the entire block
-         bytesProcessed = block->Interpret( *mLaneFiles[*lnIt], bytesToProcess );
+         bytesProcessed = block->Interpret( mLaneSources[*lnIt], bytesToProcess );
       }
 
    }//end for( lnIt )
@@ -154,7 +154,7 @@ bool SampleConverter::Load( const double secondsToProcess )
          uint32_t chunksLoaded = 0;
          do
          {
-            readBlockOK = block->InterpretChunks( *mLaneFiles[laneInterpreter] );
+            readBlockOK = block->InterpretChunks( mLaneSources[laneInterpreter] );
             chunksLoaded++;
          }
          while( readBlockOK && chunksLoaded < chunksToLoad );

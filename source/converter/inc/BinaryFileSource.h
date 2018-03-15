@@ -21,78 +21,30 @@
 #ifndef CLASS_BinaryFileSource
 #define CLASS_BinaryFileSource
 
-#include <vector>
+#include "BinarySource.h"
 #include <fstream>
-#include <string>
-#include <cstring>
-
-#define BinaryFileSource_READ_SIZE 16*1024*1024
-
-#undef min
-
-//class BinarySource
-//{
-//
-//};
 
 
-class BinaryFileSource
+class BinaryFileSource : public BinarySource
 {
    
 protected:
-   
-   bool mIsOpen;
    std::ifstream*                 mBinfile;
-   std::vector<uint8_t>           mData;
-   std::vector<uint8_t>::iterator mStartBuffer;
-   std::vector<uint8_t>::iterator mEndBuffer;
-   uint64_t                       mFilePos;
-   
-public:
-   BinaryFileSource():
-   mIsOpen(false), mBinfile(NULL), mFilePos(0)
-   {};
-   
-   BinaryFileSource(const std::string filename)
-   {
-      Open(filename);
-   };
-   
-   ~BinaryFileSource()
-   {
-      Close();
-   }
-   
-   bool Open(const std::string filename)
+
+   bool DoOpen(const std::string streamName)
    {
       
       mBinfile = new std::ifstream;
-      mBinfile->open( filename, std::ios::binary );
+      mBinfile->open( streamName, std::ios::binary );
       
       mIsOpen = mBinfile->is_open();
       
-      if( mIsOpen )
-      {
-         mData.resize(BinaryFileSource_READ_SIZE);
-         mStartBuffer = mData.end();
-         mEndBuffer   = mStartBuffer;
-      }
+
       
       return mIsOpen;
    };
    
-   
-   uint64_t FilePos()
-   {
-      return mFilePos;
-   }
-   
-   size_t Skip(size_t bytesToSkip)
-   {
-      return Get(NULL,bytesToSkip);
-   }
-   
-   void Close()
+   void DoClose()
    {
       if( mBinfile != NULL)
       {
@@ -100,12 +52,7 @@ public:
          delete mBinfile;
          mBinfile = NULL;
       }
-      mIsOpen = false;
-   };
-   
-   bool IsOpen() const
-   {
-      return mIsOpen;
+
    };
    
    bool Load()
@@ -114,7 +61,6 @@ public:
       {
          return false;
       }
-      
       //read the data
       mStartBuffer = mData.begin();
       mBinfile->read( reinterpret_cast<char*>(&(*mStartBuffer)) , BinaryFileSource_READ_SIZE);
@@ -123,39 +69,27 @@ public:
       //make sure that we have actually loaded something (we may have reached eof)
       return !(mStartBuffer == mEndBuffer);
    }
+
+public:
+   BinaryFileSource():
+   mBinfile(NULL)
+   {};
    
-   size_t Get( void* pData, size_t requestedBytes )
+   BinaryFileSource(const std::string filename)
    {
-      if( !mIsOpen )
-      {
-         return 0;
-      }
-      
-      size_t deliveredBytes = 0;
-      while( deliveredBytes < requestedBytes )
-      {
-         //make sure we have data
-         if( mStartBuffer == mEndBuffer )
-         {
-            if( !Load() )
-            {
-               break;
-            }
-         }
-         //now copy out the bytes
-         size_t copyBytes = std::min( size_t(requestedBytes-deliveredBytes), size_t(mEndBuffer-mStartBuffer) );
-         
-         if( pData != NULL )
-         {
-            std::memcpy( static_cast<uint8_t*>(pData) + deliveredBytes, &(*mStartBuffer), copyBytes);
-         }
-         mFilePos       += copyBytes;
-         mStartBuffer   += copyBytes;
-         deliveredBytes += copyBytes;
-      }
-      
-      return deliveredBytes;
+      Open(filename);
    };
+   
+   virtual ~BinaryFileSource()
+   {
+      Close();
+   }
+   
+
    
 };
 #endif //CLASS_BinaryFileSource
+
+
+
+
