@@ -78,8 +78,46 @@ else
 end
 
 
+
+
+
+headerBytes = 3*512;
+
+fileHeaderOriginal = fopen('headers_ref.dat', 'rb');
+
+dataHeaderOriginal = fread( fileHeaderOriginal, headerBytes, origFileDataType );
+
+fileHeaderNew = fopen(sprintf('headers.dat'));
+
+if( fileHeaderNew == -1)
+    fprintf('Failed to open input file: FAIL\n')
+    FITWDP_OK = 0;
+    return;
+end
+
+HeaderOK = 0;
+if( fileHeaderNew > 0 )
+    dataHeaderNew = fread( fileHeaderNew, headerBytes, newFileDataType );
+    if( dataHeaderOriginal ==  dataHeaderNew )
+        if(~doSilent)
+            fprintf('File Header OK\n');
+        end
+        HeaderOK = 1;
+    else
+        if(~doSilent)
+            fprintf('File Header Broken!\n');
+        end
+    end
+else
+    if(~doSilent)
+        fprintf('File Header Missing!\n')
+    end
+end
+
+
+
 fclose all;
 
 
-FITWDP_OK = L1OK && L5OK;
+FITWDP_OK = L1OK && L5OK && HeaderOK;
 

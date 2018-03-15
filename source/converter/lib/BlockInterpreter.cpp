@@ -107,7 +107,15 @@ uint64_t BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
    if(mChunkIndex == 0)
    {
       //first skip the header-bytes
-      packedFile.Skip( mHeaderBytes );
+      //packedFile.Skip( mHeaderBytes );
+      if( mHeaderBytes > 0 )
+      {
+         std::ofstream hfile("headers.dat",std::ios::app);
+         std::vector<uint8_t> headerBytes;
+         headerBytes.resize(mHeaderBytes);
+         packedFile.Get( &headerBytes[0], mHeaderBytes );
+         hfile.write(reinterpret_cast<const char*>(&headerBytes[0]), mHeaderBytes);
+      }
    }
    
    //now cycle through each chunk in the block and interpret

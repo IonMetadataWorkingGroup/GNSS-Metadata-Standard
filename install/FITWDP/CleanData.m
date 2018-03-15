@@ -5,4 +5,5 @@ function CleanData( )
 
 delete('L1.dat');
 delete('L5.dat');
+delete('headers.dat');
 
