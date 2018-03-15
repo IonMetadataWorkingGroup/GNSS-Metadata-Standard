@@ -30,17 +30,19 @@ class SampleFrontEnd : public SampleConverter
 
 public:
 
+   //typedef for a map indexed by Stream name, and containing a pair: sampleSource and an info-structure
 	typedef std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > taggedSampleStreamWithInfo;
 
+   //constructor
    SampleFrontEnd():
    SampleConverter(this)
    {};
 
+   // when calling Open() we define the type of the output samples (int8_t, float, double, ... )
    template<typename sample_base_t>
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" )
    {
-      typedef SampleSinkFactory<SampleBuffer<sample_base_t>> frontend_sinkfactory_t;
-      return SampleConverter::Open<frontend_sinkfactory_t,sample_base_t>( md, path_prefix );
+      return SampleConverter::Open<SampleBuffer,sample_base_t>( md, path_prefix );
    };
    
    // return a SampelSource by name

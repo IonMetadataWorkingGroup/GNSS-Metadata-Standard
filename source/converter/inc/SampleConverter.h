@@ -38,31 +38,44 @@ protected:
    bool                   mIsOpen;
    BaseSampleSinkFactory* mSampleSinkFactory;
 
-   //std::map<std::string,SampleSink*> mSampleSinks;
+   // interpreters for the lane objects - one per lane
    std::vector<LaneInterpreter*>             mLaneInterps;
+   // a map of binary file sources, one per lane interpreter
    std::map<LaneInterpreter*,BinarySource*>  mLaneSources;
    
+   // shortest common load period (in integer samples) for all lanes/blocks/chunks
    double mBaseLoadPeriod;
    
-   bool mNormalizeSampleStreams;//indicate whether or not to scale output samples to +/-1.0;
-   
-   //protected member functions, to keep the code clean and clear
-   template<typename chunk_t, typename sample_base_t>
-   bool CreateChunkInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp  );
+   //indicate whether or not to scale output samples to +/-1.0;
+   bool mNormalizeSampleStreams;
+
+   //block interpreter, creates one block interpeter object per block type, templated to sample output type (int8_t, float, etc...)
    template<typename sample_base_t>
    bool CreateBlockInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Block* block, BlockInterpreter** blockInterp );
+   
+   // chunk interpreter, templated to the chunk type chunk_t -> uint8_t, uint16_t, uint32_t ...
+   // second template argument defines the sample output type (int8_t, float, etc...)
+   template<typename chunk_t, typename sample_base_t>
+   bool CreateChunkInterpreter( GnssMetadata::Metadata& md, SampleStreamInfo commonSampleInfo, GnssMetadata::Chunk* chunk, Chunk** chunkInterp  );
 
 public:
    SampleConverter( const bool normalizeSamples = false );
    virtual ~SampleConverter(void);
 
-   template<typename sample_source_t, typename sample_base_t>
+   // when opening the sampleconverter, we define the samplesink (where the samples go: file/buffer etc.)
+   // and also define the output sample type: int8_t, float, etc...
+   template <template<typename > class sample_sink_t, typename sample_base_t>
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" );
-   void Close();
+   void Close(); //close, tidy up
+
+   //convert at least 'bytesToProcess' of the input Lane file:
    void Convert( const uint32_t bytesToProcess = 0 );
-   bool Load( const double secondsToLoad );
+
+   // query for the minimum interval of time that spans an integer number of samples on all streams
    double BaseLoadPeriod() const;
 
+   // load a block of data from the Lane file such that we have at least 'secondsToLoad' with of samples
+   bool Load( const double secondsToLoad );
  
 };
 

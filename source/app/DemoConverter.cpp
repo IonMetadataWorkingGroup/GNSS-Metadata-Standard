@@ -209,11 +209,12 @@ int Convert( std::string xmlFileName )
    //create the converter
    SampleConverter spcv;
    
-   //define what sort of sample converter we want: create a 'SampleSinkFactory' that makes 'SampleFileSinks' writing type 'sample_base_t'
-   typedef SampleSinkFactory<SampleFileSink<sample_base_t>> sample_sink_factory;
-   
    //open the Metadata Converter
-   spcv.Open< sample_sink_factory, sample_base_t>( md );
+   // Two argument template:
+   // i)  define what sort of sample converter we want:
+   //     'SampleFileSink' will stream received samples to file
+   // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
+   spcv.Open< SampleFileSink, sample_base_t>( md );
    
 
    //perform the conversion, in parts of 1ms
@@ -250,11 +251,12 @@ int ComputeStatistics( std::string xmlFileName )
    //create the converter
    SampleConverter spcv;
    
-   //define what sort of sample converter we want: create a 'SampleSinkFactory' that makes 'SampleStatisticsSink' operating on type 'sample_base_t'
-   typedef SampleSinkFactory<SampleStatisticsSink<sample_base_t>> sample_sink_factory;
-   
    //open the Metadata Converter
-   spcv.Open< sample_sink_factory, sample_base_t>( md );
+   // Two argument template:
+   // i)  define what sort of sample converter we want:
+   //     'SampleStatisticsSink' will compute stats based on the received samples
+   // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
+   spcv.Open< SampleStatisticsSink, sample_base_t>( md );
    
    
    //perform the conversion, in parts of 1ms
@@ -290,7 +292,7 @@ int FrontEnd( std::string xmlFileName )
 
    //create the factory for the sample-sinks used in the converter, this is just a set of named buffers
    SampleFrontEnd frontEnd;
-   //open the Metadata Converter
+   //open the Metadata Converter, tell it to use a sample_base_t internal type for the samples
    frontEnd.Open<sample_base_t>( md );
 
    //load 1ms
