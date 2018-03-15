@@ -173,6 +173,8 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
                                        static_cast<uint32_t>( block->SizeHeader() ),
                                        static_cast<uint32_t>( block->SizeFooter() )
                                        );
+   
+   //mSampleSinkFactory->GetSampleSink("block"); //JTC Complete me
          
    for( GnssMetadata::ChunkList::iterator ckIt = block->Chunks().begin(); ckIt != block->Chunks().end(); ++ckIt )
    {

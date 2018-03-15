@@ -44,20 +44,20 @@ set_target_properties(TestAPI PROPERTIES
 )
  
 ###############################################################################
-set( TestConverter_sources 
-    TestConverter.cpp
+set( DemoConverter_sources 
+    DemoConverter.cpp
 )
-add_executable(TestConverter ${TestConverter_sources} )
-target_link_libraries(TestConverter cnv api xml )
-set_target_properties( TestConverter
+add_executable(DemoConverter ${DemoConverter_sources} )
+target_link_libraries(DemoConverter cnv api xml )
+set_target_properties( DemoConverter
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/install"
 )
 # change the path so as not to include Debug/Release
-set_target_properties(TestConverter PROPERTIES
+set_target_properties(DemoConverter PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/install"
 )
-set_target_properties(TestConverter PROPERTIES
+set_target_properties(DemoConverter PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/install"
 )
 

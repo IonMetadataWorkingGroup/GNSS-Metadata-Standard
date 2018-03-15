@@ -40,10 +40,11 @@ protected:
    std::vector<uint8_t>           mData;
    std::vector<uint8_t>::iterator mStartBuffer;
    std::vector<uint8_t>::iterator mEndBuffer;
+   uint64_t                       mFilePos;
    
 public:
    BinaryFileSource():
-   mIsOpen(false), mBinfile(NULL)
+   mIsOpen(false), mBinfile(NULL), mFilePos(0)
    {};
    
    BinaryFileSource(const std::string filename)
@@ -73,6 +74,12 @@ public:
       
       return mIsOpen;
    };
+   
+   
+   uint64_t FilePos()
+   {
+      return mFilePos;
+   }
    
    size_t Skip(size_t bytesToSkip)
    {
@@ -136,6 +143,7 @@ public:
          {
             std::memcpy( static_cast<uint8_t*>(pData) + deliveredBytes, &(*mStartBuffer), copyBytes);
          }
+         mFilePos       += copyBytes;
          mStartBuffer   += copyBytes;
          deliveredBytes += copyBytes;
       }

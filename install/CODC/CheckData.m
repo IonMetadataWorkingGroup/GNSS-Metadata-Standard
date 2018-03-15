@@ -4,7 +4,7 @@ function CODC_OK = CheckData( doSilent )
 %  0 : fail
 % -1 : not executed
 
-nSamples = 1024*1024;
+nSamples = 1024;
 
 origFileDataType = 'int16';
 newFileDataType  = 'int16';

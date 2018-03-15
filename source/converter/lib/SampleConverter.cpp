@@ -96,24 +96,12 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
    
       //for now, just decode the first Lane
       LaneInterpreter* laneInterpreter= (*lnIt);
-   
-      bool readBlockOK = false;
-      do
+      for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
       {
-   
-         for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
-         {
-            BlockInterpreter* block = (*It);
-            //read the entire block
-            do
-            {
-               readBlockOK = block->Interpret( *mLaneFiles[*lnIt], bytesProcessed, bytesToProcess );
-            }
-            while( readBlockOK );
-         }
-
+         BlockInterpreter* block = (*It);
+         //read the entire block
+         bytesProcessed = block->Interpret( *mLaneFiles[*lnIt], bytesToProcess );
       }
-      while( readBlockOK );
 
    }//end for( lnIt )
 }

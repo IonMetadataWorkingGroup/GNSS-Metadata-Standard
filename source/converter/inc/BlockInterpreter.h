@@ -45,8 +45,8 @@ public:
 	virtual  ~BlockInterpreter();
 
    virtual void AddChunk(Chunk* newChunk);
-   virtual bool Interpret( BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess );
-   virtual bool InterpretChunks( BinaryFileSource& packedFile );
+   virtual uint64_t Interpret( BinaryFileSource& packedFile, uint64_t bytesToProcess );
+   virtual uint64_t InterpretChunks( BinaryFileSource& packedFile );
    
    std::vector<Chunk*>& ChunkInterpreters();
    

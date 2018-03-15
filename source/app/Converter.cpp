@@ -23,7 +23,7 @@ int Convert( std::string xmlFileName );
 int main(int argc, char* argv[])
 {
 
-	if (argc < 2)
+	if (argc < 3)
 	{
 		printf("Call with:\n");
 		printf(" - xml_file (full path)\n");
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	if (validFileOutputType.find(argv[2]) != validFileOutputType.end())
 		fileOutputType = validFileOutputType[argv[2]];
 
-	printf("Parsing file: '%s'", argv[1]);
+	printf("Parsing file: '%s'\n", argv[1]);
 	
 	
 	try
@@ -70,9 +70,6 @@ int main(int argc, char* argv[])
             case kInt32:
                Convert<int32_t>(argv[1]);
                break;
-            //case kInt64:
-               //Convert<int64_t>(argv[1]);
-               //break;
 		      case kFloat:
       	      Convert<float>(argv[1]);
  			      break;
@@ -126,7 +123,6 @@ int Convert( std::string xmlFileName )
 
    //perform the conversion
    spcv.Convert();
-
 
    //close the converter
    spcv.Close();
