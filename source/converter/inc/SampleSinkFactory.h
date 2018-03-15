@@ -44,7 +44,7 @@ class SampleSinkFactory : public BaseSampleSinkFactory
 
 protected:
    std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>> mSampleSinks;
-   void TryGet(const std::string sinkName);
+   void TryGetSampleSink(const std::string sinkName);
 
 public:
    SampleSinkFactory();

@@ -39,7 +39,7 @@ SampleSinkFactory<sample_sink_t>::~SampleSinkFactory()
 }
 
 template<typename sample_sink_t>
-void SampleSinkFactory<sample_sink_t>::TryGet(const std::string sinkName)
+void SampleSinkFactory<sample_sink_t>::TryGetSampleSink(const std::string sinkName)
 {
    //if we don't aleady have a SampleSink for this stream, then create one
    if( mSampleSinks.find( sinkName ) == mSampleSinks.end() )
@@ -54,7 +54,7 @@ template<typename sample_sink_t>
 SampleSink* SampleSinkFactory<sample_sink_t>::GetSampleSink( const std::string sinkName )
 {
 
-   TryGet(sinkName);
+   TryGetSampleSink(sinkName);
    
    return mSampleSinks[sinkName].first;
    
@@ -64,7 +64,7 @@ template<typename sample_sink_t>
 SampleStreamInfo* SampleSinkFactory<sample_sink_t>::GetSampleStreamInfo(const std::string sinkName)
 {
 
-   TryGet(sinkName);
+   TryGetSampleSink(sinkName);
    
    return mSampleSinks[sinkName].second;
    

@@ -30,6 +30,12 @@
 
 #undef min
 
+//class BinarySource
+//{
+//
+//};
+
+
 class BinaryFileSource
 {
    
