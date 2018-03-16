@@ -84,7 +84,7 @@ public:
       return mSourcePos;
    };
 
-   size_t Skip(size_t bytesToSkip)
+   uint32_t Skip(size_t bytesToSkip)
    {
       return Get(NULL,bytesToSkip);
    }
@@ -96,7 +96,7 @@ public:
          return 0;
       }
       
-      size_t deliveredBytes = 0;
+      uint32_t deliveredBytes = 0;
       while( deliveredBytes < requestedBytes )
       {
          //make sure we have data
@@ -108,7 +108,7 @@ public:
             }
          }
          //now copy out the bytes
-         size_t copyBytes = std::min( size_t(requestedBytes-deliveredBytes), size_t(mEndBuffer-mStartBuffer) );
+         uint32_t copyBytes = std::min( uint32_t(requestedBytes-deliveredBytes), uint32_t(mEndBuffer-mStartBuffer) );
          
          if( pData != NULL )
          {

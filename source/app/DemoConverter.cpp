@@ -214,7 +214,7 @@ int Convert( std::string xmlFileName )
    // i)  define what sort of sample converter we want:
    //     'SampleFileSink' will stream received samples to file
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
-   spcv.Open< SampleFileSink, sample_base_t>( md );
+   spcv.Open<SampleFileSink, sample_base_t>( md );
    
 
    //perform the conversion, in parts of 1ms
@@ -256,7 +256,7 @@ int ComputeStatistics( std::string xmlFileName )
    // i)  define what sort of sample converter we want:
    //     'SampleStatisticsSink' will compute stats based on the received samples
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
-   spcv.Open< SampleStatisticsSink, sample_base_t>( md );
+   spcv.Open<SampleStatisticsSink, sample_base_t>( md );
    
    
    //perform the conversion, in parts of 1ms

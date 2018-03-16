@@ -66,7 +66,7 @@ namespace SampleEncoderFunctions
       bool sign =  ( pChunk[chunkIndex] >> (shift+quantization-1) ) & 0x1 ;
 
       //make a mask for the magnitude data (ones for the upper bits)
-      uint32_t signExtension = std::numeric_limits<uint32_t>::max() << quantization;
+      uint32_t signExtension = static_cast<uint32_t>( std::numeric_limits<uint32_t>::max() << quantization );
 
       //either assign the bits or add the sign extension
       uint32_t smpl =  ( sign ?  bits | signExtension : bits );
@@ -90,7 +90,7 @@ namespace SampleEncoderFunctions
 	   bool sign = (pChunk[chunkIndex] >> (shift + quantization - 1)) & 0x1;
 
 	   //make a mask for the magnitude data (ones for the upper bits, noting the << 1 above)
-	   uint32_t signExtension = std::numeric_limits<chunk_t>::max() << (quantization + 1);
+	   uint32_t signExtension = static_cast<uint32_t>( std::numeric_limits<chunk_t>::max() << (quantization + 1) );
       
       //either assign the bits or add the sign extension, offset by +1
       uint32_t smpl =  (sign ? bits | signExtension : bits) + 1;
