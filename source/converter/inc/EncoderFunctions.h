@@ -60,7 +60,7 @@ namespace SampleEncoderFunctions
       chunk_t mask = std::numeric_limits<chunk_t>::max() >> ( 8*sizeof(chunk_t) - (quantization) ); 
 
       //extract the sample bits
-      uint32_t bits = ( pChunk[chunkIndex] >> shift ) & mask;
+      uint32_t bits = static_cast<uint32_t>( ( pChunk[chunkIndex] >> shift ) & mask );
       
       //retrieve the sign of the data
       bool sign =  ( pChunk[chunkIndex] >> (shift+quantization-1) ) & 0x1 ;
@@ -84,7 +84,7 @@ namespace SampleEncoderFunctions
 	   chunk_t mask = std::numeric_limits<chunk_t>::max() >> (8 * sizeof(chunk_t) - (quantization));
 
 	   //extract the sample bits, and multiply by 2
-	   uint32_t bits = ((pChunk[chunkIndex] >> shift) & mask)<<1;
+	   uint32_t bits = static_cast<uint32_t>(  ((pChunk[chunkIndex] >> shift) & mask)<<1 );
 
 	   //retrieve the sign of the data
 	   bool sign = (pChunk[chunkIndex] >> (shift + quantization - 1)) & 0x1;

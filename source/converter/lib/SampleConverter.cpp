@@ -94,7 +94,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
    for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
    {
 
-      uint32_t bytesProcessed = 0;
+      uint64_t bytesProcessed = 0;
    
       //for now, just decode the first Lane
       LaneInterpreter* laneInterpreter= (*lnIt);
@@ -143,7 +143,7 @@ bool SampleConverter::Load( const double secondsToProcess )
       //for now, just decode the first Lane
       LaneInterpreter* laneInterpreter= (*lnIt);
       
-      bool readBlockOK = false;
+      uint64_t readBlockSize = 0;
          
       //for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
       {
@@ -156,12 +156,12 @@ bool SampleConverter::Load( const double secondsToProcess )
          uint32_t chunksLoaded = 0;
          do
          {
-            readBlockOK = block->InterpretChunks( mLaneSources[laneInterpreter] );
+            readBlockSize = block->InterpretChunks( mLaneSources[laneInterpreter] );
             chunksLoaded++;
          }
-         while( readBlockOK && chunksLoaded < chunksToLoad );
+         while( readBlockSize != 0 && chunksLoaded < chunksToLoad );
          
-         readAllOK = readAllOK && ( chunksToLoad == chunksLoaded );
+         readAllOK = (readBlockSize != 0) && ( chunksToLoad == chunksLoaded );
       }
       
       

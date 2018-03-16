@@ -84,7 +84,7 @@ public:
       return mSourcePos;
    };
 
-   uint32_t Skip(size_t bytesToSkip)
+   uint32_t Skip(uint32_t bytesToSkip)
    {
       return Get(NULL,bytesToSkip);
    }

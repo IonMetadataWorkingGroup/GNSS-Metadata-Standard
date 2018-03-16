@@ -215,8 +215,9 @@ namespace SampleFormatFunctions
       uint32_t chunkIndexFirst, chunkIndexSecond;
       ComputeOffsets<chunk_t>( chunkIndex, residualBitIndex, bitWidth, shiftFirst, shiftSecond, chunkIndexFirst, chunkIndexSecond );
       
-      sample_base_t I =  static_cast<int16_t>( (pChunk[chunkIndexFirst]  >> shiftFirst)  & 0xffff );
-      sample_base_t Q =  static_cast<int16_t>( (pChunk[chunkIndexSecond] >> shiftSecond) & 0xffff );
+      //note that sample_base_t should always be int16_t when this is called.
+      sample_base_t I =  static_cast<sample_base_t>( (pChunk[chunkIndexFirst]  >> shiftFirst)  & 0xffff );
+      sample_base_t Q =  static_cast<sample_base_t>( (pChunk[chunkIndexSecond] >> shiftSecond) & 0xffff );
       
       sampleSink->AddSample( I, Q );
       
