@@ -34,7 +34,7 @@ public:
 	typedef std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > taggedSampleStreamWithInfo;
 
    //constructor
-   SampleFrontEnd(){};
+   SampleFrontEnd()  {};
 
    // when calling Open() we define the type of the output samples (int8_t, float, double, ... )
    template<typename sample_base_t>
