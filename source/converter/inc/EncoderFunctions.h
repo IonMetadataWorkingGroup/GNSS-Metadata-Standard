@@ -49,7 +49,7 @@ namespace SampleEncoderFunctions
    template<typename chunk_t, typename sample_base_t> 
    sample_base_t Sign( const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization )
    {
-      return ( (pChunk[chunkIndex] >> shift ) & 0x1 ? -1 : 1 );
+      return static_cast<sample_base_t>( (pChunk[chunkIndex] >> shift ) & 0x1 ? -1 : 1 );
    }
 
    template<typename chunk_t, typename sample_base_t> 
@@ -189,7 +189,7 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t bits = (pChunk[chunkIndex] >> shift) & mask;
 
-	   chunk_t offset = 0x1 << (quantization - 1);
+	   chunk_t offset =  static_cast<chunk_t>(0x1) << (quantization - 1);
 
       //re-center around zero
       sample_base_t ans = static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
@@ -205,7 +205,7 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits, then multiply by 2
 	   chunk_t bits = ((pChunk[chunkIndex] >> shift) & mask)<<1;
 
-	   chunk_t offset = (0x1 << quantization) - 1;
+	   chunk_t offset =  static_cast<chunk_t>( (0x1 << quantization) - 1 );
 
       //re-center around zero
       sample_base_t ans = static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
@@ -222,13 +222,13 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t gray = (pChunk[chunkIndex] >> shift) & mask;
 
-	   for (chunk_t b = 1U << quantization; b > 1; b >>= 1)
+	   for (chunk_t b = static_cast<chunk_t>(0x1) << quantization; b > 1; b >>= 1)
 	   {
 		   if (gray & b)
 			   gray ^= (b >> 1);
 	   }
 
-	   chunk_t offset = 0x1 << (quantization - 1);
+	   chunk_t offset = static_cast<chunk_t>(0x1) << (quantization - 1);
 
       //re-center around zero
       sample_base_t ans = static_cast<sample_base_t>(gray) - static_cast<sample_base_t>(offset);
@@ -244,13 +244,13 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t gray = (pChunk[chunkIndex] >> shift) & mask;
 
-	   for (chunk_t b = 1U << quantization; b > 1; b >>= 1)
+	   for (chunk_t b = static_cast<chunk_t>(0x1) << quantization; b > 1; b >>= 1)
 	   {
 		   if (gray & b)
 			   gray ^= (b >> 1);
 	   }
 
-	   chunk_t offset = (0x1 << quantization) - 1;
+	   chunk_t offset =  static_cast<chunk_t>( (0x1 << quantization) - 1 );
 
       //re-center around zero
       sample_base_t ans = static_cast<sample_base_t>(gray << 1) - static_cast<sample_base_t>(offset);

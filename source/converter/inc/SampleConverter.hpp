@@ -18,6 +18,10 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if defined(_WIN32) || defined(_WIN64) || defined(_MSC_VER) 
+   //try to suppress some Visual Studio Warnings
+   #define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include "SampleFileSink.h"
 #include "SampleStatisticsSink.h"
@@ -241,12 +245,12 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 	   uint16_t numBitsInLump = 0;
 	   for (GnssMetadata::StreamList::iterator smIt = lpIt->Streams().begin(); smIt != lpIt->Streams().end(); ++smIt)
 	   {
-		   numSampleInterpretersPerLump += static_cast<uint32_t>(smIt->RateFactor());
+		   numSampleInterpretersPerLump += static_cast<uint16_t>(smIt->RateFactor());
 		   numBitsInLump += static_cast<uint16_t>( smIt->Packedbits() );
 		   //printf("Found Stream: %s\n", smIt->toString().c_str());
 	   }
 
-	   uint16_t lnLumpRepeat = ( chunk->SizeWord() * chunk->CountWords() * 8 ) / numBitsInLump;
+	   uint16_t lnLumpRepeat = static_cast<uint16_t>( ( chunk->SizeWord() * chunk->CountWords() * 8 ) / numBitsInLump );
       double   lumpPeriod   = 0;
       
 		for (uint16_t lr = 0; lr < lnLumpRepeat; lr++)
@@ -289,8 +293,8 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
             //  o the code below ensures that the ordering of the SampleInterprerters in the queue corresponds
             //    tho the chronological order in wich the samples were actually captured
             //
-            uint16_t numSmpInterp = static_cast<uint32_t>(smIt->RateFactor());
-            uint16_t numPaddingBits = static_cast<uint32_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
+            uint16_t numSmpInterp = static_cast<uint16_t>(smIt->RateFactor());
+            uint16_t numPaddingBits = static_cast<uint16_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
             
             uint16_t nextCallOrder = totalNumSampleInterpreters;
 				//offset the call-order based on the shift-direction of the Lumps
@@ -307,7 +311,7 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 				{
 					// take the templated-typed chunkInterpreter and use it to create the appropriate type of sample intepreter
 					SampleInterpreter* splIntrp;
-					chunkIntrp->mSampleInterpFactory.Create(sampleSink, smIt->Format(), smIt->Encoding(), smIt->Quantization(), splIntrp, nextCallOrder);
+					chunkIntrp->mSampleInterpFactory.Create(sampleSink, smIt->Format(), smIt->Encoding(), static_cast<uint8_t>(smIt->Quantization()), splIntrp, nextCallOrder);
 					// and add it to the ordered list
 					streamSplIntrps.push_back(splIntrp);
 

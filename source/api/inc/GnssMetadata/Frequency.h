@@ -22,6 +22,11 @@
 #ifndef FREQUENCY_H_H
 #define FREQUENCY_H_H
 
+#if defined(_WIN32) || defined(_WIN64) || defined(_MSC_VER) 
+   //try to suppress some Visual Studio Warnings
+   #define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "BaseTypes.h"
 namespace GnssMetadata
 {
