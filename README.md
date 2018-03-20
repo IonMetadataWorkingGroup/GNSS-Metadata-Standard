@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/IonMetadataWorkingGroup/GNSS-Metadata-Standard.svg?branch=travis)](https://travis-ci.org/IonMetadataWorkingGroup/GNSS-Metadata-Standard)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/8dn8fjhqexgv361r?svg=true)](https://ci.appveyor.com/project/JamesTCurran/gnss-metadata-standard)
+
 The 'master' branch is frozen between major updates inlucind requests for comment, and opdated once or twice annually. 
 
 Ongoing development and latests updates are available on the 'deve' branch. If you wish to submit code or pull-requests, please use the 'deve' branch. Pull requests for 'master' will be rejected. 
