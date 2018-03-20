@@ -64,7 +64,7 @@ protected:
       //read the data
       mStartBuffer = mData.begin();
       mBinfile->read( reinterpret_cast<char*>(&(*mStartBuffer)) , BinaryFileSource_READ_SIZE);
-      mEndBuffer = mStartBuffer + mBinfile->gcount();
+      mEndBuffer = mStartBuffer + static_cast<uint32_t>( mBinfile->gcount() );
       
       //make sure that we have actually loaded something (we may have reached eof)
       return !(mStartBuffer == mEndBuffer);
