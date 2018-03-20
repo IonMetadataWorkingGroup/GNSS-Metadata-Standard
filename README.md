@@ -1,6 +1,6 @@
 # GNSS-Metadata-Standard
 
-
+[![Build Status](https://travis-ci.org/IonMetadataWorkingGroup/GNSS-Metadata-Standard.svg?branch=travis)](https://travis-ci.org/IonMetadataWorkingGroup/GNSS-Metadata-Standard)
 
 The 'master' branch is frozen between major updates inlucind requests for comment, and opdated once or twice annually. 
 
