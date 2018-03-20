@@ -74,7 +74,7 @@ Date Date::Now()
 {
 	Date date;
 #if defined(_POSIX_C_SOURCE)
-    clock_gettime( CLOCK_REALTIME, &(date._dt));
+    clock_gettime( CLOCK_REALTIME, static_cast<timespec*>(&(date._dt)));
 #elif defined(_WIN32) || defined(_WIN64)
 	FILETIME ft;
 	GetSystemTimeAsFileTime(&ft);
