@@ -2,7 +2,7 @@ version: '{build}'
 
 branches:
   only:
-  - master
+  - travis
   
 clone_folder: c:\GNSS-Metadata-Standard
 
