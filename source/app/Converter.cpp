@@ -16,9 +16,9 @@
 // include the converter
 #include "Converter.h"
 
+//declare conversion function
 template<typename sample_base_t>
 int Convert( std::string xmlFileName );
-
 
 int main(int argc, char* argv[])
 {
