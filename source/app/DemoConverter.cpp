@@ -362,5 +362,6 @@ void PrintEncoderTables()
       printf("\n\n\n");
    }
    
-};
+}
+
 
