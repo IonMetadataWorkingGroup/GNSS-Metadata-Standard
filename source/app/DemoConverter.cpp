@@ -341,7 +341,7 @@ void PrintEncoderTables()
    {
       printf("%d-Bit Formats\n",qnt);
       printf(" HEX |  OB | OBA |  SM | SMA |  MS | MSA |  TC | TCA |  OG | OGA |\n");
-      for(size_t i=0; i<(1<<qnt); i++)
+      for(uint32_t i=0; i<(1<<qnt); i++)
       {
          sample = static_cast<uint8_t>(i);
 

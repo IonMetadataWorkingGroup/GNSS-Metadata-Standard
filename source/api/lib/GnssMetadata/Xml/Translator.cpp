@@ -34,7 +34,7 @@ namespace GnssMetadata
 
 Translator::~Translator()
 {
-};
+}
 
 
 /**

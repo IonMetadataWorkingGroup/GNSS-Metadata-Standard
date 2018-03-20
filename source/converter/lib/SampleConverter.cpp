@@ -70,7 +70,7 @@ void SampleConverter::Close()
 double SampleConverter::BaseLoadPeriod() const
 {
    return mBaseLoadPeriod;
-};
+}
 
 
 void SampleConverter::Convert( const uint32_t bytesToProcess )
