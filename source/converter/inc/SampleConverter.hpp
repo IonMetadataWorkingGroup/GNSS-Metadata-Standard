@@ -199,7 +199,7 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
          CreateChunkInterpreter<uint64_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
          break;
       default:
-         printf("Error: unsupported Chunk::SizeWord(): %ld\n",ckIt->SizeWord());
+         printf("Error: unsupported Chunk::SizeWord(): %d\n", static_cast<int32_t>(ckIt->SizeWord()));
          return false;
       }
       
@@ -242,7 +242,7 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 	   for (GnssMetadata::StreamList::iterator smIt = lpIt->Streams().begin(); smIt != lpIt->Streams().end(); ++smIt)
 	   {
 		   numSampleInterpretersPerLump += static_cast<uint32_t>(smIt->RateFactor());
-		   numBitsInLump += smIt->Packedbits();
+		   numBitsInLump += static_cast<uint16_t>( smIt->Packedbits() );
 		   //printf("Found Stream: %s\n", smIt->toString().c_str());
 	   }
 

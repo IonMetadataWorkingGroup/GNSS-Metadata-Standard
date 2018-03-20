@@ -67,7 +67,7 @@ protected:
 
 public:
    
-   virtual ~SampleSinkT(){};
+   virtual ~SampleSinkT(){}
 
    // This is a little ugly, but accommodates the parsing of multiple SampleFileSinks, which
    // have different template arguments, in one container. Hopefully the optimizer can take 
