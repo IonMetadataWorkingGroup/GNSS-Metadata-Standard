@@ -41,7 +41,7 @@ public:
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" )
    {
       return SampleConverter::Open<SampleBuffer,sample_base_t>( md, path_prefix );
-   };
+   }
    
    // return a SampelSource by name
    const SampleSource*     GetSource(const std::string sinkName) const;

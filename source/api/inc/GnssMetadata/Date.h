@@ -32,7 +32,6 @@ struct IonTimespec
    time_t tv_sec;
    long tv_nsec;
 };
-
 #define GMTIME( ptm, pt) gmtime_s(ptm, pt)
 #else
 #include <time.h>
@@ -42,7 +41,6 @@ struct IonTimespec
    time_t tv_sec;
    long tv_nsec;
 };
-
 #define GMTIME( ptm, pt) gmtime_r(pt, ptm)
 #endif
 
