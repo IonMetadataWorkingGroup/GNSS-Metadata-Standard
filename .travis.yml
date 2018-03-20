@@ -16,3 +16,9 @@ before_script:
 
 script:
   - make
+
+only_commits:
+  files:
+    - CMakeLists.txt
+    - .travis.yml
+    - source/
