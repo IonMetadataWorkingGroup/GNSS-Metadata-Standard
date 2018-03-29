@@ -33,11 +33,11 @@ int main(int argc, char* argv[])
 
 	typedef enum 
 	{
-		kInt8,
-      kInt16,
-      kInt32,
-      kFloat,
-      kDouble
+	   kInt8,
+           kInt16,
+           kInt32,
+           kFloat,
+           kDouble
 	} outputTypes;
 
 	std::map<std::string,outputTypes> validFileOutputType;
