@@ -86,7 +86,7 @@ void SampleConverter::SetNormalize( const bool yayOrNay )
          it->second.first->UnsetNormalize();
       }
    }
-};
+}
 
 double SampleConverter::BaseLoadPeriod() const
 {
