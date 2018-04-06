@@ -28,10 +28,7 @@
 SampleConverter::SampleConverter(const bool normalizeSamples):
 mIsOpen(false),
 mSampleSinkFactory(NULL),
-mBaseLoadPeriod(1),
-// tells the sample converter to normalize samples to +/-1.0 when converting to float/double
-// normalization is configured such that the maximum input value (i.e. 2^QuantBits) maps to +1.0
-mNormalizeSampleStreams(normalizeSamples)
+mBaseLoadPeriod(1)
 {
 
    
@@ -67,6 +64,30 @@ void SampleConverter::Close()
    mIsOpen = false;
 }
 
+void SampleConverter::SetNormalize( const bool yayOrNay )
+{
+
+   if( !mIsOpen )
+   {
+      printf("Error: SetNormalize(): no sampleSinks. Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n");
+      return;
+   }
+
+   sampleSinkInfo_map_t ssMap = mSampleSinkFactory->GetSampleSinkInfoMap();
+   
+   for( sampleSinkInfo_map_t::iterator it = ssMap.begin(); it != ssMap.end(); ++it )
+   {
+      if( yayOrNay )
+      {
+         it->second.first->SetNormalize();
+      }
+      else
+      {
+         it->second.first->UnsetNormalize();
+      }
+   }
+};
+
 double SampleConverter::BaseLoadPeriod() const
 {
    return mBaseLoadPeriod;
@@ -78,7 +99,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
 
    if( !mIsOpen )
    {
-      printf("Error: no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n )");
+      printf("Error: Convert() :no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n");
       return;
    }
 
@@ -94,7 +115,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
    for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
    {
 
-      uint64_t bytesProcessed = 0;
+      //uint64_t bytesProcessed = 0;
    
       //for now, just decode the first Lane
       LaneInterpreter* laneInterpreter= (*lnIt);
@@ -102,7 +123,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
       {
          BlockInterpreter* block = (*It);
          //read the entire block
-         bytesProcessed = block->Interpret( mLaneSources[*lnIt], bytesToProcess );
+         /*bytesProcessed = */ block->Interpret( mLaneSources[*lnIt], bytesToProcess );
       }
 
    }//end for( lnIt )

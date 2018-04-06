@@ -45,9 +45,6 @@ protected:
    
    // shortest common load period (in integer samples) for all lanes/blocks/chunks
    double mBaseLoadPeriod;
-   
-   //indicate whether or not to scale output samples to +/-1.0;
-   bool mNormalizeSampleStreams;
 
    //block interpreter, creates one block interpeter object per block type, templated to sample output type (int8_t, float, etc...)
    template<typename sample_base_t>
@@ -68,6 +65,9 @@ public:
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" );
    void Close(); //close, tidy up
 
+   //indicate whether or not to scale output samples (float/double) to +/-1.0;
+   void SetNormalize( const bool yayOrNay );
+   
    //convert at least 'bytesToProcess' of the input Lane file:
    void Convert( const uint32_t bytesToProcess = 0 );
 

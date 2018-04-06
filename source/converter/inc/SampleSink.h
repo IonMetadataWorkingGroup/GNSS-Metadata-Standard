@@ -27,17 +27,38 @@
 class SampleSink
 {
 protected:
-   bool         mIsOpen;
-   double       mScaleValue;
+   bool         mIsOpen, mDoNormalize;
+   double       mConfigScaleValue, mScaleValue;
    virtual bool Open() = 0;
    
-   SampleSink(){ mScaleValue = 1.0; };
+   SampleSink():
+   mDoNormalize(false),
+   mConfigScaleValue(1), // the value that would be used if "doNormalize" is called
+   mScaleValue(1)        // the value that is currently being used (default to 1.0)
+   { };
 
 public:
    
    virtual ~SampleSink(){};
    
-   virtual void SetScaleValue( const double scale ){ mScaleValue = scale; };
+   virtual void SetScaleValue( const double scale )
+   {
+      mConfigScaleValue = scale;
+      if( mDoNormalize )
+      {
+         mScaleValue = mConfigScaleValue;
+      }
+   };
+   virtual void SetNormalize()
+   {
+      mScaleValue = mConfigScaleValue;
+      mDoNormalize = true;
+   };
+   virtual void UnsetNormalize()
+   {
+      mScaleValue  = 1.0;
+      mDoNormalize = false;
+   };
    
    virtual void AddSample( int8_t  x ) = 0;
    virtual void AddSample( int16_t x ) = 0;

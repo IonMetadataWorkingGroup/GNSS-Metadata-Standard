@@ -221,6 +221,9 @@ int Convert( std::string xmlFileName )
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
    spcv.Open<SampleFileSink, sample_base_t>( md );
    
+   //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
+   bool doNormalize = false;
+   spcv.SetNormalize( doNormalize );
 
    //perform the conversion, in parts of 1ms
    for( int i=0; i<200; i++ )
@@ -263,6 +266,9 @@ int ComputeStatistics( std::string xmlFileName )
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
    spcv.Open<SampleStatisticsSink, sample_base_t>( md );
    
+   //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
+   bool doNormalize = false;
+   spcv.SetNormalize( doNormalize );
    
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
@@ -300,6 +306,10 @@ int FrontEnd( std::string xmlFileName )
    //open the Metadata Converter, tell it to use a sample_base_t internal type for the samples
    frontEnd.Open<sample_base_t>( md );
 
+   //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
+   bool doNormalize = false;
+   frontEnd.SetNormalize( doNormalize );
+   
    //load 1ms
    frontEnd.Load( 0.001 );
 

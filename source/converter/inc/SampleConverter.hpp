@@ -268,19 +268,12 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
             SampleStreamInfo* sampleInfo = mSampleSinkFactory->GetSampleStreamInfo( smIt->toString() );
             
             //JTC: ToDo
-            //
             // At this point it should be possible to determine the scale factor for the samples in the case that
             // we intend to scale float/double to the interval +/1.0.    
-            //
-            // o we might choose to always set a sampleSink scale-factor ( sampleSink->SetScaleFactor( X ) )
-            //   but only apply it in the <float> <double> overridden SampleSink::DoAddSample() function implementation 
-            //
-            if( mNormalizeSampleStreams )
-            {
-               int32_t maxSampleValue = ( 0x1 << smIt->Quantization() );
-               double  sampleScaleValue = 1.0 / static_cast<double>( maxSampleValue );
-               sampleSink->SetScaleValue( sampleScaleValue );
-            }
+            // we always provide this scale value, but must explictly enable/disable normalizatoin. 
+            int32_t maxSampleValue = ( 0x1 << smIt->Quantization() );
+            double  sampleScaleValue = 1.0 / static_cast<double>( maxSampleValue );
+            sampleSink->SetScaleValue( sampleScaleValue );
 
             ////////////////////////////////////////////////////
             //
