@@ -1,0 +1,24 @@
+  
+language: cpp
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+  - clang
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+
+script:
+  - make
+
+only_commits:
+  files:
+    - CMakeLists.txt
+    - .travis.yml
+    - source/

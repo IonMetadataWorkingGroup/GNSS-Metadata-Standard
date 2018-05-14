@@ -91,14 +91,14 @@ template<typename chunk_t,typename sample_base_t>
 void ChunkInterpreter<chunk_t, sample_base_t>::SetChunkPeriod(const double chunkPeriod)
 {
    mChunkPeriod = chunkPeriod;
-};
+}
 
 
 template<typename chunk_t,typename sample_base_t>
 double ChunkInterpreter<chunk_t, sample_base_t>::ChunkPeriod() const
 {
    return mChunkPeriod;
-};
+}
 
 
 template<typename chunk_t,typename sample_base_t>

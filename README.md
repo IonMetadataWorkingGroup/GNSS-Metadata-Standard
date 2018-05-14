@@ -1,6 +1,9 @@
 # GNSS-Metadata-Standard
 
+  Linux & OSX:  [![Build Status](https://travis-ci.org/IonMetadataWorkingGroup/GNSS-Metadata-Standard.svg?branch=travis)](https://travis-ci.org/IonMetadataWorkingGroup/GNSS-Metadata-Standard)
 
+
+  Windows:  [![Build status](https://ci.appveyor.com/api/projects/status/7oy9xv60ko04gfub/branch/travis?svg=true)](https://ci.appveyor.com/project/JamesTCurran/gnss-metadata-standard/branch/travis)
 
 The 'master' branch is frozen between major updates inlucind requests for comment, and opdated once or twice annually. 
 

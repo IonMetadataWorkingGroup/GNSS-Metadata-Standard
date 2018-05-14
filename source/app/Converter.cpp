@@ -16,9 +16,9 @@
 // include the converter
 #include "Converter.h"
 
+//declare conversion function
 template<typename sample_base_t>
 int Convert( std::string xmlFileName );
-
 
 int main(int argc, char* argv[])
 {
@@ -33,11 +33,11 @@ int main(int argc, char* argv[])
 
 	typedef enum 
 	{
-		kInt8,
-      kInt16,
-      kInt32,
-      kFloat,
-      kDouble
+	   kInt8,
+           kInt16,
+           kInt32,
+           kFloat,
+           kDouble
 	} outputTypes;
 
 	std::map<std::string,outputTypes> validFileOutputType;
@@ -112,13 +112,17 @@ int Convert( std::string xmlFileName )
 
    //create the converter
    SampleConverter spcv;
-
+   
    //open the Metadata Converter
    // Two argument template:
    // i)  define what sort of sample converter we want: 'SampleFileSink' or anything derived from SampleSink.h
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
    spcv.Open<SampleFileSink, sample_base_t>( md );
 
+   //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
+   bool doNormalize = false;
+   spcv.SetNormalize( doNormalize );
+   
    //perform the conversion - this will stream samples of
    //type sample_base_t to streams of type SampleFileSink
    spcv.Convert();

@@ -19,6 +19,11 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if defined(_WIN32) || defined(_WIN64) || defined(_MSC_VER) 
+   //try to suppress some Visual Studio Warnings
+   #define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <GnssMetadata/Date.h>
 #include <stdio.h>
 #include <string.h>
@@ -74,7 +79,10 @@ Date Date::Now()
 {
 	Date date;
 #if defined(_POSIX_C_SOURCE)
-    clock_gettime( CLOCK_REALTIME, &(date._dt));
+   timespec tmpTm;
+   clock_gettime( CLOCK_REALTIME,&tmpTm);
+   date._dt.tv_nsec = tmpTm.tv_sec;
+   date._dt.tv_sec  = tmpTm.tv_nsec;
 #elif defined(_WIN32) || defined(_WIN64)
 	FILETIME ft;
 	GetSystemTimeAsFileTime(&ft);

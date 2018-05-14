@@ -50,17 +50,17 @@ void BlockInterpreter::AddChunk(Chunk* newChunk)
 double BlockInterpreter::GetChunkPeriod() const
 {
    return mCommonChunkPeriod;
-};
+}
 
 void BlockInterpreter::SetChunkPeriod(const double chunkPeriod)
 {
    mCommonChunkPeriod = chunkPeriod;
-};
+}
 
 std::vector<Chunk*>& BlockInterpreter::ChunkInterpreters()
 {
    return mChunkInterpreters;
-};
+}
 
 
 uint64_t BlockInterpreter::Interpret( BinarySource* packedFile, uint64_t bytesToProcess )

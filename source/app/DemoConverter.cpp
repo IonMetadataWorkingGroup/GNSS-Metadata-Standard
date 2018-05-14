@@ -1,3 +1,8 @@
+#if defined(_WIN32) || defined(_WIN64) || defined(_MSC_VER) 
+   //try to suppress some Visual Studio Warnings
+   #define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -216,6 +221,9 @@ int Convert( std::string xmlFileName )
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
    spcv.Open<SampleFileSink, sample_base_t>( md );
    
+   //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
+   bool doNormalize = false;
+   spcv.SetNormalize( doNormalize );
 
    //perform the conversion, in parts of 1ms
    for( int i=0; i<200; i++ )
@@ -258,6 +266,9 @@ int ComputeStatistics( std::string xmlFileName )
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
    spcv.Open<SampleStatisticsSink, sample_base_t>( md );
    
+   //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
+   bool doNormalize = false;
+   spcv.SetNormalize( doNormalize );
    
    //perform the conversion, in parts of 1ms
    for( int i=0; i<10; i++ )
@@ -295,6 +306,10 @@ int FrontEnd( std::string xmlFileName )
    //open the Metadata Converter, tell it to use a sample_base_t internal type for the samples
    frontEnd.Open<sample_base_t>( md );
 
+   //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
+   bool doNormalize = false;
+   frontEnd.SetNormalize( doNormalize );
+   
    //load 1ms
    frontEnd.Load( 0.001 );
 
@@ -341,7 +356,7 @@ void PrintEncoderTables()
    {
       printf("%d-Bit Formats\n",qnt);
       printf(" HEX |  OB | OBA |  SM | SMA |  MS | MSA |  TC | TCA |  OG | OGA |\n");
-      for(size_t i=0; i<(1<<qnt); i++)
+      for(uint32_t i=0; i<uint32_t(1<<qnt); i++)
       {
          sample = static_cast<uint8_t>(i);
 
@@ -362,5 +377,6 @@ void PrintEncoderTables()
       printf("\n\n\n");
    }
    
-};
+}
+
 
