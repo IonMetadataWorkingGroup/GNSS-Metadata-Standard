@@ -34,7 +34,8 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
 
    if( mIsOpen )
    {
-      throw std::runtime_error("Error: Already open");
+      printf("Error: Already open.\n");
+      return false;
    }
    
    //assign a sample sink factory
@@ -51,6 +52,7 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
    SampleStreamInfo commonSampleInfo;
    
    //////////////////////////////////////////////////////////////
+   bool allOK = true;
    for( GnssMetadata::LaneList::iterator  lnIt = md.Lanes().begin(); lnIt != md.Lanes().end(); ++lnIt)
    {
 
@@ -70,7 +72,9 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
       //skip lane if we have no file
       if( !foundFileForLane )
       {
-		 throw std::runtime_error( "SampleConverter: No file found for Lane" );
+         printf( "Error: SampleConverter - No file found for Lane.\n" );
+         allOK = false;
+         break;
       }
 
       //create a lane
@@ -105,8 +109,15 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
       mLaneSources[ mLaneInterps.back() ]->Open( fullpath );
       if( !mLaneSources[ mLaneInterps.back() ]->IsOpen() )
       {
-		 throw std::runtime_error( "SampleConverter: Could not open file" );
+         printf( "Error: SampleConverter: Could not open file.\n" );
+         allOK = false;
+         break;
       }
+   }
+
+   if( !allOK )
+   {
+      return false;
    }
 
    
@@ -162,7 +173,7 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
    }while( !foundBaseLoadPeriod );
       
    //if this worked, then flag the converter as being open
-   mIsOpen = true;
+   mIsOpen = allOK;
 
    return mIsOpen;
 

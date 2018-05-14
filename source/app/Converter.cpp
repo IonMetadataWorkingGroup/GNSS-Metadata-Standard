@@ -104,7 +104,7 @@ int Convert( std::string xmlFileName )
    GnssMetadata::Metadata md;
    GnssMetadata::XmlProcessor xproc;
 
-   if( !xproc.Load( xmlFileName.c_str(), false, md) )
+   if( !  xproc.Load( xmlFileName.c_str(), false, md)    )
    {
       printf("Could not load metadata. Terminating.\n");
       return -1;
@@ -117,8 +117,11 @@ int Convert( std::string xmlFileName )
    // Two argument template:
    // i)  define what sort of sample converter we want: 'SampleFileSink' or anything derived from SampleSink.h
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
-   spcv.Open<SampleFileSink, sample_base_t>( md );
-
+   if( !  spcv.Open<SampleFileSink, sample_base_t>( md )    )
+   {
+      printf("Could not configure converter. Terminating.\n");
+      return -1;
+   }
    //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
    bool doNormalize = false;
    spcv.SetNormalize( doNormalize );
