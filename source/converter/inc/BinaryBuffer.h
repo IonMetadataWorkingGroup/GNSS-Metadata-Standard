@@ -26,7 +26,6 @@
 #include <stdint.h>
 
 #include "BinarySink.h"
-#include "BinarySource.h"
 
 #define BASE_BUFFER_SIZE 1024 * 1024
 

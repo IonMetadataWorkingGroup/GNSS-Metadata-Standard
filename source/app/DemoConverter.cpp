@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 
     try
     {
-       /*
+       
        // process JRC data
        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
        std::cout << "JRC data case\n";
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
                   << (res[2]==0?"ok ":"failed ")
                   << "\n\n";
         change_dir( ".." );
-        */
+        
         // process Fraunhofer data
         printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
         std::cout << "FHG data case\n";

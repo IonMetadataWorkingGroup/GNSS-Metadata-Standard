@@ -82,7 +82,7 @@ std::map< std::string, BinaryBuffer* > SampleFrontEnd::GetHeaderFooterSources( )
 
    return hdftMap;
 
-};
+}
 
 
 
