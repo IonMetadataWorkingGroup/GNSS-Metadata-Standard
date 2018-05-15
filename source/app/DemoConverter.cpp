@@ -348,9 +348,10 @@ int FrontEnd( std::string xmlFileName )
    for( std::map<std::string,BinaryBuffer*>::iterator it = headfootMap.begin(); it != headfootMap.end(); it++ )
    {
 
+      uint8_t bytesToPrint = 16;
       uint8_t* pHdFt = NULL;
-      uint32_t nBytes = it->second->Get( reinterpret_cast<void**>(&pHdFt), 20); 
-      nBytes = ( nBytes < 20 ? nBytes : 20 );
+      uint32_t nBytes = it->second->Get( reinterpret_cast<void**>(&pHdFt), bytesToPrint);
+      nBytes = ( nBytes < bytesToPrint ? nBytes : bytesToPrint );
 
       printf("Header/Footer< %s >:\n",it->first.c_str());
       for(uint8_t i=0; i<nBytes; i++)
