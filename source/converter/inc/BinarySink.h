@@ -24,6 +24,7 @@
 #include <vector>
 #include <string>
 #include <cstring>
+#include <stdint.h>
 
 #define BinaryFileSink_WRITE_SIZE 16*1024*1024
 
