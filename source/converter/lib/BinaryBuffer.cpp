@@ -79,7 +79,7 @@ void BinaryBuffer::Clear()
 uint32_t BinaryBuffer::Put( void* pData, uint32_t numBytes )
 {
 	//check that there is enough space
-	uint32_t remainingSpace = mBuffer.size() - mBufferPos;
+	uint32_t remainingSpace = static_cast<uint32_t>(mBuffer.size() - mBufferPos);
 	if( remainingSpace < numBytes )
 	{
 		uint32_t newSize = static_cast<uint32_t>( BASE_BUFFER_SIZE * ceil( (mBufferPos + numBytes) / static_cast<float>(BASE_BUFFER_SIZE) ) );
