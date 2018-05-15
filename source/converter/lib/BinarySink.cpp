@@ -24,17 +24,17 @@ BinarySink::BinarySink():
 mIsOpen(false)
 {
    
-};
+}
 
 BinarySink::~BinarySink()
 {
    
-};
+}
    
 bool BinarySink::IsOpen() const
 {
    return mIsOpen;
-};
+}
 
 bool BinarySink::Open(const std::string streamName)
 {
@@ -43,7 +43,7 @@ bool BinarySink::Open(const std::string streamName)
    mIsOpen = DoOpen(streamName);
    
    return mIsOpen;
-};
+}
 
 void BinarySink::Close()
 {
@@ -51,6 +51,6 @@ void BinarySink::Close()
    Flush();
    DoClose();
    mIsOpen = false;
-};
+}
 
 

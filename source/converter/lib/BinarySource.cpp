@@ -25,17 +25,17 @@ mIsOpen(false),
 mSourcePos(0)
 {
    
-};
+}
 
 BinarySource::~BinarySource()
 {
    
-};
+}
    
 bool BinarySource::IsOpen() const
 {
    return mIsOpen;
-};
+}
 
 bool BinarySource::Open(const std::string streamName)
 {
@@ -44,14 +44,14 @@ bool BinarySource::Open(const std::string streamName)
    mIsOpen = DoOpen(streamName);
    
    return mIsOpen;
-};
+}
 
 void BinarySource::Close()
 {
    //call the derived class Close()
    DoClose();
    mIsOpen = false;
-};
+}
 
 uint32_t BinarySource::Skip(uint32_t bytesToSkip)
 {
@@ -61,4 +61,4 @@ uint32_t BinarySource::Skip(uint32_t bytesToSkip)
 uint64_t BinarySource::SourcePos()
 {
    return mSourcePos;
-};
+}

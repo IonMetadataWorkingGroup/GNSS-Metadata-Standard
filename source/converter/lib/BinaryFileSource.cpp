@@ -22,12 +22,14 @@
 
 BinaryFileSource::BinaryFileSource():
 mBinfile(NULL)
-{};
+{
+   
+}
 
 BinaryFileSource::BinaryFileSource(const std::string filename)
 {
    Open(filename);
-};
+}
 
 BinaryFileSource::~BinaryFileSource()
 {
@@ -50,7 +52,7 @@ bool BinaryFileSource::DoOpen(const std::string streamName)
    }
    
    return mIsOpen;
-};
+}
 
 void BinaryFileSource::DoClose()
 {
@@ -61,7 +63,7 @@ void BinaryFileSource::DoClose()
       mBinfile = NULL;
    }
 
-};
+}
 
 
 uint32_t BinaryFileSource::Get( void* pData, uint32_t requestedBytes )
@@ -95,7 +97,7 @@ uint32_t BinaryFileSource::Get( void* pData, uint32_t requestedBytes )
    }
    
    return deliveredBytes;
-};
+}
 
 
 bool BinaryFileSource::Load()

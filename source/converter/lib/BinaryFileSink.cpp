@@ -22,12 +22,14 @@
 
 BinaryFileSink::BinaryFileSink():
 mBinfile(NULL)
-{};
+{
+   
+}
 
 BinaryFileSink::BinaryFileSink(const std::string filename)
 {
    Open(filename);
-};
+}
 
 BinaryFileSink::~BinaryFileSink()
 {
@@ -43,7 +45,7 @@ bool BinaryFileSink::DoOpen(const std::string streamName)
    mIsOpen = mBinfile->is_open();
    
    return mIsOpen;
-};
+}
 
 void BinaryFileSink::DoClose()
 {
@@ -54,7 +56,7 @@ void BinaryFileSink::DoClose()
       mBinfile = NULL;
    }
    
-};
+}
 
 void BinaryFileSink::Flush()
 {
@@ -63,7 +65,7 @@ void BinaryFileSink::Flush()
       mBinfile->flush();
    }
    
-};
+}
 
 uint32_t BinaryFileSink::Put( void* pData, uint32_t numBytes )
 {
@@ -75,7 +77,7 @@ uint32_t BinaryFileSink::Put( void* pData, uint32_t numBytes )
    mBinfile->write( reinterpret_cast<char*>(pData), numBytes);
    
    return (mBinfile->good() ? numBytes : 0);
-};
+}
 
 
 
