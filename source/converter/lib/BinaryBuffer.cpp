@@ -17,7 +17,7 @@
  * You should have received a copy of the Lesser GNU General Public License
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include <math.h>
 #include "BinaryBuffer.h"
 
 BinaryBuffer::BinaryBuffer( std::string fileName ) :
