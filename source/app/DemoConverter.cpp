@@ -337,6 +337,8 @@ int FrontEnd( std::string xmlFileName )
       printf("\n");
       
       //note that for FrontEnd() the header/footer data is still dumped to file: ToDo....
+   
+   
    }
 
    //clear the sample buffers, otherwise the next Load will append the samples
