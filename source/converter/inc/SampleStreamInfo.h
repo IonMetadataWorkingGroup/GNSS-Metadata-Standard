@@ -32,6 +32,8 @@ public:
    GnssMetadata::Frequency mSampleFrequency;
    GnssMetadata::Frequency mBaseFrequency;
    GnssMetadata::Duration  mDelayBias;
+   
+   std::string             mLaneID;
 	
    size_t mQuantization;
    bool   mIsComplexSamples;
@@ -46,6 +48,7 @@ public:
   
    void Print() const
    {
+      printf("LaneID:              %s\n", mLaneID.c_str());
       printf("CenterFrequency:     %s\n",mCenterFrequency.toString(  ).c_str());
       printf("TranslatedFrequency: %s\n",mTranslatedFrequency.toString( ).c_str());
       printf("DelayBias:           %s\n",mDelayBias.toString().c_str());

@@ -5,8 +5,7 @@ function CleanData( )
 delete('L1E1bc.dat');
 delete('L2L2C.dat');
 delete('L5E5a.dat');
-
-
+delete('GPS SPS Data - Galileo OS Data.hdft');
 
 
 

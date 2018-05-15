@@ -18,6 +18,7 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SampleSinkFactory.h"
+#include "BinaryFileSink.h"
 
 template<typename sample_sink_t>
 SampleSinkFactory<sample_sink_t>::SampleSinkFactory()
@@ -69,4 +70,28 @@ SampleStreamInfo* SampleSinkFactory<sample_sink_t>::GetSampleStreamInfo(const st
    return mSampleSinks[sinkName].second;
    
 }
+
+template<typename sample_sink_t>
+void SampleSinkFactory<sample_sink_t>::TryGetHeadFootSink(const std::string sinkName)
+{
+   //if we don't aleady have a SampleSink for this stream, then create one
+   if( mHeadFootSinks.find( sinkName ) == mHeadFootSinks.end() )
+   {
+      std::string fileName = sinkName + ".hdft";
+      mHeadFootSinks[sinkName]= new BinaryFileSink( fileName );
+   }
+   
+}
+
+template<typename sample_sink_t>
+BinarySink* SampleSinkFactory<sample_sink_t>::GetHeadFootSink( const std::string sinkName )
+{
+   
+   TryGetHeadFootSink(sinkName);
+   
+   return mHeadFootSinks[sinkName];
+   
+}
+
+
 

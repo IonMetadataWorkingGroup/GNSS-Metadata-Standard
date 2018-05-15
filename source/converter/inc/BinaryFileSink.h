@@ -1,7 +1,7 @@
 /**
  * Author: James T. Curran
  *
- * Copyright(c) 2016 Institute of Navigation
+ * Copyright(c) 2018 Institute of Navigation
  * http://www.ion.org
  *
  * This Metadata Converter is free software; you can redistribute it and/or
@@ -18,18 +18,18 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLASS_BinaryFileSource
-#define CLASS_BinaryFileSource
+#ifndef CLASS_BinaryFileSink
+#define CLASS_BinaryFileSink
 
-#include "BinarySource.h"
+#include "BinarySink.h"
 #include <fstream>
 
 
-class BinaryFileSource : public BinarySource
+class BinaryFileSink : public BinarySink
 {
    
 protected:
-   std::ifstream*                 mBinfile;
+   std::ofstream*                 mBinfile;
    
    
    std::vector<uint8_t>           mData;
@@ -38,17 +38,17 @@ protected:
 
    bool DoOpen(const std::string streamName);
    void DoClose();
-   bool Load();
 
 public:
-   BinaryFileSource();
-   BinaryFileSource(const std::string filename);
-   virtual ~BinaryFileSource();
+   BinaryFileSink();
+   BinaryFileSink(const std::string filename);
+   virtual ~BinaryFileSink();
    
-   uint32_t Get( void* pData, uint32_t requestedBytes );
+   uint32_t Put( void* pData, uint32_t numBytes );
+   void Flush();
 
 };
-#endif //CLASS_BinaryFileSource
+#endif //CLASS_BinaryFileSink
 
 
 

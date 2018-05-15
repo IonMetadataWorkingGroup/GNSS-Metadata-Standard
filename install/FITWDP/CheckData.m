@@ -81,7 +81,7 @@ fileHeaderOriginal = fopen('headers_ref.dat', 'rb');
 
 dataHeaderOriginal = fread( fileHeaderOriginal, headerBytes, origFileDataType );
 
-fileHeaderNew = fopen(sprintf('headers.dat'));
+fileHeaderNew = fopen(sprintf('RFI-Mon.hdft'));
 
 if( fileHeaderNew == -1)
     fprintf('Failed to open input file: FAIL\n')

@@ -86,6 +86,7 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
 		GnssMetadata::AttributedObject::Search<GnssMetadata::System>( system, md, sysID );
       //assign the system frequency
       commonSampleInfo.mBaseFrequency = GnssMetadata::Frequency( system.BaseFrequency().toHertz() );
+      commonSampleInfo.mLaneID        = laneID;
 
       //populate it with blocks
       BlockInterpreter* blockInterp;
@@ -191,8 +192,13 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
                                        static_cast<uint32_t>( block->SizeHeader() ),
                                        static_cast<uint32_t>( block->SizeFooter() )
                                        );
-   
-   //mSampleSinkFactory->GetSampleSink("block"); //JTC Complete me
+
+   // if necessary, we request a binary source from the SampleSinkFactory, named according to the containing Lane
+   if( ( (block->SizeHeader() > 0) || (block->SizeFooter() > 0) ) )
+   {
+      BinarySink* pSink = mSampleSinkFactory->GetHeadFootSink( commonSampleInfo.mLaneID );
+      (*blockInterp)->SetHeadFootSink( pSink );
+   }
          
    for( GnssMetadata::ChunkList::iterator ckIt = block->Chunks().begin(); ckIt != block->Chunks().end(); ++ckIt )
    {

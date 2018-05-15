@@ -24,6 +24,7 @@
 #include <map>
 #include <string>
 #include "SampleSink.h"
+#include "BinarySink.h"
 #include "SampleStreamInfo.h"
 
 typedef std::map< std::string, std::pair<SampleSink*,SampleStreamInfo*> > sampleSinkInfo_map_t;
@@ -32,6 +33,7 @@ class BaseSampleSinkFactory
 {
 protected:
    std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>> mSampleSinks;
+   std::map<std::string,BinarySink*> mHeadFootSinks;
    
 public:
    BaseSampleSinkFactory(){};
@@ -40,6 +42,8 @@ public:
    virtual SampleSink* GetSampleSink(const std::string sinkName) = 0;
    virtual SampleStreamInfo* GetSampleStreamInfo(const std::string sinkName) = 0;
 
+   virtual BinarySink* GetHeadFootSink(const std::string sinkName) = 0;
+   
    bool HasSampleSink(const std::string sinkName)
    {
       //if we don't aleady have a SampleSink for this stream, then create one
@@ -49,6 +53,7 @@ public:
       }
       return true;
    }
+   
    
    sampleSinkInfo_map_t GetSampleSinkInfoMap()
    {
@@ -62,6 +67,16 @@ public:
       return sinkMap;
    };
    
+   bool HasHeadFootSink(const std::string sinkName)
+   {
+      //if we don't aleady have a SampleSink for this stream, then create one
+      if( mHeadFootSinks.find( sinkName ) == mHeadFootSinks.end() )
+      {
+         return false;
+      }
+      return true;
+   }
+   
 };
 
 
@@ -72,6 +87,7 @@ class SampleSinkFactory : public BaseSampleSinkFactory
 protected:
    
    void TryGetSampleSink(const std::string sinkName);
+   void TryGetHeadFootSink(const std::string sinkName);
 
 public:
    SampleSinkFactory();
@@ -80,6 +96,7 @@ public:
    SampleSink*       GetSampleSink(const std::string sinkName);
    SampleStreamInfo* GetSampleStreamInfo(const std::string sinkName);
 	
+   BinarySink*       GetHeadFootSink(const std::string sinkName);
 };
 
 #include "SampleSinkFactory.hpp"

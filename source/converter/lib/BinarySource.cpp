@@ -1,7 +1,7 @@
 /**
- * Author: James T. Curran
+ * Author: James T. Curran : jamestcurran@ieee.org
  *
- * Copyright(c) 2016 Institute of Navigation
+ * Copyright(c) 2018 Institute of Navigation
  * http://www.ion.org
  *
  * This Metadata Converter is free software; you can redistribute it and/or
@@ -18,38 +18,47 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLASS_BinaryFileSource
-#define CLASS_BinaryFileSource
-
 #include "BinarySource.h"
-#include <fstream>
 
-
-class BinaryFileSource : public BinarySource
+BinarySource::BinarySource():
+mIsOpen(false),
+mSourcePos(0)
 {
    
-protected:
-   std::ifstream*                 mBinfile;
-   
-   
-   std::vector<uint8_t>           mData;
-   std::vector<uint8_t>::iterator mStartBuffer;
-   std::vector<uint8_t>::iterator mEndBuffer;
-
-   bool DoOpen(const std::string streamName);
-   void DoClose();
-   bool Load();
-
-public:
-   BinaryFileSource();
-   BinaryFileSource(const std::string filename);
-   virtual ~BinaryFileSource();
-   
-   uint32_t Get( void* pData, uint32_t requestedBytes );
-
 };
-#endif //CLASS_BinaryFileSource
 
+BinarySource::~BinarySource()
+{
+   
+};
+   
+bool BinarySource::IsOpen() const
+{
+   return mIsOpen;
+};
 
+bool BinarySource::Open(const std::string streamName)
+{
 
+   //call the derived class Open()
+   mIsOpen = DoOpen(streamName);
+   
+   return mIsOpen;
+};
 
+void BinarySource::Close()
+{
+   //call the derived class Close()
+   DoClose();
+   mIsOpen = false;
+};
+
+uint32_t BinarySource::Skip(uint32_t bytesToSkip)
+{
+   return Get(NULL,bytesToSkip);
+}
+
+uint64_t BinarySource::SourcePos()
+{
+   return mSourcePos;
+};

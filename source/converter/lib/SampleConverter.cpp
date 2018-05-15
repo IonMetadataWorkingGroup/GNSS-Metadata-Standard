@@ -166,9 +166,9 @@ bool SampleConverter::Load( const double secondsToProcess )
       
       uint64_t readBlockSize = 0;
          
-      //for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
+      for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
       {
-         std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin();
+         //std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin();
          BlockInterpreter* block = (*It);
          
          //determine how many chunks to interpret

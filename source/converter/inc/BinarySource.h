@@ -32,96 +32,24 @@ class BinarySource
 {
 protected:
    bool mIsOpen;
-   
-   std::vector<uint8_t>           mData;
-   std::vector<uint8_t>::iterator mStartBuffer;
-   std::vector<uint8_t>::iterator mEndBuffer;
    uint64_t                       mSourcePos;
 
-   BinarySource():
-      mIsOpen(false),
-      mSourcePos(0)
-      {};
-
+   BinarySource();
    virtual bool Load()    = 0;
    virtual bool DoOpen(const std::string streamName)  = 0;
    virtual void DoClose() = 0;
 
 public:
-   virtual ~BinarySource(){};
+   virtual ~BinarySource();
    
-   bool IsOpen() const
-   {
-      return mIsOpen;
-   };
+   bool IsOpen() const;
+   bool Open(const std::string streamName);
+   void Close();
    
-   bool Open(const std::string streamName)
-   {
-
-      //call the derived class Open()
-      mIsOpen = DoOpen(streamName);
-      
-      if( mIsOpen )
-      {
-         mData.resize(BinaryFileSource_READ_SIZE);
-         mStartBuffer = mData.end();
-         mEndBuffer   = mStartBuffer;
-      }
-      
-      return mIsOpen;
-   };
+   uint32_t Skip(uint32_t bytesToSkip);
+   virtual uint32_t Get( void* pData, uint32_t requestedBytes ) = 0;
    
-   void Close()
-   {
-      //call the derived class Close()
-      DoClose();
-      mIsOpen = false;
-   };
-   
-   
-   uint64_t SourcePos()
-   {
-      return mSourcePos;
-   };
-
-   uint32_t Skip(uint32_t bytesToSkip)
-   {
-      return Get(NULL,bytesToSkip);
-   }
-   
-   uint32_t Get( void* pData, uint32_t requestedBytes )
-   {
-      if( !mIsOpen )
-      {
-         return 0;
-      }
-      
-      uint32_t deliveredBytes = 0;
-      while( deliveredBytes < requestedBytes )
-      {
-         //make sure we have data
-         if( mStartBuffer == mEndBuffer )
-         {
-            if( !Load() )
-            {
-               break;
-            }
-         }
-         //now copy out the bytes
-         uint32_t copyBytes = std::min( uint32_t(requestedBytes-deliveredBytes), uint32_t(mEndBuffer-mStartBuffer) );
-         
-         if( pData != NULL )
-         {
-            std::memcpy( static_cast<uint8_t*>(pData) + deliveredBytes, &(*mStartBuffer), copyBytes);
-         }
-         mSourcePos     += copyBytes;
-         mStartBuffer   += copyBytes;
-         deliveredBytes += copyBytes;
-      }
-      
-      return deliveredBytes;
-   };
-   
+   uint64_t SourcePos();
    
 };
 

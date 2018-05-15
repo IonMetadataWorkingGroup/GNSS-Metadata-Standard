@@ -22,6 +22,7 @@
 #define CLASS_BlockInterpreter
 #include <vector>
 #include <GnssMetadata/Metadata.h>
+#include "BinarySink.h"
 #include "ChunkInterpreter.h"
 #include <BinaryFileSource.h>
 
@@ -38,6 +39,8 @@ protected:
    std::vector<Chunk*> mChunkInterpreters;
    
    double              mCommonChunkPeriod;
+   
+   BinarySink*         mHeadFootSink;
 	
 public:	
    BlockInterpreter( const uint32_t cycles, const uint32_t headerBytes, const uint32_t footerBytes );
@@ -51,6 +54,8 @@ public:
    
    double GetChunkPeriod() const;
    void SetChunkPeriod(const double chunkPeriod);
+   
+   void SetHeadFootSink( BinarySink* pHeadFootSink );
 };
 
 #endif //CLASS_BlockInterpreter

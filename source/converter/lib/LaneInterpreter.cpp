@@ -17,14 +17,15 @@
  * You should have received a copy of the Lesser GNU General Public License
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include "BinaryFileSink.h"
 #include "LaneInterpreter.h"
 
 
 std::vector<BlockInterpreter*> mBlockInterpreters;
 
 LaneInterpreter::LaneInterpreter( std::string fileURL ):
-mFileURL(fileURL)
+mFileURL(fileURL),
+mHeadFootSink(NULL)
 {
 	
 	mBlockInterpreters.resize(0);
@@ -36,6 +37,8 @@ LaneInterpreter::~LaneInterpreter()
 	
 	for( std::vector<BlockInterpreter*>::iterator It = mBlockInterpreters.begin(); It != mBlockInterpreters.end(); ++It)
 		delete (*It);
+   
+   delete mHeadFootSink;
 	
 }
 
@@ -43,7 +46,7 @@ void LaneInterpreter::AddBlock( BlockInterpreter* newBlock )
 {
    
    mBlockInterpreters.push_back( newBlock );
-   
+ 
 }
 
 std::vector<BlockInterpreter*>& LaneInterpreter::Blocks()

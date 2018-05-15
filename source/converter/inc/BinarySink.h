@@ -1,7 +1,7 @@
 /**
- * Author: James T. Curran
+ * Author: James T. Curran : jamestcurran@ieee.org
  *
- * Copyright(c) 2016 Institute of Navigation
+ * Copyright(c) 2018 Institute of Navigation
  * http://www.ion.org
  *
  * This Metadata Converter is free software; you can redistribute it and/or
@@ -18,37 +18,38 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLASS_BinaryFileSource
-#define CLASS_BinaryFileSource
+#ifndef CLASS_BinarySink
+#define CLASS_BinarySink
 
-#include "BinarySource.h"
-#include <fstream>
+#include <vector>
+#include <string>
+#include <cstring>
 
+#define BinaryFileSink_WRITE_SIZE 16*1024*1024
 
-class BinaryFileSource : public BinarySource
+class BinarySink
 {
-   
 protected:
-   std::ifstream*                 mBinfile;
-   
-   
-   std::vector<uint8_t>           mData;
-   std::vector<uint8_t>::iterator mStartBuffer;
-   std::vector<uint8_t>::iterator mEndBuffer;
+   bool mIsOpen;
 
-   bool DoOpen(const std::string streamName);
-   void DoClose();
-   bool Load();
+   BinarySink();
+
+   virtual bool DoOpen(const std::string streamName)  = 0;
+   virtual void DoClose() = 0;
 
 public:
-   BinaryFileSource();
-   BinaryFileSource(const std::string filename);
-   virtual ~BinaryFileSource();
+   virtual ~BinarySink();
    
-   uint32_t Get( void* pData, uint32_t requestedBytes );
-
+   bool IsOpen() const;
+   bool Open(const std::string streamName);
+   void Close();
+   
+   virtual void Flush() = 0;
+   virtual uint32_t Put( void* pData, uint32_t numBytes ) = 0;
+   
 };
-#endif //CLASS_BinaryFileSource
+
+#endif //CLASS_BinarySink
 
 
 

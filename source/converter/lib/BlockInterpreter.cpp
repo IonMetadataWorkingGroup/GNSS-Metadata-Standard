@@ -25,7 +25,8 @@ mCycles(cycles),
 mChunkIndex(0),
 mHeaderBytes(headerBytes),
 mFooterBytes(footerBytes),
-mCommonChunkPeriod(1)
+mCommonChunkPeriod(1),
+mHeadFootSink(NULL)
 {
 
 	mChunkInterpreters.resize(0);
@@ -39,6 +40,12 @@ BlockInterpreter::~BlockInterpreter()
       delete (*It);
 
 }
+
+void BlockInterpreter::SetHeadFootSink( BinarySink* pHeadFootSink )
+{
+   
+   mHeadFootSink = pHeadFootSink;
+};
 
 void BlockInterpreter::AddChunk(Chunk* newChunk)
 {
@@ -106,16 +113,16 @@ uint64_t BlockInterpreter::InterpretChunks( BinarySource* packedFile )
    
    if(mChunkIndex == 0)
    {
-      //first skip the header-bytes
-      //packedFile.Skip( mHeaderBytes );
+      //first process the header-bytes
       if( mHeaderBytes > 0 )
       {
-         std::ofstream hfile("headers.dat", std::ios::out | std::ios::binary | std::ios::app );
          std::vector<uint8_t> headerBytes;
          headerBytes.resize(mHeaderBytes);
          packedFile->Get( &headerBytes[0], mHeaderBytes );
-         hfile.write(reinterpret_cast<const char*>(&headerBytes[0]), mHeaderBytes);
-         hfile.flush();
+         if( mHeadFootSink != NULL )
+         {
+            mHeadFootSink->Put(&headerBytes[0], mHeaderBytes);
+         }
       }
    }
    
@@ -143,8 +150,18 @@ uint64_t BlockInterpreter::InterpretChunks( BinarySource* packedFile )
 
    if(mChunkIndex == mCycles)
    {
-      //finally skip the footer-bytes
-      packedFile->Skip( mFooterBytes );
+      //first process the header-bytes
+      if( mFooterBytes > 0 )
+      {
+         std::vector<uint8_t> footerBytes;
+         footerBytes.resize(mFooterBytes);
+         packedFile->Get( &footerBytes[0], mFooterBytes );
+         if( mHeadFootSink != NULL )
+         {
+            mHeadFootSink->Put(&footerBytes[0], mFooterBytes);
+         }
+      }
+      
       mChunkIndex = 0;
    }
    
