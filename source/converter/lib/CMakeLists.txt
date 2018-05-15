@@ -23,6 +23,7 @@ set( cnv_lib_sources
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/BinarySink.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/BinaryFileSource.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/BinaryFileSink.h
+	${CMAKE_CURRENT_SOURCE_DIR}/../inc/BinaryBuffer.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/BlockInterpreter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/ChunkInterpreter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/ChunkInterpreter.hpp
@@ -53,6 +54,7 @@ set( cnv_lib_sources
 	${CMAKE_CURRENT_SOURCE_DIR}/../inc/statistics.h
 	BinarySource.cpp
 	BinarySink.cpp
+	BinaryBuffer.cpp
     BinaryFileSource.cpp
     BinaryFileSink.cpp
     BlockInterpreter.cpp
