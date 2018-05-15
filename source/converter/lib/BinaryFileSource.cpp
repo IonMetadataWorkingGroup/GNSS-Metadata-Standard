@@ -19,7 +19,7 @@
  */
 
 #include "BinaryFileSource.h"
-#include <algorithm> 
+#include <algorithm>
 
 BinaryFileSource::BinaryFileSource():
 mBinfile(NULL)

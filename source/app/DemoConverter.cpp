@@ -335,6 +335,8 @@ int FrontEnd( std::string xmlFileName )
       for(int i=0;i<20;i++)
          printf("% 4d ", pbuff[i]);
       printf("\n");
+      
+      //note that for FrontEnd() the header/footer data is still dumped to file: ToDo....
    }
 
    //clear the sample buffers, otherwise the next Load will append the samples
