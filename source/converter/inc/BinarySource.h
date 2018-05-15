@@ -27,7 +27,6 @@
 #include <stdint.h>
 
 #define BinaryFileSource_READ_SIZE 16*1024*1024
-#undef min
 
 class BinarySource
 {
