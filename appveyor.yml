@@ -1,9 +1,5 @@
 version: '{build}'
 
-branches:
-  only:
-  - devel
-  
 clone_folder: c:\GNSS-Metadata-Standard
 
 image:
