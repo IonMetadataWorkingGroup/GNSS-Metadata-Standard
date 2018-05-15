@@ -45,7 +45,7 @@ void BlockInterpreter::SetHeadFootSink( BinarySink* pHeadFootSink )
 {
    
    mHeadFootSink = pHeadFootSink;
-};
+}
 
 void BlockInterpreter::AddChunk(Chunk* newChunk)
 {
