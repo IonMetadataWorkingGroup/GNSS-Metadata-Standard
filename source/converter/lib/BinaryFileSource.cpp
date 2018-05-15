@@ -117,6 +117,16 @@ bool BinaryFileSource::Load()
 }
 
 
+void BinaryFileSource::Clear()
+{
+
+   //read the data
+   mData.clear();
+   mStartBuffer = mData.begin();
+   mEndBuffer = mStartBuffer ;
+}
+
+
 
 
 

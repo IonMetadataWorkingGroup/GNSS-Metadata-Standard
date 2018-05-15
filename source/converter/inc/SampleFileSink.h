@@ -26,9 +26,6 @@
 
 #include "SampleSink.h"
 
-
-#define BASE_BUFFER_SIZE_IN_BYTES 1024 * 1024
-
 template<typename sample_base_t>
 class SampleFileSink : public SampleSinkT<sample_base_t>
 {

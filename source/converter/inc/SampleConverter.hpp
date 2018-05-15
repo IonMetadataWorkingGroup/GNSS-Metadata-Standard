@@ -23,11 +23,9 @@
    #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#include "SampleFileSink.h"
-#include "SampleStatisticsSink.h"
 #include <math.h>
 
-template <template<typename > class sample_sink_t, typename sample_base_t>
+template< template<typename> class sample_sink_t, typename sample_base_t, typename binary_sink_t >
 bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix )
 {
    std::string fullpath;
@@ -39,7 +37,7 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
    }
    
    //assign a sample sink factory
-   mSampleSinkFactory = new SampleSinkFactory<sample_sink_t<sample_base_t>>();
+   mSampleSinkFactory = new SampleSinkFactory<sample_sink_t<sample_base_t>, binary_sink_t>();
 
    //find the files
    for( GnssMetadata::FileList::iterator  flIt = md.Files().begin(); flIt != md.Files().end(); ++flIt)

@@ -128,7 +128,8 @@ uint32_t SampleBuffer<sample_base_t>:: DoGetSamples( const void** pbuff ) const
    //point to the vector memory
    *pbuff = &mSampleBuffer[0];
 
-   //indicate how many samples are there
+   //indicate how many samples are there 
+   // (note the +1 is because we have IQ pairs and point to the I, with the Q immediately after ... i.e. +1)
    return static_cast<uint32_t>(mBufferPos+1);
 }
 

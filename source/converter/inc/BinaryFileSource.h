@@ -46,6 +46,7 @@ public:
    virtual ~BinaryFileSource();
    
    uint32_t Get( void* pData, uint32_t requestedBytes );
+   void Clear();
 
 };
 #endif //CLASS_BinaryFileSource

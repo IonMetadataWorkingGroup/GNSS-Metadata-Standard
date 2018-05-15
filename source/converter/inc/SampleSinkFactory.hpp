@@ -18,18 +18,17 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SampleSinkFactory.h"
-#include "BinaryFileSink.h"
 
-template<typename sample_sink_t>
-SampleSinkFactory<sample_sink_t>::SampleSinkFactory()
+template<typename sample_sink_t, typename binary_sink_t>
+SampleSinkFactory<sample_sink_t,binary_sink_t>::SampleSinkFactory()
 {
    
    mSampleSinks.clear();
    
 }
 
-template<typename sample_sink_t>
-SampleSinkFactory<sample_sink_t>::~SampleSinkFactory()
+template<typename sample_sink_t, typename binary_sink_t>
+SampleSinkFactory<sample_sink_t,binary_sink_t>::~SampleSinkFactory()
 {
    
    for( std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>>::iterator it = mSampleSinks.begin();  it != mSampleSinks.end(); ++it )
@@ -39,8 +38,8 @@ SampleSinkFactory<sample_sink_t>::~SampleSinkFactory()
    }
 }
 
-template<typename sample_sink_t>
-void SampleSinkFactory<sample_sink_t>::TryGetSampleSink(const std::string sinkName)
+template<typename sample_sink_t, typename binary_sink_t>
+void SampleSinkFactory<sample_sink_t,binary_sink_t>::TryGetSampleSink(const std::string sinkName)
 {
    //if we don't aleady have a SampleSink for this stream, then create one
    if( mSampleSinks.find( sinkName ) == mSampleSinks.end() )
@@ -51,8 +50,8 @@ void SampleSinkFactory<sample_sink_t>::TryGetSampleSink(const std::string sinkNa
    
 }
 
-template<typename sample_sink_t>
-SampleSink* SampleSinkFactory<sample_sink_t>::GetSampleSink( const std::string sinkName )
+template<typename sample_sink_t, typename binary_sink_t>
+SampleSink* SampleSinkFactory<sample_sink_t,binary_sink_t>::GetSampleSink( const std::string sinkName )
 {
 
    TryGetSampleSink(sinkName);
@@ -61,8 +60,8 @@ SampleSink* SampleSinkFactory<sample_sink_t>::GetSampleSink( const std::string s
    
 }
 
-template<typename sample_sink_t>
-SampleStreamInfo* SampleSinkFactory<sample_sink_t>::GetSampleStreamInfo(const std::string sinkName)
+template<typename sample_sink_t, typename binary_sink_t>
+SampleStreamInfo* SampleSinkFactory<sample_sink_t,binary_sink_t>::GetSampleStreamInfo(const std::string sinkName)
 {
 
    TryGetSampleSink(sinkName);
@@ -71,20 +70,20 @@ SampleStreamInfo* SampleSinkFactory<sample_sink_t>::GetSampleStreamInfo(const st
    
 }
 
-template<typename sample_sink_t>
-void SampleSinkFactory<sample_sink_t>::TryGetHeadFootSink(const std::string sinkName)
+template<typename sample_sink_t, typename binary_sink_t>
+void SampleSinkFactory<sample_sink_t,binary_sink_t>::TryGetHeadFootSink(const std::string sinkName)
 {
    //if we don't aleady have a SampleSink for this stream, then create one
    if( mHeadFootSinks.find( sinkName ) == mHeadFootSinks.end() )
    {
       std::string fileName = sinkName + ".hdft";
-      mHeadFootSinks[sinkName]= new BinaryFileSink( fileName );
+      mHeadFootSinks[sinkName]= new binary_sink_t( fileName );
    }
    
 }
 
-template<typename sample_sink_t>
-BinarySink* SampleSinkFactory<sample_sink_t>::GetHeadFootSink( const std::string sinkName )
+template<typename sample_sink_t, typename binary_sink_t>
+BinarySink* SampleSinkFactory<sample_sink_t,binary_sink_t>::GetHeadFootSink( const std::string sinkName )
 {
    
    TryGetHeadFootSink(sinkName);

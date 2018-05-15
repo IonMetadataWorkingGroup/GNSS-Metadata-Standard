@@ -23,6 +23,7 @@
 
 #include "SampleSinkFactory.h"
 #include "SampleBuffer.h"
+#include "BinaryBuffer.h"
 #include "SampleConverter.h"
 
 class SampleFrontEnd : public SampleConverter
@@ -40,7 +41,7 @@ public:
    template<typename sample_base_t>
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" )
    {
-      return SampleConverter::Open<SampleBuffer,sample_base_t>( md, path_prefix );
+      return SampleConverter::Open<SampleBuffer,sample_base_t, BinaryBuffer>( md, path_prefix );
    }
    
    // return a SampelSource by name
@@ -49,6 +50,9 @@ public:
    //
    std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > GetSources( ) const;
    
+   // get a map of header/footer sources, indexed by LaneID string
+   std::map< std::string, BinaryBuffer* > GetHeaderFooterSources( ) const;
+
    // clear buffers corresponding to all SampleSources
    // simultanious clear of all sources will keep sample data aligned
    void Clear( );

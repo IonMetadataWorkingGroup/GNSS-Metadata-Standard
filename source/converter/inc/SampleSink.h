@@ -24,6 +24,8 @@
 
 #include <stdint.h>
 
+#define BASE_BUFFER_SIZE_IN_BYTES 1024 * 1024
+
 class SampleSink
 {
 protected:

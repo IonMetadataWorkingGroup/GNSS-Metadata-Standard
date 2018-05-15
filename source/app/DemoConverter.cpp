@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 
     try
     {
-       
+       /*
        // process JRC data
        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
        std::cout << "JRC data case\n";
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
                   << (res[2]==0?"ok ":"failed ")
                   << "\n\n";
         change_dir( ".." );
-
+        */
         // process Fraunhofer data
         printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
         std::cout << "FHG data case\n";
@@ -219,7 +219,8 @@ int Convert( std::string xmlFileName )
    // i)  define what sort of sample converter we want:
    //     'SampleFileSink' will stream received samples to file
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
-   spcv.Open<SampleFileSink, sample_base_t>( md );
+   //iii) define the type 'binary_sink_t' to stream the header/footer data
+   spcv.Open<SampleFileSink, sample_base_t, BinaryFileSink>( md );
    
    //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
    bool doNormalize = false;
@@ -264,7 +265,8 @@ int ComputeStatistics( std::string xmlFileName )
    // i)  define what sort of sample converter we want:
    //     'SampleStatisticsSink' will compute stats based on the received samples
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
-   spcv.Open<SampleStatisticsSink, sample_base_t>( md );
+   //iii) define the type 'binary_sink_t' to stream the header/footer data
+   spcv.Open<SampleStatisticsSink, sample_base_t, BinaryBuffer>( md );
    
    //now you can tell the sample converters to normalize to +/-1.0 for float/double (if you like)
    bool doNormalize = false;
@@ -324,6 +326,7 @@ int FrontEnd( std::string xmlFileName )
    std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > sourceMap = frontEnd.GetSources();
    for(std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> >::iterator src_it = sourceMap.begin(); src_it != sourceMap.end(); src_it++)
    {
+
       std::string             sourceName  = src_it->first;
       const SampleSource*     pSource     = frontEnd.GetSource( sourceName );
       const SampleStreamInfo* pSourceInfo = frontEnd.GetSourceInfo( sourceName );
@@ -332,23 +335,39 @@ int FrontEnd( std::string xmlFileName )
 
       nSamples = pSource->GetSamples( pbuff );
       printf("Samples: ");
-      for(int i=0;i<20;i++)
+      for(uint8_t i=0;i<20;i++)
+      {
          printf("% 4d ", pbuff[i]);
+      }
       printf("\n");
-      
-      //note that for FrontEnd() the header/footer data is still dumped to file: ToDo....
    
-   
+   }
+
+   //now ask the front end to provide the HeadFoot buffers and print out a few bytes
+   std::map<std::string, BinaryBuffer*> headfootMap = frontEnd.GetHeaderFooterSources();
+   for( std::map<std::string,BinaryBuffer*>::iterator it = headfootMap.begin(); it != headfootMap.end(); it++ )
+   {
+
+      uint8_t* pHdFt = NULL;
+      uint32_t nBytes = it->second->Get( reinterpret_cast<void**>(&pHdFt), 20); 
+      nBytes = ( nBytes < 20 ? nBytes : 20 );
+
+      printf("Header/Footer< %s >:\n",it->first.c_str());
+      for(uint8_t i=0; i<nBytes; i++)
+      {
+         printf("%02x ",pHdFt[i]);
+      }
+      printf("\n");
    }
 
    //clear the sample buffers, otherwise the next Load will append the samples
    frontEnd.Clear();
 
-
    //close the converter
    frontEnd.Close();
 
    return 0;
+
 }
 
 void PrintEncoderTables()

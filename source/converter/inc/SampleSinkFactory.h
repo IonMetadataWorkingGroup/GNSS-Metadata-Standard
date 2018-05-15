@@ -66,6 +66,18 @@ public:
       
       return sinkMap;
    };
+
+    std::map<std::string,BinarySink*> GetHeadFootSinkMap()
+   {
+      std::map<std::string,BinarySink*> sinkMap;
+      
+      for(std::map<std::string,BinarySink*>::const_iterator mit = mHeadFootSinks.begin(); mit != mHeadFootSinks.end(); mit++)
+      {
+         sinkMap[ mit->first ] = mit->second;
+      }
+      
+      return sinkMap;
+   };
    
    bool HasHeadFootSink(const std::string sinkName)
    {
@@ -76,11 +88,11 @@ public:
       }
       return true;
    }
-   
+
 };
 
 
-template<typename sample_sink_t>
+template<typename sample_sink_t, typename binary_sink_t>
 class SampleSinkFactory : public BaseSampleSinkFactory
 {
 

@@ -117,7 +117,7 @@ int Convert( std::string xmlFileName )
    // Two argument template:
    // i)  define what sort of sample converter we want: 'SampleFileSink' or anything derived from SampleSink.h
    // ii) define the type 'sample_base_t', any native type: int8_t, float, etc..
-   if( !  spcv.Open<SampleFileSink, sample_base_t>( md )    )
+   if( !  spcv.Open<SampleFileSink, sample_base_t, BinaryFileSink>( md )    )
    {
       printf("Could not configure converter. Terminating.\n");
       return -1;

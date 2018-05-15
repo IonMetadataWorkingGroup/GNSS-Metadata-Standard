@@ -47,9 +47,10 @@ public:
    void Close();
    
    uint32_t Skip(uint32_t bytesToSkip);
-   virtual uint32_t Get( void* pData, uint32_t requestedBytes ) = 0;
-   
    uint64_t SourcePos();
+
+   virtual uint32_t Get( void* pData, uint32_t requestedBytes ) = 0;
+   virtual void     Clear() = 0;
    
 };
 

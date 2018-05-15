@@ -59,11 +59,14 @@ public:
    SampleConverter( const bool normalizeSamples = false );
    virtual ~SampleConverter(void);
 
-   // when opening the sampleconverter, we define the samplesink (where the samples go: file/buffer etc.)
-   // and also define the output sample type: int8_t, float, etc...
-   template <template<typename > class sample_sink_t, typename sample_base_t>
+   // when opening the sampleconverter, we define the sample sink (sample_sink_t) where the samples go: file/buffer etc.
+   // and define the output sample type (sample_base_t): int8_t, float, etc...
+   // also we define where the header/footer binary data will be streamed (binary_sink_t)
+   template <template<typename > class sample_sink_t, typename sample_base_t, typename binary_sink_t >
    bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" );
-   void Close(); //close, tidy up
+
+   //close, tidy up
+   void Close(); 
 
    //indicate whether or not to scale output samples (float/double) to +/-1.0;
    void SetNormalize( const bool yayOrNay );

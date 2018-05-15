@@ -66,6 +66,25 @@ std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> >
    
 }
 
+std::map< std::string, BinaryBuffer* > SampleFrontEnd::GetHeaderFooterSources( ) const
+{
+
+   std::map<std::string, BinaryBuffer*> hdftMap;
+   
+   std::map<std::string,BinarySink*> sinkMap = mSampleSinkFactory->GetHeadFootSinkMap();
+
+   for(std::map<std::string,BinarySink*>::iterator sinkIt = sinkMap.begin(); sinkIt != sinkMap.end(); sinkIt++)
+   {
+      BinaryBuffer* pSampleBuff = dynamic_cast<BinaryBuffer*>( sinkIt->second );
+      
+      hdftMap[ sinkIt->first ] = pSampleBuff;
+   }
+
+   return hdftMap;
+
+};
+
+
 
 void SampleFrontEnd::Clear(  )
 {
@@ -74,12 +93,25 @@ void SampleFrontEnd::Clear(  )
    SampleSource* pSampleSource;
    
    sampleSinkInfo_map_t    sinkMap = mSampleSinkFactory->GetSampleSinkInfoMap();
-
+   // iterate through all sample sources and clear the data
    for(sampleSinkInfo_map_t::iterator sinkIt = sinkMap.begin(); sinkIt != sinkMap.end(); sinkIt++)
    {
       pSampleSource = dynamic_cast<SampleSource*>( sinkIt->second.first );
       if( pSampleSource )
+      {
          pSampleSource->Clear();
+      }
+   }
+
+   // now iterate through all of the binary header/footer buffers and clear them too
+   std::map<std::string,BinarySink*> hdftSinkMap = mSampleSinkFactory->GetHeadFootSinkMap();
+   for(std::map<std::string,BinarySink*>::iterator sinkIt = hdftSinkMap.begin(); sinkIt != hdftSinkMap.end(); sinkIt++)
+   {
+      BinaryBuffer* pBinource = dynamic_cast<BinaryBuffer*>( sinkIt->second );
+      if( pBinource )
+      {
+         pBinource->Clear();
+      }
    }
  
 }
