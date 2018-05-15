@@ -92,7 +92,7 @@ uint32_t BinaryBuffer::Put( void* pData, uint32_t numBytes )
 
    return numBytes;
 	
-};  
+}
 
 uint32_t BinaryBuffer::Get( void** pbuff, uint32_t numBytes )
 {
