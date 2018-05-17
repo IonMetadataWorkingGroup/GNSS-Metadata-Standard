@@ -54,11 +54,13 @@ public:
    SampleInterpreterFactory<chunk_t,sample_base_t> mSampleInterpFactory;
 
 protected:	
+
+   typedef std::vector<SampleInterpreter*> splInterpContainer_t;
    // this is an orderd set of SampleInterpreters, the placement in the deque indicates which bits of the chunk are interpreted
-	std::deque<SampleInterpreter*> mSampleInterpreters;
+	splInterpContainer_t           mSampleInterpreters;
    // this is an orderd set of SampleInterpreters, the placement in the list indicates which should be called first
    // -when multiple interpreters send data to the same sink, the order in which they are called matters.
-   std::list<SampleInterpreter*>  mCallOrderedSampleInterpreters;
+   splInterpContainer_t           mCallOrderedSampleInterpreters;
    std::vector<chunk_t>           mDataChunk;
    bool                           mSourceEndiannessIsDifferent;
    bool                           mRightWordShift;

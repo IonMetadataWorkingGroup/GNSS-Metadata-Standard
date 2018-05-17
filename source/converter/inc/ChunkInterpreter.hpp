@@ -37,7 +37,7 @@ ChunkInterpreter<chunk_t, sample_base_t>::~ChunkInterpreter()
 {
 
    //iterate through the sample interpreters and delete them
-   for( std::deque<SampleInterpreter*>::iterator it = mSampleInterpreters.begin(); it != mSampleInterpreters.end(); ++it )
+   for( std::vector<SampleInterpreter*>::iterator it = mSampleInterpreters.begin(); it != mSampleInterpreters.end(); ++it )
       delete (*it);
 
 }
@@ -47,13 +47,16 @@ void ChunkInterpreter<chunk_t, sample_base_t>::AddSampleInterpreter( SampleInter
 {
    //add it to the list, this maintains an ordered list of sample interpreters, which extract a single sample or sample pair
    if( front )
-      mSampleInterpreters.push_front( splIntrp );
+   {
+      mSampleInterpreters.insert( mSampleInterpreters.begin(), splIntrp );
+   }
    else
+   {
       mSampleInterpreters.push_back( splIntrp );
-
+   }
    //figure out what the sum of the preceeding bit-widths is
    uint32_t bitOffset = 0;
-   for( std::deque<SampleInterpreter*>::iterator it=mSampleInterpreters.begin(); it!=mSampleInterpreters.end(); ++it )
+   for( splInterpContainer_t::iterator it=mSampleInterpreters.begin(); it!=mSampleInterpreters.end(); ++it )
    {
       //indicate the bit offset: this tells the sample-interpreter how many bits into the chunk to start decoding the sample
       (*it)->SetChunkOffset( bitOffset );
@@ -63,13 +66,13 @@ void ChunkInterpreter<chunk_t, sample_base_t>::AddSampleInterpreter( SampleInter
 
    //now add the sample interpreters to the call-ordered list, and sort based on the call index
    mCallOrderedSampleInterpreters.clear();
-   for( std::deque<SampleInterpreter*>::iterator it=mSampleInterpreters.begin(); it!=mSampleInterpreters.end(); ++it )
+   for( splInterpContainer_t::iterator it=mSampleInterpreters.begin(); it!=mSampleInterpreters.end(); ++it )
    {
       mCallOrderedSampleInterpreters.push_back( *it );
    }
 
-   mCallOrderedSampleInterpreters.sort( SampleInterpreter::callOrderSortAscend );
-
+   //mCallOrderedSampleInterpreters.sort( SampleInterpreter::callOrderSortAscend );
+   std::sort( mCallOrderedSampleInterpreters.begin(), mCallOrderedSampleInterpreters.end() , SampleInterpreter::callOrderSortAscend);
 }
 
 template<typename chunk_t,typename sample_base_t>
@@ -154,9 +157,10 @@ void ChunkInterpreter<chunk_t, sample_base_t>::Interpret( )
       std::reverse(mDataChunk.begin(),mDataChunk.end());
    }
 
-   for( std::list<SampleInterpreter*>::iterator it=mCallOrderedSampleInterpreters.begin(); it!=mCallOrderedSampleInterpreters.end(); ++it )
+   for( splInterpContainer_t::iterator it=mCallOrderedSampleInterpreters.begin(); it!=mCallOrderedSampleInterpreters.end(); ++it )
    {
       (*it)->Interpret( &mDataChunk[0] );
    }
 
 }
+            
