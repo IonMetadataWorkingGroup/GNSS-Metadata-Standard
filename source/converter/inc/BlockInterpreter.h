@@ -22,12 +22,12 @@
 #define CLASS_BlockInterpreter
 #include <vector>
 #include <GnssMetadata/Metadata.h>
+#include "BinarySink.h"
 #include "ChunkInterpreter.h"
 #include <BinaryFileSource.h>
 
 class BlockInterpreter
 {
-
 
 protected:	
 
@@ -39,20 +39,23 @@ protected:
    std::vector<Chunk*> mChunkInterpreters;
    
    double              mCommonChunkPeriod;
+   
+   BinarySink*         mHeadFootSink;
 	
 public:	
    BlockInterpreter( const uint32_t cycles, const uint32_t headerBytes, const uint32_t footerBytes );
 	virtual  ~BlockInterpreter();
 
    virtual void AddChunk(Chunk* newChunk);
-   virtual bool Interpret( BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess );
-   virtual bool InterpretChunks( BinaryFileSource& packedFile );
+   virtual uint64_t Interpret( BinarySource* packedFile, uint64_t bytesToProcess );
+   virtual uint64_t InterpretChunks( BinarySource* packedFile );
    
    std::vector<Chunk*>& ChunkInterpreters();
    
-   
    double GetChunkPeriod() const;
    void SetChunkPeriod(const double chunkPeriod);
+   
+   void SetHeadFootSink( BinarySink* pHeadFootSink );
 };
 
 #endif //CLASS_BlockInterpreter

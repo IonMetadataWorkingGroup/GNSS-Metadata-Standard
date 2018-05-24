@@ -7,7 +7,7 @@ delete('Str00.dat');
 delete('Str01.dat');
 delete('Str02.dat');
 delete('Str03.dat');
-
+delete('Converted Lane.hdft');
 
 
 

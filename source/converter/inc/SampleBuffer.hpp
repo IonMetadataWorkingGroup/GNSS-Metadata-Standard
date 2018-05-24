@@ -33,7 +33,7 @@ template<typename sample_base_t>
 SampleBuffer<sample_base_t>::~SampleBuffer(void)
 {
    //flush the stream
-   Flush();
+   Clear();
    
    //close the stream, if it is not done so already.
    Close();
@@ -49,7 +49,7 @@ bool SampleBuffer<sample_base_t>::Open( )
 
    //now try to ensure that there is space in the buffer
    mSampleBuffer.resize(BASE_BUFFER_SIZE);
-   mBufferSize = mSampleBuffer.size();
+   mBufferSize = static_cast<int32_t>( mSampleBuffer.size() );
    mBufferPos  = -1;
    
    return this->mIsOpen;
@@ -62,12 +62,12 @@ void SampleBuffer<sample_base_t>::Close()
    
    this->mIsOpen = false;
 
-   Flush();
+   Clear();
 
 }
 
 template<typename sample_base_t>
-void SampleBuffer<sample_base_t>::Flush()
+void SampleBuffer<sample_base_t>::Clear()
 {
 
    if( !this->mIsOpen )
@@ -91,7 +91,7 @@ void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x )
    if( mBufferPos >= static_cast<int32_t>(mSampleBuffer.size()) )
    {
       mSampleBuffer.resize( mSampleBuffer.size() + BASE_BUFFER_SIZE_IN_BYTES );
-      mBufferSize = mSampleBuffer.size();
+      mBufferSize = static_cast<int32_t>( mSampleBuffer.size());
       
    }
    
@@ -113,7 +113,7 @@ void SampleBuffer<sample_base_t>::DoAddSample( sample_base_t x, sample_base_t y 
    if( mBufferPos >= mBufferSize )
    {
       mSampleBuffer.resize( mBufferSize + BASE_BUFFER_SIZE_IN_BYTES );
-      mBufferSize = mSampleBuffer.size();
+      mBufferSize = static_cast<int32_t>( mSampleBuffer.size());
    }
    
    mSampleBuffer[mBufferPos-1] = x;
@@ -128,7 +128,8 @@ uint32_t SampleBuffer<sample_base_t>:: DoGetSamples( const void** pbuff ) const
    //point to the vector memory
    *pbuff = &mSampleBuffer[0];
 
-   //indicate how many samples are there
+   //indicate how many samples are there 
+   // (note the +1 is because we have IQ pairs and point to the I, with the Q immediately after ... i.e. +1)
    return static_cast<uint32_t>(mBufferPos+1);
 }
 

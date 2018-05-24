@@ -25,6 +25,7 @@
 #include <vector>
 #include <GnssMetadata/Metadata.h>
 #include "SampleSink.h"
+#include "BinarySink.h"
 #include "BlockInterpreter.h"
 
 
@@ -33,6 +34,9 @@ class LaneInterpreter
 protected:	
    std::string                       mFileURL;
    std::vector<BlockInterpreter*>    mBlockInterpreters;
+
+   BinarySink*                       mHeadFootSink;
+   
 	
 public:	
     LaneInterpreter( std::string fileURL );

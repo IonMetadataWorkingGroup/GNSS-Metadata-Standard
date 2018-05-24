@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
-  <lane id="GPS SPS Data / Galileo OS Data">
+  <lane id="GPS SPS Data - Galileo OS Data">
         <session id="0">
             <comment format="text">This is a 15 second long signal generated from the Spirent GSS8000.</comment>
             <toa>2014-12-30T22:38:54.905999999Z</toa>
@@ -78,7 +78,7 @@
     <file>
         <url>L125_III1b_15s.usb</url>
         <timestamp>2014-12-30T22:38:54.905999999Z</timestamp>
-        <lane id="GPS SPS Data / Galileo OS Data"/>
+        <lane id="GPS SPS Data - Galileo OS Data"/>
         <owner>Fraunhofer IIS</owner>
         <copyright>http://www.iis.fraunhofer.de/flexiband"</copyright>
     </file>

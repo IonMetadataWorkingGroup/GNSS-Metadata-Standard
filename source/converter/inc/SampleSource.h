@@ -42,6 +42,7 @@ public:
    virtual uint32_t GetSamples( const  double*& pbuff )  const = 0;
 
    virtual void Close() = 0;
+   virtual void Clear() = 0;
 
 };
 

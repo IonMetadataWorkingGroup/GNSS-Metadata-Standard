@@ -23,8 +23,8 @@ public:
    Statistics(double rangeMin, double rangeMax, int64_t samplesToSkip = 0 );
    virtual ~Statistics(void);
 
-   static double constexpr MaxPossibleValue = 1.0e308;
-   static double constexpr MinPossibleValue = -1.0e308;
+   const double MaxPossibleValue =  1.0e308;
+   const double MinPossibleValue = -1.0e308;
 
    double Mean()       const;
    double Min()        const;

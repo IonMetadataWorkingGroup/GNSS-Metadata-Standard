@@ -23,26 +23,36 @@
 
 #include "SampleSinkFactory.h"
 #include "SampleBuffer.h"
+#include "BinaryBuffer.h"
 #include "SampleConverter.h"
 
-template<typename sample_base_t>
-class SampleFrontEnd : public SampleSinkFactory< SampleBuffer<sample_base_t> >, public SampleConverter
+class SampleFrontEnd : public SampleConverter
 {
 
 public:
 
+   //typedef for a map indexed by Stream name, and containing a pair: sampleSource and an info-structure
 	typedef std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > taggedSampleStreamWithInfo;
 
-   SampleFrontEnd():
-   SampleConverter(this)
-   {};
+   //constructor
+   SampleFrontEnd()  {};
 
+   // when calling Open() we define the type of the output samples (int8_t, float, double, ... )
+   template<typename sample_base_t>
+   bool Open( GnssMetadata::Metadata& md, std::string path_prefix="" )
+   {
+      return SampleConverter::Open<SampleBuffer,sample_base_t, BinaryBuffer>( md, path_prefix );
+   }
+   
    // return a SampelSource by name
    const SampleSource*     GetSource(const std::string sinkName) const;
    const SampleStreamInfo* GetSourceInfo( const std::string sinkName ) const;
    //
    std::map< std::string, std::pair<const SampleSource*, const SampleStreamInfo*> > GetSources( ) const;
    
+   // get a map of header/footer sources, indexed by LaneID string
+   std::map< std::string, BinaryBuffer* > GetHeaderFooterSources( ) const;
+
    // clear buffers corresponding to all SampleSources
    // simultanious clear of all sources will keep sample data aligned
    void Clear( );

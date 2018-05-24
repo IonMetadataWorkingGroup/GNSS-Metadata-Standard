@@ -206,8 +206,23 @@ namespace SampleFormatFunctions
       sample_base_t Q =  static_cast<int8_t>( (pChunk[chunkIndexSecond] >> shiftSecond) & 0xff );
       
       sampleSink->AddSample( I, Q );
-
+      
    }
+   
+   template<typename chunk_t, typename sample_base_t> void Int16IQ( sample_base_t (*encoderFunc)( const chunk_t* , uint32_t, uint32_t, uint32_t ), const chunk_t* pChunk, uint32_t chunkIndex, uint32_t residualBitIndex, uint32_t bitWidth, SampleSink* sampleSink )
+   {
+      uint8_t  shiftFirst, shiftSecond;
+      uint32_t chunkIndexFirst, chunkIndexSecond;
+      ComputeOffsets<chunk_t>( chunkIndex, residualBitIndex, bitWidth, shiftFirst, shiftSecond, chunkIndexFirst, chunkIndexSecond );
+      
+      //note that sample_base_t should always be int16_t when this is called.
+      sample_base_t I =  static_cast<sample_base_t>( static_cast<int16_t>( (pChunk[chunkIndexFirst]  >> shiftFirst)  & 0xffff ) );
+      sample_base_t Q =  static_cast<sample_base_t>( static_cast<int16_t>( (pChunk[chunkIndexSecond] >> shiftSecond) & 0xffff ) );
+      
+      sampleSink->AddSample( I, Q );
+      
+   }
+   
 
 }//end namespace SampleFormatFunctions
 

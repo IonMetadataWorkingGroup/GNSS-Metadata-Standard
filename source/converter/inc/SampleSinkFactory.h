@@ -24,35 +24,91 @@
 #include <map>
 #include <string>
 #include "SampleSink.h"
+#include "BinarySink.h"
 #include "SampleStreamInfo.h"
+
+typedef std::map< std::string, std::pair<SampleSink*,SampleStreamInfo*> > sampleSinkInfo_map_t;
 
 class BaseSampleSinkFactory
 {
-
+protected:
+   std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>> mSampleSinks;
+   std::map<std::string,BinarySink*> mHeadFootSinks;
+   
 public:
    BaseSampleSinkFactory(){};
    virtual ~BaseSampleSinkFactory(){};
+   
    virtual SampleSink* GetSampleSink(const std::string sinkName) = 0;
    virtual SampleStreamInfo* GetSampleStreamInfo(const std::string sinkName) = 0;
+
+   virtual BinarySink* GetHeadFootSink(const std::string sinkName) = 0;
+   
+   bool HasSampleSink(const std::string sinkName)
+   {
+      //if we don't aleady have a SampleSink for this stream, then create one
+      if( mSampleSinks.find( sinkName ) == mSampleSinks.end() )
+      {
+         return false;
+      }
+      return true;
+   }
+   
+   
+   sampleSinkInfo_map_t GetSampleSinkInfoMap()
+   {
+      sampleSinkInfo_map_t sinkMap;
+      
+      for(std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>>::const_iterator mit = mSampleSinks.begin(); mit != mSampleSinks.end(); mit++)
+      {
+         sinkMap[ mit->first ] = std::make_pair( mit->second.first, mit->second.second );
+      }
+      
+      return sinkMap;
+   };
+
+    std::map<std::string,BinarySink*> GetHeadFootSinkMap()
+   {
+      std::map<std::string,BinarySink*> sinkMap;
+      
+      for(std::map<std::string,BinarySink*>::const_iterator mit = mHeadFootSinks.begin(); mit != mHeadFootSinks.end(); mit++)
+      {
+         sinkMap[ mit->first ] = mit->second;
+      }
+      
+      return sinkMap;
+   };
+   
+   bool HasHeadFootSink(const std::string sinkName)
+   {
+      //if we don't aleady have a SampleSink for this stream, then create one
+      if( mHeadFootSinks.find( sinkName ) == mHeadFootSinks.end() )
+      {
+         return false;
+      }
+      return true;
+   }
 
 };
 
 
-template<typename sample_sink_t>
+template<typename sample_sink_t, typename binary_sink_t>
 class SampleSinkFactory : public BaseSampleSinkFactory
 {
 
 protected:
-   std::map<std::string,std::pair<SampleSink*,SampleStreamInfo*>> mSampleSinks;
-   void TryGet(const std::string sinkName);
+   
+   void TryGetSampleSink(const std::string sinkName);
+   void TryGetHeadFootSink(const std::string sinkName);
 
 public:
    SampleSinkFactory();
    ~SampleSinkFactory();
 
-   SampleSink* GetSampleSink(const std::string sinkName);
+   SampleSink*       GetSampleSink(const std::string sinkName);
    SampleStreamInfo* GetSampleStreamInfo(const std::string sinkName);
 	
+   BinarySink*       GetHeadFootSink(const std::string sinkName);
 };
 
 #include "SampleSinkFactory.hpp"

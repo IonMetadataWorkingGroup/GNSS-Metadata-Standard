@@ -49,7 +49,7 @@ namespace SampleEncoderFunctions
    template<typename chunk_t, typename sample_base_t> 
    sample_base_t Sign( const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization )
    {
-      return ( (pChunk[chunkIndex] >> shift ) & 0x1 ? -1 : 1 );
+      return static_cast<sample_base_t>( (pChunk[chunkIndex] >> shift ) & 0x1 ? -1 : 1 );
    }
 
    template<typename chunk_t, typename sample_base_t> 
@@ -60,16 +60,19 @@ namespace SampleEncoderFunctions
       chunk_t mask = std::numeric_limits<chunk_t>::max() >> ( 8*sizeof(chunk_t) - (quantization) ); 
 
       //extract the sample bits
-      chunk_t bits = ( pChunk[chunkIndex] >> shift ) & mask;
+      uint32_t bits = static_cast<uint32_t>( ( pChunk[chunkIndex] >> shift ) & mask );
       
       //retrieve the sign of the data
       bool sign =  ( pChunk[chunkIndex] >> (shift+quantization-1) ) & 0x1 ;
 
       //make a mask for the magnitude data (ones for the upper bits)
-      chunk_t signExtension = std::numeric_limits<chunk_t>::max() << quantization;
+      uint32_t signExtension = static_cast<uint32_t>( std::numeric_limits<uint32_t>::max() << quantization );
 
-      //either return the bits or add the sign extension
-      return static_cast<sample_base_t>(  ( sign ?  bits | signExtension : bits ) );
+      //either assign the bits or add the sign extension
+      uint32_t smpl =  ( sign ?  bits | signExtension : bits );
+      
+      //finally cast to the output type (might be floating point)
+      return static_cast<sample_base_t>( static_cast<int32_t>(smpl) );
    }
 
 
@@ -81,16 +84,19 @@ namespace SampleEncoderFunctions
 	   chunk_t mask = std::numeric_limits<chunk_t>::max() >> (8 * sizeof(chunk_t) - (quantization));
 
 	   //extract the sample bits, and multiply by 2
-	   chunk_t bits = ((pChunk[chunkIndex] >> shift) & mask)<<1;
+	   uint32_t bits = static_cast<uint32_t>(  ((pChunk[chunkIndex] >> shift) & mask)<<1 );
 
 	   //retrieve the sign of the data
 	   bool sign = (pChunk[chunkIndex] >> (shift + quantization - 1)) & 0x1;
 
 	   //make a mask for the magnitude data (ones for the upper bits, noting the << 1 above)
-	   chunk_t signExtension = std::numeric_limits<chunk_t>::max() << (quantization + 1);
+	   uint32_t signExtension = static_cast<uint32_t>( std::numeric_limits<chunk_t>::max() << (quantization + 1) );
+      
+      //either assign the bits or add the sign extension, offset by +1
+      uint32_t smpl =  (sign ? bits | signExtension : bits) + 1;
 
-	   //either return the bits or add the sign extension, offset by +1
-	   return static_cast<sample_base_t>((sign ? bits | signExtension : bits) + 1 );
+      //finally cast to the output type (might be floating point)
+	   return static_cast<sample_base_t>( static_cast<int32_t>(smpl) );
    }
    
 
@@ -132,6 +138,47 @@ namespace SampleEncoderFunctions
 	   sample_base_t ans = (sign ? -mag : mag);
 	   return ans;
    }
+   
+   template<typename chunk_t, typename sample_base_t>
+   sample_base_t MagnitudeSign(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
+   {
+      
+      //set to all ones (assume chunk_t is unsigned), then rightshift
+      chunk_t mask = std::numeric_limits<chunk_t>::max() >> (8 * sizeof(chunk_t) - (quantization - 1));
+      
+      //extract the sample bits
+      sample_base_t mag = static_cast<sample_base_t>((pChunk[chunkIndex] >> (shift+1)) & mask);
+      
+      //retrieve the sign of the data
+      bool sign = (pChunk[chunkIndex] >> shift) & 0x1;
+      
+      //either return the bits or add the sign extension
+      sample_base_t ans = (sign ? -mag : mag);
+      return ans;
+      
+   }
+
+   template<typename chunk_t, typename sample_base_t>
+   sample_base_t MagnitudeSignAdjusted(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
+   {
+      
+      //set to all ones (assume chunk_t is unsigned), then rightshift
+      chunk_t mask = std::numeric_limits<chunk_t>::max() >> (8 * sizeof(chunk_t) - (quantization - 1));
+
+      //extract the sample bits
+      sample_base_t mag = static_cast<sample_base_t>(
+                                                     (  ((pChunk[chunkIndex] >> (shift+1)) & mask) << 1 ) | 0x1
+                                                     );
+            
+      //retrieve the sign of the data
+      bool sign = (pChunk[chunkIndex] >> shift) & 0x1;
+      
+      //either return the bits or add the sign extension
+      sample_base_t ans = (sign ? -mag : mag);
+      return ans;
+      
+   }
+   
 
    template<typename chunk_t, typename sample_base_t>
    sample_base_t OffsetBinary(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
@@ -142,9 +189,11 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t bits = (pChunk[chunkIndex] >> shift) & mask;
 
-	   chunk_t offset = 0x1 << (quantization - 1);
+	   chunk_t offset =  static_cast<chunk_t>(0x1) << (quantization - 1);
 
-	   return static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
+      //re-center around zero
+      sample_base_t ans = static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
+      return ans;
    }
 
    template<typename chunk_t, typename sample_base_t>
@@ -156,9 +205,11 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits, then multiply by 2
 	   chunk_t bits = ((pChunk[chunkIndex] >> shift) & mask)<<1;
 
-	   chunk_t offset = (0x1 << quantization) - 1;
+	   chunk_t offset =  static_cast<chunk_t>( (0x1 << quantization) - 1 );
 
-	   return static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
+      //re-center around zero
+      sample_base_t ans = static_cast<sample_base_t>(bits) - static_cast<sample_base_t>(offset);
+      return ans;
    }
 
 
@@ -171,15 +222,17 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t gray = (pChunk[chunkIndex] >> shift) & mask;
 
-	   for (chunk_t b = 1U << quantization; b > 1; b >>= 1)
+	   for (chunk_t b = static_cast<chunk_t>(0x1) << quantization; b > 1; b >>= 1)
 	   {
 		   if (gray & b)
 			   gray ^= (b >> 1);
 	   }
 
-	   chunk_t offset = 0x1 << (quantization - 1);
+	   chunk_t offset = static_cast<chunk_t>(0x1) << (quantization - 1);
 
-	   return static_cast<sample_base_t>(gray) - static_cast<sample_base_t>(offset);
+      //re-center around zero
+      sample_base_t ans = static_cast<sample_base_t>(gray) - static_cast<sample_base_t>(offset);
+      return ans;
    }
 
    template<typename chunk_t, typename sample_base_t>
@@ -191,25 +244,36 @@ namespace SampleEncoderFunctions
 	   //simply extract the bits
 	   chunk_t gray = (pChunk[chunkIndex] >> shift) & mask;
 
-	   for (chunk_t b = 1U << quantization; b > 1; b >>= 1)
+	   for (chunk_t b = static_cast<chunk_t>(0x1) << quantization; b > 1; b >>= 1)
 	   {
 		   if (gray & b)
 			   gray ^= (b >> 1);
 	   }
 
-	   chunk_t offset = (0x1 << quantization) - 1;
+	   chunk_t offset =  static_cast<chunk_t>( (0x1 << quantization) - 1 );
 
-	   return static_cast<sample_base_t>(gray << 1) - static_cast<sample_base_t>(offset);
+      //re-center around zero
+      sample_base_t ans = static_cast<sample_base_t>(gray << 1) - static_cast<sample_base_t>(offset);
+      return ans;
    }
 
 
    template<typename chunk_t, typename sample_base_t>
    sample_base_t Int8(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
    {
-
-	   int8_t sample =  static_cast<int8_t>( (pChunk[chunkIndex] >> shift) & 0xff );
-
-	   return static_cast<sample_base_t>(sample);
+      
+      int8_t sample =  static_cast<int8_t>( (pChunk[chunkIndex] >> shift) & 0xff );
+      
+      return static_cast<sample_base_t>(sample);
+   }
+   
+   template<typename chunk_t, typename sample_base_t>
+   sample_base_t Int16(const chunk_t* pChunk, uint32_t chunkIndex, uint32_t shift, uint32_t quantization)
+   {
+      
+      int16_t sample =  static_cast<int16_t>( (pChunk[chunkIndex] >> shift) & 0xffff );
+      
+      return static_cast<sample_base_t>(sample);
    }
 
 

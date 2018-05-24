@@ -25,9 +25,9 @@
 #include "SampleInterpreterFactory.h"
 
 
-SampleConverter::SampleConverter(BaseSampleSinkFactory* ssFactory):
+SampleConverter::SampleConverter(const bool normalizeSamples):
 mIsOpen(false),
-mSampleSinkFactory(ssFactory),
+mSampleSinkFactory(NULL),
 mBaseLoadPeriod(1)
 {
 
@@ -52,20 +52,46 @@ void SampleConverter::Close()
       for( std::vector<LaneInterpreter*>::iterator It = mLaneInterps.begin(); It != mLaneInterps.end(); ++It )
       {
          delete (*It);
-         mLaneFiles[*It]->Close();
-         delete mLaneFiles[*It];
-         mLaneFiles.erase(*It);
+         mLaneSources[*It]->Close();
+         delete mLaneSources[*It];
+         mLaneSources.erase(*It);
       }
       
+      //delete the sampel sink factory
+      delete mSampleSinkFactory;
       
    }
    mIsOpen = false;
 }
 
+void SampleConverter::SetNormalize( const bool yayOrNay )
+{
+
+   if( !mIsOpen )
+   {
+      printf("Error: SetNormalize(): no sampleSinks. Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n");
+      return;
+   }
+
+   sampleSinkInfo_map_t ssMap = mSampleSinkFactory->GetSampleSinkInfoMap();
+   
+   for( sampleSinkInfo_map_t::iterator it = ssMap.begin(); it != ssMap.end(); ++it )
+   {
+      if( yayOrNay )
+      {
+         it->second.first->SetNormalize();
+      }
+      else
+      {
+         it->second.first->UnsetNormalize();
+      }
+   }
+}
+
 double SampleConverter::BaseLoadPeriod() const
 {
    return mBaseLoadPeriod;
-};
+}
 
 
 void SampleConverter::Convert( const uint32_t bytesToProcess )
@@ -73,7 +99,7 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
 
    if( !mIsOpen )
    {
-      printf("Error: no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n )");
+      printf("Error: Convert() :no file open - Terminating.\n[Did you forget to call SampleConverter::Open( GnssMetadata::Metadata&)?].\n");
       return;
    }
 
@@ -89,28 +115,16 @@ void SampleConverter::Convert( const uint32_t bytesToProcess )
    for( std::vector<LaneInterpreter*>::iterator lnIt = mLaneInterps.begin(); lnIt != mLaneInterps.end(); lnIt++  )
    {
 
-      uint32_t bytesProcessed = 0;
+      //uint64_t bytesProcessed = 0;
    
       //for now, just decode the first Lane
       LaneInterpreter* laneInterpreter= (*lnIt);
-   
-      bool readBlockOK = false;
-      do
+      for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
       {
-   
-         for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
-         {
-            BlockInterpreter* block = (*It);
-            //read the entire block
-            do
-            {
-               readBlockOK = block->Interpret( *mLaneFiles[*lnIt], bytesProcessed, bytesToProcess );
-            }
-            while( readBlockOK );
-         }
-
+         BlockInterpreter* block = (*It);
+         //read the entire block
+         /*bytesProcessed = */ block->Interpret( mLaneSources[*lnIt], bytesToProcess );
       }
-      while( readBlockOK );
 
    }//end for( lnIt )
 }
@@ -150,11 +164,11 @@ bool SampleConverter::Load( const double secondsToProcess )
       //for now, just decode the first Lane
       LaneInterpreter* laneInterpreter= (*lnIt);
       
-      bool readBlockOK = false;
+      uint64_t readBlockSize = 0;
          
-      //for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
+      for( std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin(); It != laneInterpreter->Blocks().end(); ++It )
       {
-         std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin();
+         //std::vector<BlockInterpreter*>::iterator It = laneInterpreter->Blocks().begin();
          BlockInterpreter* block = (*It);
          
          //determine how many chunks to interpret
@@ -163,12 +177,12 @@ bool SampleConverter::Load( const double secondsToProcess )
          uint32_t chunksLoaded = 0;
          do
          {
-            readBlockOK = block->InterpretChunks( *mLaneFiles[laneInterpreter] );
+            readBlockSize = block->InterpretChunks( mLaneSources[laneInterpreter] );
             chunksLoaded++;
          }
-         while( readBlockOK && chunksLoaded < chunksToLoad );
+         while( readBlockSize != 0 && chunksLoaded < chunksToLoad );
          
-         readAllOK = readAllOK && ( chunksToLoad == chunksLoaded );
+         readAllOK = (readBlockSize != 0) && ( chunksToLoad == chunksLoaded );
       }
       
       

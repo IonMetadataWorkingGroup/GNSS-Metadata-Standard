@@ -9,7 +9,7 @@
 %  'CleanData.m': should delete the converted files 
 
 
-testDirectories = { 'CODC', 'FHG', 'IFEN', 'JRC', 'TRIGR', 'SJTU' };
+testDirectories = { 'CODC' , 'FHG', 'FITWDP', 'IFEN', 'JRC', 'TRIGR' };
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Purge all of the old converted sample files, to ensure that the 
@@ -29,34 +29,27 @@ fprintf('Done.\n');
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Run the Converter
-
-binName    = 'TestConverter';
+doSilent = 1;
+binName    = 'Converter';
 testDir    = pwd;
-if ismac
-    cmdString  = ['./'   binName  ' > log.txt'];
-elseif isunix
-    cmdString  = ['./'   binName  ' > log.txt'];
-elseif ispc
-    cmdString  = [binName ' > log.txt'];
-else
-    disp('Operating system not supported\nPlease manually modify script (check_converter.m : line 18) to continue.\n')
-    return;
-end
 
 % check the system (xmlread not supported under Octave) 
-isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
-isMatlab = ~isOctave;
+%isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+%isMatlab = ~isOctave;
 
-% run the converter 
 fprintf('Running the test converter ("%s"): ',binName);
-installDir = pwd();
-system(cmdString);
-cd(testDir);
-fprintf('Done.\n');
+for t=1:numel(testDirectories)
+       
+    cd(testDirectories{t});  
+    RunConverter( doSilent );
+    cd('..');
+
+end
+fprintf('\Conversion completed.\n\n');
+
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Check each of the files
-doSilent = 1;
 fprintf('Checking the converted output: \n');
 for t=1:numel(testDirectories)
     

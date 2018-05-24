@@ -18,20 +18,26 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if defined(_WIN32) || defined(_WIN64) || defined(_MSC_VER) 
+   //try to suppress some Visual Studio Warnings
+   #define _CRT_SECURE_NO_WARNINGS
+#endif
 
-#include "SampleFileSink.h"
-#include "SampleStatisticsSink.h"
 #include <math.h>
 
-template<typename sample_base_t>
+template< template<typename> class sample_sink_t, typename sample_base_t, typename binary_sink_t >
 bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix )
 {
    std::string fullpath;
 
    if( mIsOpen )
    {
-      throw std::runtime_error("Error: Already open");
+      printf("Error: Already open.\n");
+      return false;
    }
+   
+   //assign a sample sink factory
+   mSampleSinkFactory = new SampleSinkFactory<sample_sink_t<sample_base_t>, binary_sink_t>();
 
    //find the files
    for( GnssMetadata::FileList::iterator  flIt = md.Files().begin(); flIt != md.Files().end(); ++flIt)
@@ -44,7 +50,7 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
    SampleStreamInfo commonSampleInfo;
    
    //////////////////////////////////////////////////////////////
-   // processs it as though it is a non-standard/custom format
+   bool allOK = true;
    for( GnssMetadata::LaneList::iterator  lnIt = md.Lanes().begin(); lnIt != md.Lanes().end(); ++lnIt)
    {
 
@@ -64,7 +70,9 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
       //skip lane if we have no file
       if( !foundFileForLane )
       {
-		 throw std::runtime_error( "SampleConverter: No file found for Lane" );
+         printf( "Error: SampleConverter - No file found for Lane.\n" );
+         allOK = false;
+         break;
       }
 
       //create a lane
@@ -76,6 +84,7 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
 		GnssMetadata::AttributedObject::Search<GnssMetadata::System>( system, md, sysID );
       //assign the system frequency
       commonSampleInfo.mBaseFrequency = GnssMetadata::Frequency( system.BaseFrequency().toHertz() );
+      commonSampleInfo.mLaneID        = laneID;
 
       //populate it with blocks
       BlockInterpreter* blockInterp;
@@ -91,15 +100,23 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
       //JTC ToDo - check that it is ok!
       mLaneInterps.push_back( laneInterpreter );
 	  
-      //now open the first file for each lane
-      mLaneFiles[ mLaneInterps.back() ] = new BinaryFileSource;
-      //and open the file for reading binary
-	  fullpath = path_prefix + mLaneInterps.back()->FileURL();
-      mLaneFiles[ mLaneInterps.back() ]->Open( fullpath );
-      if( !mLaneFiles[ mLaneInterps.back() ]->IsOpen() )
+      //now open the first file for each lane  - note that we might source the data from somehwere else (other than a file)
+      //and so might create some other sort of BinarySource, provided it inherits from BinarySource()
+      mLaneSources[ mLaneInterps.back() ] = new BinaryFileSource;
+      //and open the source
+      fullpath = path_prefix + mLaneInterps.back()->FileURL();
+      mLaneSources[ mLaneInterps.back() ]->Open( fullpath );
+      if( !mLaneSources[ mLaneInterps.back() ]->IsOpen() )
       {
-		 throw std::runtime_error( "SampleConverter: Could not open file" );
+         printf( "Error: SampleConverter: Could not open file.\n" );
+         allOK = false;
+         break;
       }
+   }
+
+   if( !allOK )
+   {
+      return false;
    }
 
    
@@ -155,7 +172,7 @@ bool SampleConverter::Open( GnssMetadata::Metadata& md, std::string path_prefix 
    }while( !foundBaseLoadPeriod );
       
    //if this worked, then flag the converter as being open
-   mIsOpen = true;
+   mIsOpen = allOK;
 
    return mIsOpen;
 
@@ -173,6 +190,13 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
                                        static_cast<uint32_t>( block->SizeHeader() ),
                                        static_cast<uint32_t>( block->SizeFooter() )
                                        );
+
+   // if necessary, we request a binary source from the SampleSinkFactory, named according to the containing Lane
+   if( ( (block->SizeHeader() > 0) || (block->SizeFooter() > 0) ) )
+   {
+      BinarySink* pSink = mSampleSinkFactory->GetHeadFootSink( commonSampleInfo.mLaneID );
+      (*blockInterp)->SetHeadFootSink( pSink );
+   }
          
    for( GnssMetadata::ChunkList::iterator ckIt = block->Chunks().begin(); ckIt != block->Chunks().end(); ++ckIt )
    {
@@ -181,7 +205,7 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
       //create the cunk interpreter using the md and info form ckIt
       switch( ckIt->SizeWord() )
       {
-      case 1:
+      case 1:               //templated by <chunk-type, sample-output-type>
          CreateChunkInterpreter< uint8_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
          break;
       case 2:
@@ -194,7 +218,7 @@ bool SampleConverter::CreateBlockInterpreter( GnssMetadata::Metadata& md, Sample
          CreateChunkInterpreter<uint64_t, sample_base_t>( md, commonSampleInfo, &(*ckIt), &chunk );
          break;
       default:
-         printf("Error: unsupported Chunk::SizeWord(): %ld\n",ckIt->SizeWord());
+         printf("Error: unsupported Chunk::SizeWord(): %d\n", static_cast<int32_t>(ckIt->SizeWord()));
          return false;
       }
       
@@ -236,12 +260,12 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 	   uint16_t numBitsInLump = 0;
 	   for (GnssMetadata::StreamList::iterator smIt = lpIt->Streams().begin(); smIt != lpIt->Streams().end(); ++smIt)
 	   {
-		   numSampleInterpretersPerLump += static_cast<uint32_t>(smIt->RateFactor());
-		   numBitsInLump += smIt->Packedbits();
+		   numSampleInterpretersPerLump += static_cast<uint16_t>(smIt->RateFactor());
+		   numBitsInLump += static_cast<uint16_t>( smIt->Packedbits() );
 		   //printf("Found Stream: %s\n", smIt->toString().c_str());
 	   }
 
-	   uint16_t lnLumpRepeat = ( chunk->SizeWord() * chunk->CountWords() * 8 ) / numBitsInLump;
+	   uint16_t lnLumpRepeat = static_cast<uint16_t>( ( chunk->SizeWord() * chunk->CountWords() * 8 ) / numBitsInLump );
       double   lumpPeriod   = 0;
       
 		for (uint16_t lr = 0; lr < lnLumpRepeat; lr++)
@@ -258,10 +282,29 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 				SampleSink*       sampleSink = mSampleSinkFactory->GetSampleSink( smIt->toString() );
             SampleStreamInfo* sampleInfo = mSampleSinkFactory->GetSampleStreamInfo( smIt->toString() );
             
-				uint16_t numSmpInterp = static_cast<uint32_t>(smIt->RateFactor());
-				uint16_t numPaddingBits = static_cast<uint32_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
+            //JTC: ToDo
+            // At this point it should be possible to determine the scale factor for the samples in the case that
+            // we intend to scale float/double to the interval +/1.0.    
+            // we always provide this scale value, but must explictly enable/disable normalizatoin. 
+            int32_t maxSampleValue = ( 0x1 << smIt->Quantization() );
+            double  sampleScaleValue = 1.0 / static_cast<double>( maxSampleValue );
+            sampleSink->SetScaleValue( sampleScaleValue );
 
-				uint16_t nextCallOrder = totalNumSampleInterpreters;
+            ////////////////////////////////////////////////////
+            //
+            // This section of code produces a queue of SampleInterpreter pointers
+            // 
+            //  o each element of the queue processes the cunk and extracts one sample or one sample pair
+            //    and then passes these sampels into the corresponding sample-sink
+            //  o we need to ensure that the samples are passed to the sink(s) in chronological order
+            //    and so it is necessary to call the SampleInterpreters in the correct oder
+            //  o the code below ensures that the ordering of the SampleInterprerters in the queue corresponds
+            //    tho the chronological order in wich the samples were actually captured
+            //
+            uint16_t numSmpInterp = static_cast<uint16_t>(smIt->RateFactor());
+            uint16_t numPaddingBits = static_cast<uint16_t>(smIt->Packedbits() - numSmpInterp * (chunkIntrp->mSampleInterpFactory.BitWidth(smIt->Format(), smIt->Quantization())));
+            
+            uint16_t nextCallOrder = totalNumSampleInterpreters;
 				//offset the call-order based on the shift-direction of the Lumps
 				if( lpIt->Shift() == GnssMetadata::Lump::shiftRight )
 					nextCallOrder += (lnLumpRepeat - lr) * numSampleInterpretersPerLump;
@@ -276,7 +319,7 @@ bool SampleConverter::CreateChunkInterpreter( GnssMetadata::Metadata& md, Sample
 				{
 					// take the templated-typed chunkInterpreter and use it to create the appropriate type of sample intepreter
 					SampleInterpreter* splIntrp;
-					chunkIntrp->mSampleInterpFactory.Create(sampleSink, smIt->Format(), smIt->Encoding(), smIt->Quantization(), splIntrp, nextCallOrder);
+					chunkIntrp->mSampleInterpFactory.Create(sampleSink, smIt->Format(), smIt->Encoding(), static_cast<uint8_t>(smIt->Quantization()), splIntrp, nextCallOrder);
 					// and add it to the ordered list
 					streamSplIntrps.push_back(splIntrp);
 

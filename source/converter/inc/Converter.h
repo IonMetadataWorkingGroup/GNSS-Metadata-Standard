@@ -25,4 +25,11 @@
 #include "SampleSinkFactory.h"
 #include "SampleFrontEnd.h"
 
+// some usefil 'Sink' types used when templating the Sample
+#include "BinaryFileSink.h"
+#include "SampleFileSink.h"
+#include "BinaryBuffer.h"
+#include "SampleStatisticsSink.h"
+
+
 #endif //INCLUDE_Converter

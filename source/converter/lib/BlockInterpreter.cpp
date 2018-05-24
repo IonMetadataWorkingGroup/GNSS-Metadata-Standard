@@ -25,7 +25,8 @@ mCycles(cycles),
 mChunkIndex(0),
 mHeaderBytes(headerBytes),
 mFooterBytes(footerBytes),
-mCommonChunkPeriod(1)
+mCommonChunkPeriod(1),
+mHeadFootSink(NULL)
 {
 
 	mChunkInterpreters.resize(0);
@@ -40,6 +41,12 @@ BlockInterpreter::~BlockInterpreter()
 
 }
 
+void BlockInterpreter::SetHeadFootSink( BinarySink* pHeadFootSink )
+{
+   
+   mHeadFootSink = pHeadFootSink;
+}
+
 void BlockInterpreter::AddChunk(Chunk* newChunk)
 {
 
@@ -50,84 +57,73 @@ void BlockInterpreter::AddChunk(Chunk* newChunk)
 double BlockInterpreter::GetChunkPeriod() const
 {
    return mCommonChunkPeriod;
-};
+}
 
 void BlockInterpreter::SetChunkPeriod(const double chunkPeriod)
 {
    mCommonChunkPeriod = chunkPeriod;
-};
+}
 
 std::vector<Chunk*>& BlockInterpreter::ChunkInterpreters()
 {
    return mChunkInterpreters;
-};
+}
 
 
-bool BlockInterpreter::Interpret( BinaryFileSource& packedFile, uint32_t& bytesProcessed, uint32_t bytesToProcess )
+uint64_t BlockInterpreter::Interpret( BinarySource* packedFile, uint64_t bytesToProcess )
 {
-   
-   //first skip the header-bytes
-   packedFile.Skip(mHeaderBytes);
-   
-   bool continueChunkInterpret = true;
-   while( continueChunkInterpret )
-   {
-      
-      //keep a track of how many chunk-patterns have been interpreted
-      uint32_t chunkPatternCount = 0;
-      
-      //now cycle through each chunk in the block and interpret
-      for( std::vector<Chunk*>::iterator ckIt = mChunkInterpreters.begin(); ckIt != mChunkInterpreters.end(); ++ckIt )
-      {
-         //get the chunk memory from the chunk interpreter
-         char*    pChunk = static_cast<char*>( (*ckIt)->GetChunk() );
-         uint32_t nBytes = (*ckIt)->BytesPerChunk();
-         
-         //read one chunk
-         if( packedFile.Get( pChunk, nBytes ) == static_cast<std::streamsize>(nBytes) )
-         {
 
-            (*ckIt)->Interpret( );
-            bytesProcessed += nBytes;
-            
-            if( bytesToProcess != 0 && ( bytesProcessed >= bytesToProcess ) )
-            {
-               //not very clean, but keep for now (later process integer blocks?)
-               return false;
-            }
-         }
-         else
-         {
-            //out of data
-            return false;
-         }
+   uint64_t bytesProcessed   = 0;
+   uint64_t thisConvertBytes = 0;
+   
+   //if we are passed '0' then interpret the entire file
+   if( bytesToProcess == 0 )
+   {
+      do
+      {
+         // a collection of chunks represents the minimum possible convertion size
+         // so always convert at least this much
+         thisConvertBytes = InterpretChunks( packedFile );
+         bytesProcessed += thisConvertBytes;
          
       }
-      
-      if( mCycles != 0 )
+      while( thisConvertBytes > 0 );
+   }
+   //otherwise interpret 'bytesToProcess' or the entire file, whichever is smaller
+   else
+   {
+      while( bytesProcessed < bytesToProcess && thisConvertBytes > 0 )
       {
-         chunkPatternCount++;
-         continueChunkInterpret = (chunkPatternCount < mCycles);
+         // a collection of chunks represents the minimum possible convertion size
+         // so always convert at least this much
+         thisConvertBytes = InterpretChunks( packedFile );
+         bytesProcessed += thisConvertBytes;
       }
-      
    }
    
-   //finally skip the footer-bytes
-   packedFile.Skip( mFooterBytes );
-   
-   //otherwise, a full block was read
-   return true;
+   return bytesProcessed;
 }
 
 
 
-bool BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
+uint64_t BlockInterpreter::InterpretChunks( BinarySource* packedFile )
 {
+
+   uint64_t startBytes = packedFile->SourcePos();
    
    if(mChunkIndex == 0)
    {
-      //first skip the header-bytes
-      packedFile.Skip( mHeaderBytes );
+      //first process the header-bytes
+      if( mHeaderBytes > 0 )
+      {
+         std::vector<uint8_t> headerBytes;
+         headerBytes.resize(mHeaderBytes);
+         packedFile->Get( &headerBytes[0], mHeaderBytes );
+         if( mHeadFootSink != NULL )
+         {
+            mHeadFootSink->Put(&headerBytes[0], mHeaderBytes);
+         }
+      }
    }
    
    //now cycle through each chunk in the block and interpret
@@ -140,27 +136,37 @@ bool BlockInterpreter::InterpretChunks( BinaryFileSource& packedFile )
       uint32_t nBytes = (*ckIt)->BytesPerChunk();
       
       //read one chunk
-      if( packedFile.Get( pChunk, nBytes ) == static_cast<std::streamsize>(nBytes) )
+      if( packedFile->Get( pChunk, nBytes ) == static_cast<std::streamsize>(nBytes) )
       {
          (*ckIt)->Interpret( );
       }
       else
       {
          //not enough data
-         return false;
+         break;
       }
       
    }
 
    if(mChunkIndex == mCycles)
    {
-      //finally skip the footer-bytes
-      packedFile.Skip( mFooterBytes );
+      //first process the header-bytes
+      if( mFooterBytes > 0 )
+      {
+         std::vector<uint8_t> footerBytes;
+         footerBytes.resize(mFooterBytes);
+         packedFile->Get( &footerBytes[0], mFooterBytes );
+         if( mHeadFootSink != NULL )
+         {
+            mHeadFootSink->Put(&footerBytes[0], mFooterBytes);
+         }
+      }
+      
       mChunkIndex = 0;
    }
    
-   //a full chunk set was read
-   return true;
+   //a full chunk-set was read, return number of bytes read
+   return ( packedFile->SourcePos() - startBytes );
 }
 
 
