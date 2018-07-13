@@ -60,16 +60,16 @@ namespace SampleEncoderFunctions
       chunk_t mask = std::numeric_limits<chunk_t>::max() >> ( 8*sizeof(chunk_t) - (quantization) ); 
 
       //extract the sample bits
-      uint32_t bits = static_cast<uint32_t>( ( pChunk[chunkIndex] >> shift ) & mask );
+      chunk_t bits = static_cast<chunk_t>( ( pChunk[chunkIndex] >> shift ) & mask );
       
       //retrieve the sign of the data
       bool sign =  ( pChunk[chunkIndex] >> (shift+quantization-1) ) & 0x1 ;
 
       //make a mask for the magnitude data (ones for the upper bits)
-      uint32_t signExtension = static_cast<uint32_t>( std::numeric_limits<uint32_t>::max() << quantization );
+      chunk_t signExtension = static_cast<uint32_t>( std::numeric_limits<uint32_t>::max() << quantization );
 
       //either assign the bits or add the sign extension
-      uint32_t smpl =  ( sign ?  bits | signExtension : bits );
+      chunk_t smpl =  ( sign ?  bits | signExtension : bits );
       
       //finally cast to the output type (might be floating point)
       return static_cast<sample_base_t>( static_cast<int32_t>(smpl) );
@@ -84,18 +84,18 @@ namespace SampleEncoderFunctions
 	   chunk_t mask = std::numeric_limits<chunk_t>::max() >> (8 * sizeof(chunk_t) - (quantization));
 
 	   //extract the sample bits, and multiply by 2
-	   uint32_t bits = static_cast<uint32_t>(  ((pChunk[chunkIndex] >> shift) & mask)<<1 );
+	   chunk_t bits = static_cast<chunk_t>(  ((pChunk[chunkIndex] >> shift) & mask)<<1 );
 
 	   //retrieve the sign of the data
 	   bool sign = (pChunk[chunkIndex] >> (shift + quantization - 1)) & 0x1;
 
 	   //make a mask for the magnitude data (ones for the upper bits, noting the << 1 above)
-	   uint32_t signExtension = static_cast<uint32_t>( std::numeric_limits<chunk_t>::max() << (quantization + 1) );
+	   chunk_t signExtension = static_cast<chunk_t>( std::numeric_limits<chunk_t>::max() << (quantization + 1) );
       
-      //either assign the bits or add the sign extension, offset by +1
-      uint32_t smpl =  (sign ? bits | signExtension : bits) + 1;
+       //either assign the bits or add the sign extension, offset by +1
+       chunk_t smpl =  (sign ? bits | signExtension : bits) + 1;
 
-      //finally cast to the output type (might be floating point)
+       //finally cast to the output type (might be floating point)
 	   return static_cast<sample_base_t>( static_cast<int32_t>(smpl) );
    }
    
