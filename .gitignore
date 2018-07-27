@@ -26,6 +26,7 @@ install/log.txt
 install/TestAPI*
 install/TestConverter*
 install/Converter*
-CMakeLists.txt.user*
-
-
+CMakeLists.txt.user
+*.cmake
+CMakeFiles/
+Makefile
