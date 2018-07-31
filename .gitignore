@@ -27,6 +27,6 @@ install/TestAPI*
 install/TestConverter*
 install/Converter*
 CMakeLists.txt.user
-*.cmake
 CMakeFiles/
 Makefile
+cmake_install.cmake

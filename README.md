@@ -1,12 +1,20 @@
 # GNSS-Metadata-Standard
 
-  Linux & OSX:  [![Build Status](https://travis-ci.org/IonMetadataWorkingGroup/GNSS-Metadata-Standard.svg?branch=travis)](https://travis-ci.org/IonMetadataWorkingGroup/GNSS-Metadata-Standard)
+In recent years there has been a proliferation of software defined radio (SDR) data collection systems and processing platforms designed for Global Navigation Satellite System (GNSS) receiver applications or those that support GNSS bands. For post-processing, correctly interpreting the GNSS SDR sampled datasets produced or consumed by these systems has historically been a cumbersome and error-prone process. This is because these systems necessarily produce datasets of various formats, the subtleties of which are often lost in translation when communicating between the producer and consumer of these datasets. The GNSS-Metadata-Standard is an effort to standardize the metadata associated with GNSS SDR sampled data files and the layout of the binary sample files.
+
+The GNSS SDR Metadata Standard defines parameters and schema to express the contents of SDR sample data files. The standard is designed to promote the interoperability of GNSS SDR data collection systems and processors. The metadata files are human readable and in XML format. This repository hosts a set of compliant open source C++ API for reading metadata and binary samples.
+
+The repository contains two libraries: 
+1. An API library that can be used for loading and writing Metadata to/from file and
+2. A converter library that can be used for parsing packed binary SDR data and converting it to machine-format (int, float, etc.) streams
+
+A selectoin of demonstration applicatoins are provided, including:
+1. A demonstration of reading/writing XML Metadata, named *TestAPI*
+2. A demonstration of the basic binary convertion utilities, named *DemoConverter*
+3. A simple binary sample file converter utility, named *Converter* that can be used for converting packed binary SDR files to mahcine-format (int, float, etc.) files
 
 
-  Windows: [![Build status](https://ci.appveyor.com/api/projects/status/clyus3vs41yij0wv?svg=true)](https://ci.appveyor.com/project/JamesTCurran/gnss-metadata-standard)
-
-
-The 'master' branch is frozen between major updates, and opdated once or twice annually. Ongoing development and latests updates are available on the 'devel' branch. If you wish to submit code or pull-requests, please use the 'devel' branch. Pull requests for 'master' will be rejected during ongoing review and RFC process. For more information on the standard, and to download sample data files, please visit http://sdr.ion.org/
+The 'master' branch is frozen between major updates, and opdated once or twice annually. Ongoing development and latests updates are available on the 'devel' branch. If you wish to submit code or pull-requests, please use the 'devel' branch.  Pull requests for 'master' will be rejected during ongoing review and RFC process. For more information on the standard, and to download sample data files, please visit http://sdr.ion.org/
 
 This project uses CMake. To create a project for your IDE follow the steps below.
 
