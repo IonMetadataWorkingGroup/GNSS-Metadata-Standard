@@ -66,13 +66,13 @@ namespace SampleEncoderFunctions
       bool sign =  ( pChunk[chunkIndex] >> (shift+quantization-1) ) & 0x1 ;
 
       //make a mask for the magnitude data (ones for the upper bits)
-      chunk_t signExtension = static_cast<uint32_t>( std::numeric_limits<uint32_t>::max() << quantization );
+	  int32_t signExtension = static_cast<int32_t>( std::numeric_limits<int32_t>::max() << quantization );
 
       //either assign the bits or add the sign extension
-      chunk_t smpl =  ( sign ?  bits | signExtension : bits );
+	  int32_t smpl =  ( sign ?  bits | signExtension : bits );
       
       //finally cast to the output type (might be floating point)
-      return static_cast<sample_base_t>( static_cast<int32_t>(smpl) );
+      return static_cast<sample_base_t>( smpl );
    }
 
 
@@ -90,13 +90,13 @@ namespace SampleEncoderFunctions
 	   bool sign = (pChunk[chunkIndex] >> (shift + quantization - 1)) & 0x1;
 
 	   //make a mask for the magnitude data (ones for the upper bits, noting the << 1 above)
-	   chunk_t signExtension = static_cast<chunk_t>( std::numeric_limits<chunk_t>::max() << (quantization + 1) );
+	   int32_t signExtension = static_cast<int32_t>( std::numeric_limits<int32_t>::max() << (quantization + 1) );
       
        //either assign the bits or add the sign extension, offset by +1
-       chunk_t smpl =  (sign ? bits | signExtension : bits) + 1;
+	   int32_t smpl =  (sign ? bits | signExtension : bits) + 1;
 
        //finally cast to the output type (might be floating point)
-	   return static_cast<sample_base_t>( static_cast<int32_t>(smpl) );
+	   return static_cast<sample_base_t>( smpl );
    }
    
 
