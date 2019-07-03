@@ -143,7 +143,7 @@ Date::Date( double secGps, int wkGps, int secLeap )
     _dt.tv_nsec = (long)((secGps - (double)tsecGps)*BILLION_VALUE);
 }
 
-Date::Date( const char* pszDate)
+Date::Date( const char* pszDate, int secLeap) : _secLeap(secLeap)
 {
 	int yr,mo,day,hr,min;
 	double sec;

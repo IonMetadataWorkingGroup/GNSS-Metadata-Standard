@@ -77,7 +77,7 @@ bool FileTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAd
 		pchild = elem.FirstChildElement("timestamp");
 		if( pchild == NULL) 
 			throw TranslationException("FileTranslator::OnRead -> timestamp not found");
-		file.TimeStamp( Date(pchild->GetText()));
+		file.TimeStamp( Date(pchild->GetText(),0));
 
 		//Parse offset [0..1]
 		file.Offset( ReadFirstElement("offset", elem, false, (size_t)0));

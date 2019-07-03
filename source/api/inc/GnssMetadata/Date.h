@@ -61,7 +61,7 @@ namespace GnssMetadata
 		Date(int year, int mon, int day, int hour, int min, double sec);
 		Date(time_t time, double fracsec = 0.0);
 		Date( double secGps, int wkGps, int secLeap = 0);
-		Date( const char* pszDate);
+		Date( const char* pszDate, int secLeap);
 
 		const Date& operator=( const Date& rhs);
 
