@@ -76,7 +76,7 @@ bool SessionTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accesso
 		pchild = elem.FirstChildElement("toa");
 		if( pchild != NULL)
 		{
-			session.Toa(Date(pchild->GetText()));
+			session.Toa(Date(pchild->GetText(),0));
 		}
 
 		//Parse Position [0..1]
