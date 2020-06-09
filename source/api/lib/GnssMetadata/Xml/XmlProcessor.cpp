@@ -68,31 +68,31 @@ using namespace tinyxml2;
 static struct TranslatorEntry
 {
 	TranslatorId id;
-	Translator& translator;
+	Translator&& translator;
 } _Translators[] =  
 {
    //NOTE these are in the same order as the 
    //TranslatorId enum.
-   {TE_ANYURI, *(new AnyUriTranslator())},
-   {TE_FREQUENCY, *(new FrequencyTranslator())},
-   {TE_DURATION, *(new DurationTranslator())},
-   {TE_POSITION, *(new PositionTranslator())},
-   {TE_ORIENTATION,*(new OrientationTranslator())},
-   {TE_STREAM, *(new StreamTranslator())},
-   {TE_BAND, *(new BandTranslator())},
-   {TE_LUMP, *(new LumpTranslator())},
-   {TE_CHUNK, *(new ChunkTranslator())},
-   {TE_BLOCK, *(new BlockTranslator())},
-   {TE_LANE, *(new LaneTranslator())},
-   {TE_DATAFILE, *(new FileTranslator())},
-   {TE_FILESET, *(new FileSetTranslator())},
-   {TE_SYSTEM, *(new SystemTranslator())},
-   {TE_CLUSTER,*(new ClusterTranslator())},
-   {TE_SOURCE,*(new SourceTranslator())},
-   {TE_SESSION, *(new SessionTranslator())},
-   //    {TE_RFCONFIG, *(new RfConfigTranslator())},
-   //    {TE_OSCILLATOR, *(new OscillatorTranslator())},
-   {TE_METADATA, *(new MetadataTranslator())}
+   {TE_ANYURI, AnyUriTranslator()},
+   {TE_FREQUENCY, FrequencyTranslator()},
+   {TE_DURATION, DurationTranslator()},
+   {TE_POSITION, PositionTranslator()},
+   {TE_ORIENTATION, OrientationTranslator()},
+   {TE_STREAM, StreamTranslator()},
+   {TE_BAND, BandTranslator()},
+   {TE_LUMP, LumpTranslator()},
+   {TE_CHUNK, ChunkTranslator()},
+   {TE_BLOCK, BlockTranslator()},
+   {TE_LANE, LaneTranslator()},
+   {TE_DATAFILE, FileTranslator()},
+   {TE_FILESET, FileSetTranslator()},
+   {TE_SYSTEM, SystemTranslator()},
+   {TE_CLUSTER, ClusterTranslator()},
+   {TE_SOURCE, SourceTranslator()},
+   {TE_SESSION, SessionTranslator()},
+   //    {TE_RFCONFIG, RfConfigTranslator()},
+   //    {TE_OSCILLATOR, OscillatorTranslator()},
+   {TE_METADATA, MetadataTranslator()}
 };
 #define COUNT_TRANSLATORS (sizeof(_Translators)/sizeof(TranslatorEntry))
 
