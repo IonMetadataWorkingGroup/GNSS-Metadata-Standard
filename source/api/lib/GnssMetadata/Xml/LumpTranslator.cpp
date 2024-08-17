@@ -42,9 +42,11 @@ LumpTranslator::LumpTranslator()
 static const char* _szShiftFmts[] = { "Left","Right", "Undefined" };
 static Lump::LumpShift ToLumpShiftFormat(const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
 	for (unsigned int i = 0; i < 3; i++)
 	{
-		if (strcmp(_szShiftFmts[i], pszFmt) == 0)
+		if (strncmp(_szShiftFmts[i], trimmedPszFmt, len) == 0)
 			return (Lump::LumpShift)i;
 	}
 	return (Lump::LumpShift)2;

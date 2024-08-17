@@ -43,9 +43,11 @@ NODELIST_END
 static const char* _szSourceType[] = {"UndefinedType","Patch", "Dipole", "Helical", "Quadrilfilar", "Simulator", "Other"};
 Source::SourceType ToSourceType( const char* psz)
 {
+	size_t len;
+	const char* trimmedPsz = Translator::TrimString(psz, &len);
     for( unsigned int i = 0; i < 7; i++)
 	{
-		if( strcmp( _szSourceType[i], psz) == 0)
+		if( strncmp( _szSourceType[i], trimmedPsz, len) == 0)
 			return (Source::SourceType)i;
 	}
 	return (Source::SourceType)0;
@@ -55,9 +57,11 @@ Source::SourceType ToSourceType( const char* psz)
 static const char* _szSourcePolarization[] = {"UndefinedPolarization", "RHCP", "LHCP", "Linear", "Horizontal", "Vertical"};
 Source::SourcePolarization ToSourcePolarization( const char* psz)
 {
+	size_t len;
+	const char* trimmedPsz = Translator::TrimString(psz, &len);
     for( unsigned int i = 0; i < 6; i++)
 	{
-		if( strcmp( _szSourcePolarization[i], psz) == 0)
+		if( strncmp( _szSourcePolarization[i], trimmedPsz, len) == 0)
 			return (Source::SourcePolarization)i;
 	}
 	return (Source::SourcePolarization)2;

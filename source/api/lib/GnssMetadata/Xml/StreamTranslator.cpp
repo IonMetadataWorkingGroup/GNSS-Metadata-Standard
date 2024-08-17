@@ -37,9 +37,11 @@ using namespace tinyxml2;
 static const char* _szAlignFmts[] = {"Left","Right", "Undefined"};
 static IonStream::StreamAlignment ToAlignmentFormat( const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
     for( unsigned  int i = 0; i < 3; i++)
 	{
-		if( strcmp( _szAlignFmts[i], pszFmt) == 0)
+		if( strncmp( _szAlignFmts[i], trimmedPszFmt, len) == 0)
 			return (IonStream::StreamAlignment)i;
 	}
 	return (IonStream::StreamAlignment)2;
@@ -48,9 +50,11 @@ static IonStream::StreamAlignment ToAlignmentFormat( const char* pszFmt)
 static const char* _szShiftFmts[] = {"Left","Right", "Undefined"};
 static IonStream::StreamShift ToStreamShiftFormat( const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
     for( unsigned  int i = 0; i < 3; i++)
 	{
-		if( strcmp(_szShiftFmts[i], pszFmt) == 0)
+		if( strncmp(_szShiftFmts[i], trimmedPszFmt, len) == 0)
 			return (IonStream::StreamShift)i;
 	}
 	return (IonStream::StreamShift)2;
@@ -61,9 +65,11 @@ static const char* _szSampleFmts[] = {"IF","IFn","IQ","IQn","InQ","InQn","QI","Q
 
 static IonStream::SampleFormat ToSampleFormat( const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
     for( unsigned int i = 0; i < 10; i++)
 	{
-		if( strcmp( _szSampleFmts[i], pszFmt) == 0)
+		if( strncmp( _szSampleFmts[i], trimmedPszFmt, len) == 0)
 			return (IonStream::SampleFormat)i;
 	}
 	return (IonStream::SampleFormat)2;

@@ -37,9 +37,11 @@ using namespace tinyxml2;
 static const char* _szfmts[] = {"Hz","kHz","MHz", "GHz", "Ratio"};
 static Frequency::FrequencyFormat ToFormat( const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
     for( unsigned int i = 0; i < 4; i++)
 	{
-		if( strcmp( _szfmts[i], pszFmt) == 0)
+		if( strncmp( _szfmts[i], trimmedPszFmt, len) == 0)
 			return (Frequency::FrequencyFormat)i;
 	}
 	return (Frequency::FrequencyFormat)0;

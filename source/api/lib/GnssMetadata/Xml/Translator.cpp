@@ -167,7 +167,9 @@ bool Translator::ReadFirstElement( const char* pszelem,
 	}
 	else
 	{
-		return (strcmp( pchild->GetText(),"false")==0);
+		size_t len;
+		const char* trimmedText = TrimString(pchild->GetText(), &len);
+		return (strcmp( trimmedText,"false")==0);
 	}
 }
 const char* Translator::ReadFirstElement( const char* pszelem,
@@ -210,7 +212,9 @@ size_t Translator::ReadFirstElement( const char* pszelem,
 	}
 	else
 	{
-		return atol( pchild->GetText());
+		size_t len;
+		const char* trimmedText = TrimString(pchild->GetText(), &len);
+		return atol(trimmedText);
 	}
 }
 
@@ -232,7 +236,9 @@ double Translator::ReadFirstElement( const char* pszelem,
 	}
 	else
 	{
-		return atof( pchild->GetText());
+		size_t len;
+		const char* trimmedText = TrimString(pchild->GetText(), &len);
+		return atof(trimmedText);
 	}
 
 }
@@ -282,6 +288,17 @@ void Translator::WriteElement( const char* pszElemName, double dvalue,
 		pelem->SetText( buff);
 		pcontainer->InsertEndChild( pelem);
 	}
+}
+
+const char* Translator::TrimString(const char* str, size_t* len) {
+	while (str[0] == ' ') {
+		str++;
+	}
+	(*len) = strlen(str);
+	while (str[(*len) - 1] == ' ') {
+		(*len)--;
+	}
+	return str;
 }
 
 

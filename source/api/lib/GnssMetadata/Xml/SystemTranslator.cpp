@@ -46,9 +46,11 @@ NODELIST_END
 static const char* _szTypes[] = {"Undefined", "Processor", "Receiver", "Simulator"};
 System::SystemType ToSystemType( const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
     for( unsigned int i = 0; i < 4; i++)
 	{
-		if( strcmp( _szTypes[i], pszFmt) == 0)
+		if( strncmp( _szTypes[i], trimmedPszFmt, len) == 0)
 			return (System::SystemType)i;
 	}
 	return (System::SystemType)3;

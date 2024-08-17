@@ -129,6 +129,13 @@ namespace GnssMetadata
 
 	private:
 		NodeEntry* _nodesAllowed;
+
+	public:
+		/**
+		 * Helper function that trims a C string and outputs its length
+		 */
+		static const char* TrimString(const char* str, size_t* len);
+
 	};
 }
 #endif

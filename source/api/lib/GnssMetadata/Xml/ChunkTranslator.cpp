@@ -45,9 +45,11 @@ NODELIST_END
 static const char* _szEndian[] = {"Big","Little", "Undefined"};
 Chunk::WordEndian ToEndian( const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
     for( unsigned int i = 0; i < 3; i++)
 	{
-		if( strcmp( _szEndian[i], pszFmt) == 0)
+		if( strncmp( _szEndian[i], trimmedPszFmt, len) == 0)
 			return (Chunk::WordEndian)i;
 	}
 	return (Chunk::WordEndian)2;
@@ -57,9 +59,11 @@ Chunk::WordEndian ToEndian( const char* pszFmt)
 static const char* _szWordPadding[] = {"None","Head","Tail"};
 Chunk::WordPadding ToWordPadding( const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
     for( unsigned int i = 0; i < 3; i++)
 	{
-		if( strcmp( _szWordPadding[i], pszFmt) == 0)
+		if( strncmp( _szWordPadding[i], trimmedPszFmt, len) == 0)
 			return (Chunk::WordPadding)i;
 	}
 	return (Chunk::WordPadding)2;
@@ -69,9 +73,11 @@ Chunk::WordPadding ToWordPadding( const char* pszFmt)
 static const char* _szWordShift[] = {"Left","Right"};
 Chunk::WordShift ToWordShift( const char* pszFmt)
 {
+	size_t len;
+	const char* trimmedPszFmt = Translator::TrimString(pszFmt, &len);
     for( unsigned int i = 0; i < 2; i++)
 	{
-		if( strcmp( _szWordShift[i], pszFmt) == 0)
+		if( strncmp( _szWordShift[i], trimmedPszFmt, len) == 0)
 			return (Chunk::WordShift)i;
 	}
 	return (Chunk::WordShift)2;
